@@ -109,6 +109,27 @@ h2{margin:6px 0 -4px;font-size:11px;font-weight:800;text-transform:uppercase;let
 .row.done .buy{border-style:dashed}
 footer{display:flex;flex-direction:column;gap:10px;align-items:center;color:var(--muted);font-size:12px;text-align:center}
 .confirm{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center}
+[hidden]{display:none!important}
+.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.tabs button{position:relative;background:transparent;border:1px solid var(--line);border-radius:12px;padding:8px 4px;font-size:13px;font-weight:800;color:var(--muted);cursor:pointer;min-width:0}
+.tabs button[aria-selected="true"]{background:var(--panel);border-color:var(--lamp);color:var(--ink)}
+.tabs button.ping::after{content:'';position:absolute;top:5px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--lamp)}
+.tabs button:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
+.panel{display:flex;flex-direction:column;gap:12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.card{display:flex;flex-direction:column;gap:4px;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px;color:var(--ink);font:inherit;min-width:0}
+button.card{cursor:pointer}
+button.card:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
+.card.on{border-color:var(--lamp);box-shadow:0 0 0 1px var(--lamp) inset}
+.card.lock{opacity:.6}
+.card .cn{font-weight:800}
+.card .cd{color:var(--muted);font-size:13px;overflow-wrap:anywhere}
+.card .cs{color:var(--moss);font-size:12px;font-weight:700;margin-top:auto;padding-top:4px}
+.card.reg svg{width:64px;height:auto;align-self:flex-start}
+.note{margin:0;color:var(--muted);font-size:13px}
+.fresh{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.fresh .lv{font-family:var(--display);font-size:34px;line-height:1;color:var(--lamp)}
+.buy.wide{width:100%}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 
@@ -120,7 +141,7 @@ footer{display:flex;flex-direction:column;gap:10px;align-items:center;color:var(
 
   <section class="stats" aria-live="off">
     <div class="big"><span id="cups">0</span><span class="unit">cups steeped</span></div>
-    <div class="chips"><span class="chip" id="cps">0 per second</span><span class="chip" id="tapv">+1 per tap</span></div>
+    <div class="chips"><span class="chip" id="cps">0 per second</span><span class="chip" id="tapv">+1 per tap</span><span class="chip" id="blendChip"></span><span class="chip" id="leafChip" hidden></span></div>
   </section>
 
   <section class="scene" id="scene">
@@ -301,11 +322,46 @@ footer{display:flex;flex-direction:column;gap:10px;align-items:center;color:var(
 
   <p class="hint" id="hint">Tap the teapot to steep a cup.</p>
 
-  <h2>Helpers</h2>
-  <div class="list" id="prod"></div>
+  <div class="tabs" role="tablist" aria-label="Sections">
+    <button type="button" role="tab" data-tab="nook" aria-selected="true">Nook</button>
+    <button type="button" role="tab" data-tab="blends" aria-selected="false">Blends</button>
+    <button type="button" role="tab" data-tab="regulars" aria-selected="false">Regulars</button>
+    <button type="button" role="tab" id="tab-fresh" data-tab="fresh" aria-selected="false">Fresh Pot</button>
+  </div>
 
-  <h2>Little extras</h2>
-  <div class="list" id="extra"></div>
+  <section class="panel" id="p-nook">
+    <h2>Helpers</h2>
+    <div class="list" id="prod"></div>
+    <h2>Little extras</h2>
+    <div class="list" id="extra"></div>
+  </section>
+
+  <section class="panel" id="p-blends" hidden>
+    <p class="note">Brew one blend at a time. Each plays a little differently, and new blends appear as you steep more cups.</p>
+    <div class="grid" id="blends"></div>
+  </section>
+
+  <section class="panel" id="p-regulars" hidden>
+    <p class="note" id="bookCount"></p>
+    <div class="grid" id="book"></div>
+    <p class="note">Visitors tip three times more when you are brewing their favorite blend. Meeting someone new earns a welcome gift.</p>
+  </section>
+
+  <section class="panel" id="p-fresh" hidden>
+    <div class="fresh">
+      <div><span class="lv" id="fLeaves">0</span> <span class="unit">Golden Leaves</span></div>
+      <div class="note" id="fBonus"></div>
+      <div class="note">Steeped this run: <strong id="fRun">0</strong></div>
+      <div id="fGain"></div>
+      <button type="button" class="buy wide" id="freshBtn">Start a Fresh Pot</button>
+      <div class="confirm" id="freshConfirm" hidden>
+        <span>Your helpers and extras start over. Blends, regulars and Golden Leaves stay.</span>
+        <button type="button" class="ghost" id="freshYes">Yes, brew fresh</button>
+        <button type="button" class="ghost" id="freshNo">Not yet</button>
+      </div>
+    </div>
+    <p class="note">Each Golden Leaf adds 5% to everything you brew, for good. Later runs go faster.</p>
+  </section>
 
   <footer>
     <span>Saved on this device. The kettle keeps brewing for up to 8 hours while you are away.</span>
@@ -367,8 +423,30 @@ var ICON={
   moonhoney:'<circle cx="12" cy="12" r="9" '+F('moon')+'/><circle cx="15.5" cy="9.5" r="7.5" style="fill:var(--wall)"/><circle cx="10" cy="16" r="1.2" '+F('lamp')+'/>'
 };
 
+var BLENDS=[
+  {id:'classic',   name:'Morning Leaf',   unlock:0,         desc:'Plain and dependable. No bonus.'},
+  {id:'chamomile', name:'Calm Chamomile', unlock:2000,      desc:'Helpers brew 20% more.'},
+  {id:'jasmine',   name:'Jasmine Pearl',  unlock:40000,     desc:'Each tap brews 3x as much.'},
+  {id:'berry',     name:'Moon-berry',     unlock:600000,    desc:'Regulars visit more often and stay longer.'},
+  {id:'rooibos',   name:'Golden Rooibos', unlock:10000000,  desc:'Cups brewed while you are away are 50% bigger.'},
+  {id:'starleaf',  name:'Star Leaf',      unlock:200000000, desc:'Everything brews 40% more.'}
+];
+var REG=[
+  {id:'mouse',name:'Pip',kind:'mouse',rarity:'Common',weight:5,tipMult:1,min:0,fav:'chamomile',line:'Collects crumbs and compliments.',
+   art:'<path d="M10 28 Q-2 26 4 14" fill="none" stroke="#e48a9c" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="24" cy="27" rx="16" ry="11" fill="#b9b4c6"/><circle cx="38" cy="25" r="8" fill="#c9c4d6"/><circle cx="35" cy="16" r="5" fill="#e48a9c"/><circle cx="43" cy="18" r="4.5" fill="#e48a9c"/><circle cx="40" cy="24" r="1.4" fill="#1d2433"/><circle cx="45.5" cy="27" r="1.6" fill="#1d2433"/><rect x="12" y="35" width="5" height="4" rx="2" fill="#b9b4c6"/><rect x="27" y="35" width="5" height="4" rx="2" fill="#b9b4c6"/>'},
+  {id:'hedgehog',name:'Bramble',kind:'hedgehog',rarity:'Common',weight:5,tipMult:1,min:5000,fav:'jasmine',line:'Always arrives a little damp.',
+   art:'<path d="M5 28 L3 22 L8 23 L7 16 L13 19 L14 12 L19 17 L22 10 L26 16 L31 12 L31 19 L36 18 L38 26 Z" fill="#5b4a3f"/><ellipse cx="22" cy="28" rx="17" ry="10" fill="#7d6a5c"/><ellipse cx="36" cy="29" rx="10" ry="7" fill="#e3c9a8"/><circle cx="35" cy="22" r="3" fill="#e3c9a8"/><circle cx="45" cy="29" r="1.8" fill="#1d2433"/><circle cx="39" cy="26" r="1.4" fill="#1d2433"/><rect x="14" y="35" width="5" height="4" rx="2" fill="#e3c9a8"/><rect x="28" y="35" width="5" height="4" rx="2" fill="#e3c9a8"/>'},
+  {id:'sparrow',name:'Wren',kind:'sparrow',rarity:'Common',weight:5,tipMult:1,min:50000,fav:'classic',line:'Sings for her tea.',
+   art:'<polygon points="12,22 1,17 3,27" fill="#7d5c3d"/><ellipse cx="24" cy="24" rx="14" ry="12" fill="#a9825b"/><ellipse cx="25" cy="29" rx="9" ry="7" fill="#e8d8bf"/><ellipse cx="20" cy="24" rx="9" ry="5.5" transform="rotate(-20 20 24)" fill="#7d5c3d"/><circle cx="35" cy="17" r="8" fill="#b99468"/><polygon points="42,15 48,18 42,20" fill="#f4bf62"/><circle cx="37" cy="15" r="1.4" fill="#1d2433"/><path d="M20 35v4M27 35v4" stroke="#f4bf62" stroke-width="1.6" stroke-linecap="round"/>'},
+  {id:'owl',name:'Hoot',kind:'owl',rarity:'Uncommon',weight:3,tipMult:1.5,min:1000000,fav:'berry',line:'Reads one page and stays all night.',
+   art:'<polygon points="13,12 15,2 21,10" fill="#9a8574"/><polygon points="35,12 33,2 27,10" fill="#9a8574"/><ellipse cx="24" cy="23" rx="13" ry="15" fill="#9a8574"/><ellipse cx="24" cy="28" rx="8" ry="9" fill="#d9c8b0"/><circle cx="18" cy="17" r="6" fill="#f4e6b8"/><circle cx="30" cy="17" r="6" fill="#f4e6b8"/><circle cx="18" cy="17" r="2.5" fill="#1d2433"/><circle cx="30" cy="17" r="2.5" fill="#1d2433"/><polygon points="24,19 21,24 27,24" fill="#f4bf62"/><rect x="16" y="36" width="5" height="3" rx="1.5" fill="#f4bf62"/><rect x="27" y="36" width="5" height="3" rx="1.5" fill="#f4bf62"/>'},
+  {id:'fox',name:'Ember',kind:'fox',rarity:'Rare',weight:1.5,tipMult:2.5,min:25000000,fav:'rooibos',line:'Shows up when the lanterns are lit.',
+   art:'<ellipse cx="9" cy="26" rx="10" ry="5" transform="rotate(-30 9 26)" fill="#e0833a"/><ellipse cx="3.5" cy="20" rx="3.4" ry="2.4" transform="rotate(-30 3.5 20)" fill="#f4e6d0"/><ellipse cx="22" cy="28" rx="13" ry="8" fill="#e0833a"/><polygon points="30,15 31,5 37,13" fill="#e0833a"/><polygon points="38,13 43,5 44,16" fill="#e0833a"/><circle cx="36" cy="21" r="8" fill="#e0833a"/><ellipse cx="42" cy="25" rx="5" ry="3.5" fill="#f4e6d0"/><circle cx="46" cy="24" r="1.5" fill="#1d2433"/><circle cx="38" cy="19" r="1.4" fill="#1d2433"/><rect x="15" y="34" width="4" height="5" rx="2" fill="#5b3a24"/><rect x="27" y="34" width="4" height="5" rx="2" fill="#5b3a24"/>'},
+  {id:'moth',name:'Luna',kind:'moth',rarity:'Legendary',weight:1,tipMult:4,min:500000000,fav:'starleaf',line:'Drawn to the lamp, stays for the tea.',
+   art:'<circle cx="24" cy="20" r="19" fill="#f4bf62" opacity=".12"/><ellipse cx="16" cy="16" rx="12" ry="9" transform="rotate(-25 16 16)" fill="#b9a6e0"/><ellipse cx="32" cy="16" rx="12" ry="9" transform="rotate(25 32 16)" fill="#b9a6e0"/><ellipse cx="17" cy="27" rx="9" ry="7" transform="rotate(20 17 27)" fill="#9c88cc"/><ellipse cx="31" cy="27" rx="9" ry="7" transform="rotate(-20 31 27)" fill="#9c88cc"/><circle cx="14" cy="15" r="2.6" fill="#f4e6b8"/><circle cx="34" cy="15" r="2.6" fill="#f4e6b8"/><ellipse cx="24" cy="24" rx="3.2" ry="10" fill="#5d4e7a"/><circle cx="24" cy="12" r="3.2" fill="#5d4e7a"/><path d="M23 10 Q20 4 16 3 M25 10 Q28 4 32 3" stroke="#5d4e7a" stroke-width="1.4" fill="none" stroke-linecap="round"/>'}
+];
 function $(id){return document.getElementById(id);}
-function fresh(){return {cups:0,total:0,counts:PROD.map(function(){return 0;}),extras:{},taps:0,mice:0,last:Date.now(),sound:false};}
+function fresh(){return {cups:0,total:0,counts:PROD.map(function(){return 0;}),extras:{},taps:0,mice:0,last:Date.now(),sound:false,life:0,leaves:0,pots:0,blend:'classic',reg:{}};}
 function load(){
   var s=fresh();
   try{
@@ -382,6 +460,11 @@ function load(){
       s.sound=!!o.sound;
       s.counts=PROD.map(function(_,i){return Math.max(0,Math.floor(+(o.counts&&o.counts[i])||0));});
       s.extras=(o.extras&&typeof o.extras==='object')?o.extras:{};
+      s.life=isFinite(o.life)?Math.max(+o.life,s.total):s.total;
+      s.leaves=Math.max(0,Math.floor(+o.leaves||0));
+      s.pots=Math.max(0,Math.floor(+o.pots||0));
+      s.blend=(typeof o.blend==='string')?o.blend:'classic';
+      s.reg=(o.reg&&typeof o.reg==='object')?o.reg:{};
     }
   }catch(e){}
   return s;
@@ -401,10 +484,20 @@ function rate(n){
   var r=Math.round(n*10)/10;
   return String(r);
 }
+var blendN=-1;
+function blendById(id){for(var i=0;i<BLENDS.length;i++){if(BLENDS[i].id===id)return BLENDS[i];}return BLENDS[0];}
+function blendUnlocked(b){return S.life>=b.unlock;}
+function curBlend(){var b=blendById(S.blend);return blendUnlocked(b)?b:BLENDS[0];}
+function leafMult(){return 1+0.05*S.leaves;}
+function blendProd(){var b=curBlend().id;return b==='chamomile'?1.2:(b==='starleaf'?1.4:1);}
+function blendTap(){return curBlend().id==='jasmine'?3:1;}
+function earn(x){S.cups+=x;S.total+=x;S.life+=x;}
+function freshGain(){return Math.floor(Math.sqrt(S.total/500000));}
+function leafWord(n){return n===1?'Golden Leaf':'Golden Leaves';}
 function cost(i){return Math.ceil(PROD[i].base*Math.pow(1.15,S.counts[i]));}
-function mult(){return (S.extras.anise?2:1)*(S.extras.quilt?1.5:1)*(S.extras.biscuit?2:1)*(S.extras.pillow?2:1)*(S.extras.moonhoney?2:1);}
+function mult(){return (S.extras.anise?2:1)*(S.extras.quilt?1.5:1)*(S.extras.biscuit?2:1)*(S.extras.pillow?2:1)*(S.extras.moonhoney?2:1)*leafMult()*blendProd();}
 function cps(){var b=0;for(var i=0;i<PROD.length;i++)b+=S.counts[i]*PROD[i].cps;return b*mult();}
-function tapValue(){return (S.extras.mitts?2:1)*(S.extras.spoon?2:1)+cps()*0.02;}
+function tapValue(){return (S.extras.mitts?2:1)*(S.extras.spoon?2:1)*blendTap()*leafMult()+cps()*0.02;}
 
 /* ---------- sound ---------- */
 var ac=null;
@@ -487,7 +580,20 @@ function update(){
   $('cups').textContent=fmt(Math.floor(S.cups));
   $('cps').textContent=rate(c)+' per second';
   $('tapv').textContent='+'+rate(tapValue())+' per tap';
-  $('hint').hidden=S.total>=15;
+  $('hint').hidden=S.life>=15;
+  var cb=curBlend(),bn=0,gain=freshGain();
+  for(var bi=0;bi<BLENDS.length;bi++){if(blendUnlocked(BLENDS[bi]))bn++;}
+  if(blendN<0){blendN=bn;renderBlends();}
+  else if(bn!==blendN){if(bn>blendN)toast('New tea blend discovered! Have a look in Blends.');blendN=bn;renderBlends();}
+  $('blendChip').textContent=cb.name;
+  $('leafChip').hidden=S.leaves<1;
+  $('leafChip').textContent=S.leaves+' '+leafWord(S.leaves);
+  $('fLeaves').textContent=String(S.leaves);
+  $('fBonus').textContent='+'+(S.leaves*5)+'% to everything you brew';
+  $('fRun').textContent=fmt(S.total);
+  $('fGain').textContent=gain>=1?('A Fresh Pot now earns '+gain+' '+leafWord(gain)+', which is +'+(gain*5)+'% more brewing.'):('Steep 500K cups in a single run to earn your first Golden Leaf. You are at '+fmt(S.total)+'.');
+  $('freshBtn').classList.toggle('can',gain>=1);
+  $('tab-fresh').classList.toggle('ping',gain>=1);
   PROD.forEach(function(it,i){
     var el=prodEls[i],k=cost(i),can=S.cups>=k;
     el.btn.textContent=fmt(k);
@@ -519,7 +625,7 @@ function pop(x,y,txt){
 }
 function tap(clientX,clientY){
   var v=tapValue();
-  S.cups+=v;S.total+=v;S.taps++;
+  earn(v);S.taps++;
   pot.classList.remove('squish');void pot.getBoundingClientRect();pot.classList.add('squish');
   var r=scene.getBoundingClientRect();
   pop(clientX-r.left+(Math.random()*24-12),clientY-r.top-18,'+'+rate(v));
@@ -536,23 +642,39 @@ hit.addEventListener('keydown',function(e){
 });
 
 /* ---------- visitors ---------- */
-var mouse=$('mouse'),mouseT,mouseHideT;
+var mouse=$('mouse'),mouseT,mouseHideT,curVis=null;
+function pickVisitor(){
+  var pool=[],w=0,i;
+  for(i=0;i<REG.length;i++){
+    if(S.life>=REG[i].min){var wt=REG[i].weight*(S.reg[REG[i].id]?1:2);pool.push([REG[i],wt]);w+=wt;}
+  }
+  var r=Math.random()*w;
+  for(i=0;i<pool.length;i++){r-=pool[i][1];if(r<=0)return pool[i][0];}
+  return REG[0];
+}
 function scheduleMouse(first){
   clearTimeout(mouseT);
-  mouseT=setTimeout(showMouse,first?(15000+Math.random()*10000):(30000+Math.random()*35000));
+  mouseT=setTimeout(showMouse,(first?(15000+Math.random()*10000):(30000+Math.random()*35000))*(curBlend().id==='berry'?0.6:1));
 }
 function showMouse(){
   if(document.hidden){scheduleMouse(false);return;}
+  curVis=pickVisitor();
+  mouse.querySelector('svg').innerHTML=curVis.art;
+  mouse.setAttribute('aria-label',curVis.name+' the '+curVis.kind+' is visiting. Tap to say hello.');
   mouse.hidden=false;
   mouse.classList.remove('in');void mouse.offsetWidth;mouse.classList.add('in');
   clearTimeout(mouseHideT);
-  mouseHideT=setTimeout(function(){mouse.hidden=true;scheduleMouse(false);},14000);
+  mouseHideT=setTimeout(function(){mouse.hidden=true;scheduleMouse(false);},(curBlend().id==='berry'?24000:14000));
 }
 mouse.addEventListener('click',function(){
-  var tip=Math.max(25,Math.floor(cps()*40));
-  S.cups+=tip;S.total+=tip;S.mice++;
+  if(!curVis) return;
+  var v=curVis,first=!S.reg[v.id],loved=curBlend().id===v.fav;
+  var tip=Math.max(25,Math.floor(cps()*40))*v.tipMult*(loved?3:1)*(first?5:1);
+  S.reg[v.id]=(S.reg[v.id]||0)+1;
+  earn(tip);S.mice++;
   mouse.hidden=true;clearTimeout(mouseHideT);
-  toast('A little mouse left a thank-you tip: +'+fmt(tip)+' cups');
+  toast(first?('You met '+v.name+' the '+v.kind+'! Welcome gift: +'+fmt(tip)+' cups'):(loved?(v.name+' adores the '+curBlend().name+'! Tip: +'+fmt(tip)+' cups'):(v.name+' left a thank-you tip: +'+fmt(tip)+' cups')));
+  renderBook();
   blip(700);update();save();scheduleMouse(false);
 });
 
@@ -564,11 +686,85 @@ function tick(){
   if(!(dt>0)) return;
   var away=dt>20;
   if(dt>MAX_AWAY) dt=MAX_AWAY;
-  var gain=cps()*dt;
-  S.cups+=gain;S.total+=gain;
+  var gain=cps()*dt*(away&&curBlend().id==='rooibos'?1.5:1);
+  earn(gain);
   if(away&&gain>=1) toast('Welcome back. The kettle kept going: +'+fmt(gain)+' cups');
   update();
 }
+
+/* ---------- blends ---------- */
+function renderBlends(){
+  var g=$('blends');
+  g.innerHTML='';
+  var cur=curBlend();
+  BLENDS.forEach(function(b){
+    var un=blendUnlocked(b),on=cur.id===b.id;
+    var el=document.createElement('button');
+    el.type='button';
+    el.className='card'+(on?' on':'')+(un?'':' lock');
+    el.setAttribute('aria-pressed',on?'true':'false');
+    el.innerHTML='<span class="cn">'+b.name+'</span>'+
+      '<span class="cd">'+(un?b.desc:'Unlocks at '+fmt(b.unlock)+' lifetime cups.')+'</span>'+
+      '<span class="cs">'+(on?'Brewing now':(un?'Tap to brew':'Locked'))+'</span>';
+    el.addEventListener('click',function(){
+      if(!un){blip(220);return;}
+      S.blend=b.id;blip(520);renderBlends();update();save();
+    });
+    g.appendChild(el);
+  });
+}
+
+/* ---------- regulars ---------- */
+function renderBook(){
+  var g=$('book'),met=0;
+  g.innerHTML='';
+  REG.forEach(function(r){
+    var n=S.reg[r.id]||0;
+    if(n) met++;
+    var el=document.createElement('div');
+    el.className='card reg'+(n?'':' lock');
+    var art='<svg viewBox="0 0 48 40" aria-hidden="true"'+(n?'':' style="filter:brightness(0) opacity(.5)"')+'>'+r.art+'</svg>';
+    var fav=blendById(r.fav);
+    var desc=n?r.line:(S.life>=r.min?'Has not stopped by yet. Keep the kettle warm.':'Arrives after '+fmt(r.min)+' lifetime cups.');
+    var meta=n?(r.rarity+' · '+n+(n===1?' visit':' visits')+' · loves '+fav.name):r.rarity;
+    el.innerHTML=art+'<span class="cn">'+(n?(r.name+' the '+r.kind):'???')+'</span><span class="cd">'+desc+'</span><span class="cs">'+meta+'</span>';
+    g.appendChild(el);
+  });
+  $('bookCount').textContent=met+' of '+REG.length+' regulars met';
+}
+
+/* ---------- tabs ---------- */
+var tabBtns=document.querySelectorAll('.tabs button');
+function showTab(name){
+  Array.prototype.forEach.call(tabBtns,function(b){
+    var t=b.getAttribute('data-tab'),on=(t===name);
+    b.setAttribute('aria-selected',on?'true':'false');
+    $('p-'+t).hidden=!on;
+  });
+  if(name==='regulars') renderBook();
+}
+Array.prototype.forEach.call(tabBtns,function(b){
+  b.addEventListener('click',function(){showTab(b.getAttribute('data-tab'));});
+});
+
+/* ---------- fresh pot ---------- */
+$('freshBtn').addEventListener('click',function(){
+  if(freshGain()<1){blip(220);return;}
+  $('freshConfirm').hidden=false;
+});
+$('freshNo').addEventListener('click',function(){$('freshConfirm').hidden=true;});
+$('freshYes').addEventListener('click',function(){
+  var g=freshGain();
+  if(g<1){$('freshConfirm').hidden=true;return;}
+  S.leaves+=g;S.pots++;
+  S.cups=0;S.total=0;
+  S.counts=PROD.map(function(){return 0;});
+  S.extras={};
+  $('freshConfirm').hidden=true;
+  renderScene();update();save();blip(660);
+  toast('Fresh pot! You earned '+g+' '+leafWord(g)+'.');
+  showTab('nook');
+});
 
 /* ---------- controls ---------- */
 function setSound(){
@@ -584,7 +780,7 @@ $('yes').addEventListener('click',function(){
   try{localStorage.removeItem(KEY);}catch(e){}
   lastTick=Date.now();
   $('confirm').hidden=true;
-  setSound();renderScene();update();
+  blendN=-1;setSound();renderScene();update();renderBook();
 });
 document.addEventListener('visibilitychange',function(){if(document.hidden)save();else tick();});
 window.addEventListener('pagehide',save);
@@ -597,6 +793,7 @@ tick();
 update();
 setInterval(tick,100);
 setInterval(save,5000);
+renderBook();
 scheduleMouse(true);
 })();
 </script>
