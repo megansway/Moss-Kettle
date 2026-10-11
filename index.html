@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Moss Kettle</title>
+<meta name="theme-color" content="#141a26">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Moss Kettle">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nunito:wght@400;600;700;800&display=swap">
+<style>html{background:#141a26;-webkit-text-size-adjust:100%}body{margin:0;min-height:100vh;-webkit-touch-callout:none;overscroll-behavior:none}</style>
+</head>
+<body>
+<style>
+/* Layout: one phone-width column. Stats up top, the lit nook as a framed scene, then helper rows to buy.
+   Single committed look: a blue-slate night with one lamp-amber accent. */
+:root{
+  color-scheme:dark;
+  --bg:#141a26;
+  --panel:#1f2839;
+  --line:#33405a;
+  --ink:#e8eee6;
+  --muted:#97a6bd;
+  --lamp:#f4bf62;
+  --lamp-ink:#2b1d08;
+  --moss:#8dbf9e;
+  --berry:#e48a9c;
+  --wall:#26304a;
+  --floor:#1b2233;
+  --sky:#0f1830;
+  --moon:#f4e6b8;
+  --wood:#7a5a46;
+  --wood-dk:#5b4132;
+  --pot:#7fb3a5;
+  --pot-dk:#5f968a;
+  --cat:#d3c0a5;
+  --bun:#d9a066;
+  --steam:#d7e6e1;
+  --display:'Bagel Fat One',ui-rounded,'SF Pro Rounded',system-ui,sans-serif;
+  --body:'Nunito',ui-rounded,system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;touch-action:manipulation}
+.wrap{max-width:440px;margin:0 auto;padding-inline:16px;padding-block:calc(14px + env(safe-area-inset-top,0px)) calc(40px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+h1{margin:0;font-family:var(--display);font-weight:400;font-size:22px;letter-spacing:.01em;text-wrap:balance}
+.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer}
+.ghost[aria-pressed="true"]{color:var(--lamp);border-color:var(--lamp)}
+.stats{display:flex;flex-direction:column;gap:8px}
+.big{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;min-width:0}
+#cups{font-family:var(--display);font-size:46px;line-height:1;color:var(--lamp);font-variant-numeric:tabular-nums;text-shadow:0 0 24px rgba(244,191,98,.35)}
+.unit{color:var(--muted);font-weight:700}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);border-radius:999px;padding:3px 11px;font-size:13px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.scene{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:var(--wall);user-select:none;-webkit-user-select:none}
+.scene svg{display:block;width:100%;height:auto}
+.f-wall{fill:var(--wall)}.f-floor{fill:var(--floor)}.f-wood{fill:var(--wood)}.f-wooddk{fill:var(--wood-dk)}
+.f-pot{fill:var(--pot)}.f-potdk{fill:var(--pot-dk)}.f-lamp{fill:var(--lamp)}.f-berry{fill:var(--berry)}
+.f-moss{fill:var(--moss)}.f-cat{fill:var(--cat)}.f-sky{fill:var(--sky)}.f-moon{fill:var(--moon)}.f-bun{fill:var(--bun)}
+.s-pot{stroke:var(--pot-dk);fill:none}.s-ink{stroke:#1d2433;fill:none;stroke-linecap:round}.s-wood{stroke:var(--wood);fill:none}
+.item{opacity:0;transition:opacity .7s ease}
+.item.on{opacity:1}
+#pot{transform-box:fill-box;transform-origin:50% 100%}
+#pot.squish{animation:squish .22s ease-out}
+@keyframes squish{0%{transform:scale(1)}35%{transform:scale(1.06,.93)}100%{transform:scale(1)}}
+.steam path{stroke:var(--steam);stroke-width:3;stroke-linecap:round;fill:none;opacity:0;animation:steam 3.2s ease-in-out infinite}
+@keyframes steam{0%{opacity:0;transform:translateY(8px)}30%{opacity:.7}100%{opacity:0;transform:translateY(-14px)}}
+.star{fill:var(--moon);animation:twinkle 3s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.25}50%{opacity:1}}
+.flame{animation:flicker 1.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes flicker{0%,100%{transform:scale(1,1)}50%{transform:scale(.88,1.1)}}
+.zz{font-family:var(--display);font-size:13px;fill:var(--moon);animation:zz 3.6s ease-in-out infinite;opacity:0}
+@keyframes zz{0%{opacity:0;transform:translateY(6px)}40%{opacity:.8}100%{opacity:0;transform:translateY(-10px)}}
+.drop{stroke:var(--moon);stroke-width:1.5;stroke-linecap:round;fill:none;opacity:0;animation:drop 1.3s linear infinite}
+@keyframes drop{0%{opacity:0;transform:translateY(0)}15%{opacity:.55}100%{opacity:0;transform:translateY(100px)}}
+#hit{fill:transparent;cursor:pointer;outline:none}
+#hit:focus-visible{stroke:var(--lamp);stroke-width:2;stroke-dasharray:5 5}
+.pop{position:absolute;pointer-events:none;font-family:var(--display);font-size:20px;color:var(--lamp);text-shadow:0 1px 6px rgba(0,0,0,.5);transform:translate(-50%,-50%);animation:rise .9s ease-out forwards;white-space:nowrap}
+@keyframes rise{0%{opacity:0;margin-top:0}15%{opacity:1}100%{opacity:0;margin-top:-64px}}
+.toast{position:absolute;top:10px;left:12px;right:12px;text-align:center;background:rgba(20,26,38,.92);border:1px solid var(--line);border-radius:14px;padding:8px 12px;font-size:13px;font-weight:700}
+.toast.show{animation:fadein .3s ease-out}
+@keyframes fadein{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.mouse{position:absolute;left:12px;bottom:8px;width:64px;background:none;border:0;padding:0;cursor:pointer;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
+.mouse svg{width:100%;height:auto;display:block}
+.mouse.in{animation:scurry .5s ease-out}
+@keyframes scurry{from{transform:translateX(-90px)}to{transform:none}}
+.mouse span{position:absolute;left:50%;top:-14px;transform:translateX(-50%);background:var(--lamp);color:var(--lamp-ink);font-size:11px;font-weight:800;border-radius:999px;padding:1px 8px;white-space:nowrap}
+.hint{margin:-4px 0 0;text-align:center;color:var(--muted);font-weight:700}
+h2{margin:6px 0 -4px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--muted)}
+.list{display:flex;flex-direction:column;gap:8px}
+.row{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:10px 12px}
+.row .ico{flex:none;width:40px;height:40px;border-radius:12px;background:var(--wall);display:grid;place-items:center}
+.row .ico svg{width:26px;height:26px}
+.row .txt{flex:1;min-width:0}
+.row .nm{font-weight:800}
+.row .ds{color:var(--muted);font-size:13px}
+.row .mt{color:var(--moss);font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.buy{flex:none;min-width:84px;background:transparent;border:1.5px solid var(--line);border-radius:12px;padding:8px 10px;color:var(--muted);font-weight:800;font-variant-numeric:tabular-nums;cursor:pointer}
+.buy.can{background:var(--lamp);border-color:var(--lamp);color:var(--lamp-ink)}
+.buy:focus-visible,.ghost:focus-visible,.mouse:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
+.row.done{opacity:.7}
+.row.done .buy{border-style:dashed}
+footer{display:flex;flex-direction:column;gap:10px;align-items:center;color:var(--muted);font-size:12px;text-align:center}
+.confirm{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+
+<main class="wrap">
+  <header class="top">
+    <h1>Moss Kettle</h1>
+    <button id="snd" class="ghost" aria-pressed="false">Sound off</button>
+  </header>
+
+  <section class="stats" aria-live="off">
+    <div class="big"><span id="cups">0</span><span class="unit">cups steeped</span></div>
+    <div class="chips"><span class="chip" id="cps">0 per second</span><span class="chip" id="tapv">+1 per tap</span></div>
+  </section>
+
+  <section class="scene" id="scene">
+    <svg id="nook" viewBox="0 0 360 260" role="img" aria-label="A cozy tea nook at night with a smiling teapot on a table">
+      <defs>
+        <radialGradient id="glowG" cx="50%" cy="50%" r="50%">
+          <stop offset="0" style="stop-color:var(--lamp);stop-opacity:.55"/>
+          <stop offset="1" style="stop-color:var(--lamp);stop-opacity:0"/>
+        </radialGradient>
+        <clipPath id="winclip"><rect x="31" y="29" width="82" height="94" rx="9"/></clipPath>
+      </defs>
+      <rect width="360" height="204" class="f-wall"/>
+      <rect y="204" width="360" height="56" class="f-floor"/>
+      <rect y="200" width="360" height="5" class="f-wooddk"/>
+
+      <!-- window -->
+      <rect x="24" y="22" width="96" height="108" rx="14" class="f-wood"/>
+      <rect x="31" y="29" width="82" height="94" rx="9" class="f-sky"/>
+      <circle cx="90" cy="56" r="13" class="f-moon"/>
+      <circle cx="96" cy="52" r="11" class="f-sky"/>
+      <circle class="star" cx="50" cy="48" r="1.7"/>
+      <circle class="star" cx="62" cy="86" r="1.5" style="animation-delay:.8s"/>
+      <circle class="star" cx="100" cy="100" r="1.7" style="animation-delay:1.6s"/>
+      <circle class="star" cx="44" cy="106" r="1.4" style="animation-delay:2.2s"/>
+      <circle class="star" cx="78" cy="38" r="1.4" style="animation-delay:1.1s"/>
+      <g id="s-rain" class="item" clip-path="url(#winclip)">
+        <path class="drop" d="M40 24 l-3 9" style="animation-delay:0s"/>
+        <path class="drop" d="M52 24 l-3 9" style="animation-delay:.5s;animation-duration:1.1s"/>
+        <path class="drop" d="M62 24 l-3 9" style="animation-delay:.2s;animation-duration:1.5s"/>
+        <path class="drop" d="M84 24 l-3 9" style="animation-delay:.8s"/>
+        <path class="drop" d="M94 24 l-3 9" style="animation-delay:.3s;animation-duration:1.2s"/>
+        <path class="drop" d="M104 24 l-3 9" style="animation-delay:.6s;animation-duration:1.6s"/>
+        <path class="drop" d="M47 24 l-3 9" style="animation-delay:1s;animation-duration:1.4s"/>
+        <path class="drop" d="M99 24 l-3 9" style="animation-delay:1.1s"/>
+        <path class="drop" d="M77 24 l-3 9" style="animation-delay:.9s;animation-duration:1.1s"/>
+        <path class="drop" d="M58 24 l-3 9" style="animation-delay:1.2s;animation-duration:1.7s"/>
+      </g>
+      <rect x="70" y="29" width="3" height="94" class="f-wood"/>
+      <rect x="31" y="74" width="82" height="3" class="f-wood"/>
+      <rect x="18" y="130" width="108" height="8" rx="3" class="f-wood"/>
+
+      <!-- fern on the sill -->
+      <g id="s-plant" class="item">
+        <ellipse cx="57" cy="100" rx="5" ry="14" class="f-moss"/>
+        <ellipse cx="46" cy="104" rx="5" ry="12" class="f-moss" transform="rotate(-35 46 104)"/>
+        <ellipse cx="68" cy="104" rx="5" ry="12" class="f-moss" transform="rotate(35 68 104)"/>
+        <rect x="44" y="114" width="26" height="16" rx="4" class="f-berry"/>
+      </g>
+
+      <!-- shelf -->
+      <rect x="196" y="112" width="120" height="6" rx="2" class="f-wood"/>
+      <g id="s-books" class="item">
+        <rect x="204" y="86" width="10" height="26" class="f-berry"/>
+        <rect x="216" y="92" width="9" height="20" class="f-moss"/>
+        <rect x="227" y="84" width="11" height="28" class="f-lamp"/>
+        <rect x="240" y="94" width="9" height="18" class="f-pot"/>
+      </g>
+      <g id="s-radio" class="item">
+        <path d="M292 94 L306 80" class="s-wood" stroke-width="2" stroke-linecap="round"/>
+        <rect x="260" y="94" width="40" height="18" rx="4" class="f-pot"/>
+        <circle cx="270" cy="103" r="5" class="f-moon"/>
+        <circle cx="270" cy="103" r="1.6" class="f-wooddk"/>
+        <path d="M280 98h14M280 103h14M280 108h14" class="s-ink" stroke-width="1.6" opacity=".6"/>
+        <text class="zz" x="302" y="92">&#9834;</text>
+      </g>
+
+      <!-- lantern string -->
+      <g id="s-lantern" class="item">
+        <path d="M128 4 Q190 36 262 4" class="s-wood" stroke-width="2"/>
+        <ellipse cx="158" cy="24" rx="7" ry="9" class="f-lamp"/>
+        <ellipse cx="192" cy="30" rx="7" ry="9" class="f-lamp"/>
+        <ellipse cx="226" cy="24" rx="7" ry="9" class="f-lamp"/>
+      </g>
+
+      <!-- hanging lamp and glow -->
+      <circle id="glow" cx="290" cy="80" r="82" fill="url(#glowG)" opacity=".4"/>
+      <line x1="290" y1="0" x2="290" y2="42" class="s-wood" stroke-width="2"/>
+      <path d="M272 72 L308 72 L300 42 L280 42 Z" class="f-lamp"/>
+      <circle cx="290" cy="74" r="5" class="f-moon"/>
+
+      <!-- table -->
+      <ellipse cx="180" cy="250" rx="120" ry="6" fill="#000" opacity=".22"/>
+      <rect x="84" y="188" width="10" height="58" class="f-wooddk"/>
+      <rect x="250" y="188" width="10" height="58" class="f-wooddk"/>
+      <rect x="64" y="176" width="232" height="12" rx="6" class="f-wood"/>
+
+      <!-- table things -->
+      <g id="s-flame" class="item">
+        <circle cx="87" cy="158" r="15" class="f-lamp" opacity=".22"/>
+        <rect x="80" y="164" width="14" height="12" rx="3" class="f-moon"/>
+        <path class="flame f-lamp" d="M87 150 q-6 8 0 14 q6 -6 0 -14z"/>
+      </g>
+      <g id="s-honey" class="item">
+        <rect x="232" y="158" width="22" height="18" rx="5" style="fill:#e0a23a"/>
+        <rect x="234" y="153" width="18" height="6" rx="2" class="f-wood"/>
+        <rect x="237" y="164" width="12" height="6" rx="2" class="f-moon" opacity=".6"/>
+      </g>
+      <g id="s-bakery" class="item">
+        <ellipse cx="274" cy="175" rx="17" ry="3" class="f-moon"/>
+        <path d="M262 174 Q262 158 274 158 Q286 158 286 174 Z" class="f-bun"/>
+        <circle cx="270" cy="165" r="1.2" class="f-moon"/><circle cx="278" cy="164" r="1.2" class="f-moon"/><circle cx="274" cy="169" r="1.2" class="f-moon"/>
+      </g>
+
+      <!-- teapot -->
+      <g id="pot">
+        <ellipse cx="180" cy="177" rx="46" ry="4" fill="#000" opacity=".25"/>
+        <path d="M138 132 C108 128 104 164 136 164" class="s-pot" stroke-width="9" stroke-linecap="round"/>
+        <path d="M218 138 C240 134 246 118 252 108" class="s-pot" stroke-width="9" stroke-linecap="round"/>
+        <ellipse cx="180" cy="144" rx="46" ry="34" class="f-pot"/>
+        <path d="M148 130 Q152 116 166 112" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="4" stroke-linecap="round"/>
+        <path d="M139 158 Q180 178 221 158" fill="none" style="stroke:var(--berry)" stroke-width="3" stroke-opacity=".85"/>
+        <ellipse cx="180" cy="113" rx="24" ry="8" class="f-potdk"/>
+        <circle cx="180" cy="103" r="6" class="f-potdk"/>
+        <path d="M162 138 q5 5 10 0 M188 138 q5 5 10 0" class="s-ink" stroke-width="2.5"/>
+        <circle cx="156" cy="148" r="5" class="f-berry" opacity=".55"/>
+        <circle cx="204" cy="148" r="5" class="f-berry" opacity=".55"/>
+        <path d="M176 146 q4 4 8 0" class="s-ink" stroke-width="2"/>
+      </g>
+      <g class="steam">
+        <g transform="translate(172 92)"><path d="M0 0 q-7 -9 0 -16 q7 -8 0 -16"/></g>
+        <g transform="translate(188 92)"><path d="M0 0 q-7 -9 0 -16 q7 -8 0 -16" style="animation-delay:1.1s"/></g>
+        <g transform="translate(252 98)"><path d="M0 0 q-6 -8 0 -14 q6 -7 0 -14" style="animation-delay:2s"/></g>
+      </g>
+      <rect id="hit" x="100" y="92" width="160" height="90" role="button" tabindex="0" aria-label="Steep a cup of tea"/>
+
+      <!-- yarn basket -->
+      <g id="s-yarn" class="item">
+        <path d="M46 204 L36 224 M52 204 L46 224" class="s-wood" stroke-width="2.5" stroke-linecap="round"/>
+        <rect x="22" y="228" width="44" height="22" rx="8" class="f-wood"/>
+        <path d="M26 237h36M26 243h36" class="s-ink" stroke-width="1.5" opacity=".35"/>
+        <circle cx="36" cy="226" r="11" class="f-berry"/>
+        <path d="M28 222q8 6 16 0M29 229q8 5 15 -1" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/>
+        <circle cx="54" cy="228" r="9" class="f-moss"/>
+      </g>
+
+      <!-- firefly jar on the sill -->
+      <g id="s-firefly" class="item">
+        <circle cx="104" cy="118" r="16" class="f-lamp" opacity=".16"/>
+        <rect x="94" y="108" width="20" height="22" rx="5" style="fill:var(--steam);fill-opacity:.16;stroke:var(--steam);stroke-opacity:.5;stroke-width:1.2"/>
+        <rect x="96" y="104" width="16" height="6" rx="2" class="f-wood"/>
+        <circle class="star" cx="100" cy="118" r="1.9" style="fill:var(--lamp);animation-delay:.2s"/>
+        <circle class="star" cx="108" cy="123" r="1.9" style="fill:var(--lamp);animation-delay:1.1s"/>
+        <circle class="star" cx="104" cy="113" r="1.6" style="fill:var(--lamp);animation-delay:1.9s"/>
+        <circle class="star" cx="110" cy="116" r="1.5" style="fill:var(--lamp);animation-delay:2.5s"/>
+      </g>
+
+      <!-- cat -->
+      <g id="s-cat" class="item">
+        <ellipse cx="306" cy="236" rx="32" ry="17" class="f-cat"/>
+        <path d="M296 221 q3 8 0 15 M308 220 q3 8 0 16" class="s-ink" stroke-width="2" opacity=".35"/>
+        <circle cx="276" cy="232" r="13" class="f-cat"/>
+        <path d="M265 222 L267 210 L276 219 Z M277 219 L285 210 L288 223 Z" class="f-cat"/>
+        <path d="M269 232 q3 3 6 0 M278 232 q3 3 6 0" class="s-ink" stroke-width="2"/>
+        <circle cx="277" cy="237" r="1.6" class="f-berry"/>
+        <path d="M336 240 Q356 236 350 222" fill="none" style="stroke:var(--cat)" stroke-width="8" stroke-linecap="round"/>
+        <text class="zz" x="262" y="210">z</text>
+        <text class="zz" x="272" y="198" style="animation-delay:1.2s">z</text>
+      </g>
+    </svg>
+
+    <div class="toast" id="toast" role="status" hidden></div>
+
+    <button class="mouse" id="mouse" hidden aria-label="A little mouse is visiting. Tap to get a tip.">
+      <span>tap!</span>
+      <svg viewBox="0 0 48 40" aria-hidden="true">
+        <path d="M10 28 Q-2 26 4 14" fill="none" style="stroke:var(--berry)" stroke-width="2.5" stroke-linecap="round"/>
+        <ellipse cx="24" cy="27" rx="16" ry="11" style="fill:#b9b4c6"/>
+        <circle cx="38" cy="25" r="8" style="fill:#c9c4d6"/>
+        <circle cx="35" cy="16" r="5" class="f-berry"/>
+        <circle cx="43" cy="18" r="4.5" class="f-berry"/>
+        <circle cx="40" cy="24" r="1.4" style="fill:#1d2433"/>
+        <circle cx="45.5" cy="27" r="1.6" style="fill:#1d2433"/>
+        <rect x="12" y="35" width="5" height="4" rx="2" style="fill:#b9b4c6"/>
+        <rect x="27" y="35" width="5" height="4" rx="2" style="fill:#b9b4c6"/>
+      </svg>
+    </button>
+  </section>
+
+  <p class="hint" id="hint">Tap the teapot to steep a cup.</p>
+
+  <h2>Helpers</h2>
+  <div class="list" id="prod"></div>
+
+  <h2>Little extras</h2>
+  <div class="list" id="extra"></div>
+
+  <footer>
+    <span>Saved on this device. The kettle keeps brewing for up to 8 hours while you are away.</span>
+    <button class="ghost" id="reset">Start a new nook</button>
+    <div class="confirm" id="confirm" hidden>
+      <span>Erase everything and start over?</span>
+      <button class="ghost" id="yes">Yes, erase</button>
+      <button class="ghost" id="no">Keep playing</button>
+    </div>
+  </footer>
+</main>
+
+<script>
+(function(){
+'use strict';
+var KEY='moss-kettle-v1', MAX_AWAY=8*3600;
+
+var PROD=[
+  {id:'flame',   name:'Tea-light Warmer', desc:'A steady little flame under the pot.', base:15,     cps:0.2},
+  {id:'honey',   name:'Honey Jar',        desc:'Sweeter cups, steeped faster.',        base:100,    cps:1},
+  {id:'cat',     name:'Sleepy Cat',       desc:'Purrs the kettle to a gentle boil.',   base:550,    cps:5},
+  {id:'plant',   name:'Window Fern',      desc:'Fresh leaves for the pot.',            base:3000,   cps:22},
+  {id:'books',   name:'Reading Shelf',    desc:'Slow afternoons, many refills.',       base:15000,  cps:90},
+  {id:'lantern', name:'Paper Lanterns',   desc:'Evening guests stay for another cup.', base:80000,  cps:380},
+  {id:'bakery',  name:'Moon Bun Oven',    desc:'Warm buns, warmer cups.',              base:420000, cps:1600},
+  {id:'yarn',    name:'Yarn Basket',      desc:'Tiny cozies knitted for every cup.',   base:2200000,   cps:6800},
+  {id:'radio',   name:'Little Radio',     desc:'Soft jazz makes everyone linger.',     base:12000000,  cps:28000},
+  {id:'rain',    name:'Rainy Window',     desc:'Nothing beats tea on a drizzly night.',base:65000000,  cps:115000},
+  {id:'firefly', name:'Firefly Jar',      desc:'A night light that never runs out.',   base:350000000, cps:480000}
+];
+var EXTRA=[
+  {id:'mitts',   name:'Knitted Mitts',   desc:'Taps brew twice as many cups.',         cost:100},
+  {id:'spoon',   name:'Silver Spoon',    desc:'Taps brew twice as many cups again.',   cost:1000},
+  {id:'anise',   name:'Star Anise',      desc:'All helpers brew twice as fast.',       cost:6000},
+  {id:'quilt',   name:'Patchwork Quilt', desc:'Everything runs 50% warmer.',           cost:30000},
+  {id:'biscuit', name:'Ginger Biscuits', desc:'All helpers brew twice as fast again.', cost:200000},
+  {id:'pillow',  name:'Cloud Cushions',  desc:'Cozier seats. All helpers brew twice as fast.', cost:1500000},
+  {id:'moonhoney', name:'Moon Honey',    desc:'Glows faintly. All helpers brew twice as fast.', cost:80000000}
+];
+var F=function(c){return 'style="fill:var(--'+c+')"';};
+var ICON={
+  flame:'<path d="M12 3c1 4.5 6 5.5 6 11a6 6 0 0 1-12 0c0-2.4 1.1-3.8 2.4-5 .1 2 .9 3 2 3.2C9.4 9 10 5.5 12 3z" '+F('lamp')+'/>',
+  honey:'<rect x="5" y="9" width="14" height="12" rx="4" '+F('lamp')+'/><rect x="7" y="5" width="10" height="4" rx="1.5" '+F('wood')+'/>',
+  cat:'<circle cx="12" cy="14" r="7" '+F('cat')+'/><path d="M6 10L6.5 3.5 11 7zM18 10L17.5 3.5 13 7z" '+F('cat')+'/><path d="M9 13.5q1.2 1.4 2.4 0M12.6 13.5q1.2 1.4 2.4 0" style="stroke:#1d2433;fill:none;stroke-width:1.5;stroke-linecap:round"/>',
+  plant:'<ellipse cx="12" cy="9" rx="3" ry="7" '+F('moss')+'/><ellipse cx="7" cy="11" rx="2.6" ry="6" transform="rotate(-35 7 11)" '+F('moss')+'/><ellipse cx="17" cy="11" rx="2.6" ry="6" transform="rotate(35 17 11)" '+F('moss')+'/><rect x="8" y="16" width="8" height="6" rx="2" '+F('berry')+'/>',
+  books:'<rect x="4" y="5" width="5" height="16" rx="1" '+F('berry')+'/><rect x="10" y="8" width="4.5" height="13" rx="1" '+F('moss')+'/><rect x="15.5" y="3" width="5" height="18" rx="1" '+F('lamp')+'/>',
+  lantern:'<rect x="10" y="2" width="4" height="3" '+F('wood')+'/><ellipse cx="12" cy="13" rx="7" ry="8.5" '+F('lamp')+'/><rect x="9" y="21" width="6" height="2" '+F('wood')+'/>',
+  bakery:'<path d="M3 17Q3 6 12 6T21 17Z" '+F('bun')+'/><rect x="3" y="17" width="18" height="3" rx="1.5" '+F('moon')+'/>',
+  mitts:'<rect x="6" y="6" width="12" height="15" rx="5" '+F('berry')+'/><rect x="3" y="11" width="6" height="6" rx="3" '+F('berry')+'/><rect x="6" y="17" width="12" height="4" rx="1.5" '+F('moon')+'/>',
+  spoon:'<ellipse cx="12" cy="7" rx="4.5" ry="5.5" '+F('steam')+'/><rect x="11" y="11" width="2" height="11" rx="1" '+F('steam')+'/>',
+  anise:'<path d="M12 2l2.2 6.3L21 6l-4 5.6L22 14l-6.6 1.2L12 22l-3.4-6.8L2 14l5-2.4L3 6l6.8 2.3z" '+F('lamp')+'/>',
+  quilt:'<rect x="3" y="3" width="9" height="9" rx="1.5" '+F('berry')+'/><rect x="12" y="3" width="9" height="9" rx="1.5" '+F('moss')+'/><rect x="3" y="12" width="9" height="9" rx="1.5" '+F('lamp')+'/><rect x="12" y="12" width="9" height="9" rx="1.5" '+F('pot')+'/>',
+  biscuit:'<circle cx="12" cy="12" r="9" '+F('bun')+'/><circle cx="9" cy="9" r="1.3" '+F('wood')+'/><circle cx="15" cy="10" r="1.3" '+F('wood')+'/><circle cx="11" cy="15" r="1.3" '+F('wood')+'/>',
+  yarn:'<circle cx="12" cy="12" r="9" '+F('berry')+'/><path d="M5 9q7 5 14 0M4.5 13q8 5 15 -1M7 18q5 -3 10 -2" style="stroke:#fff;stroke-opacity:.4;fill:none;stroke-width:1.3"/>',
+  radio:'<rect x="3" y="8" width="18" height="12" rx="3" '+F('pot')+'/><circle cx="8" cy="14" r="3" '+F('moon')+'/><path d="M13 12h5M13 15h5M13 18h5" style="stroke:#1d2433;stroke-width:1.2;fill:none;stroke-linecap:round"/><path d="M16 8l4-5" style="stroke:var(--wood);stroke-width:1.5;fill:none;stroke-linecap:round"/>',
+  rain:'<path d="M6 14a4 4 0 0 1 1-7.9A5.5 5.5 0 0 1 17.5 7 3.8 3.8 0 0 1 18 14z" '+F('steam')+'/><path d="M8 17l-1 4M13 17l-1 4M18 17l-1 4" style="stroke:var(--pot);stroke-width:1.8;fill:none;stroke-linecap:round"/>',
+  firefly:'<rect x="6" y="7" width="12" height="15" rx="3.5" style="fill:var(--steam);fill-opacity:.25;stroke:var(--steam);stroke-opacity:.7"/><rect x="7.5" y="3.5" width="9" height="4" rx="1.5" '+F('wood')+'/><circle cx="10" cy="13" r="1.4" '+F('lamp')+'/><circle cx="14" cy="16" r="1.4" '+F('lamp')+'/><circle cx="12" cy="10.5" r="1.1" '+F('lamp')+'/>',
+  pillow:'<rect x="3" y="6" width="18" height="12" rx="5" '+F('moss')+'/><circle cx="12" cy="12" r="1.6" '+F('moon')+'/>',
+  moonhoney:'<circle cx="12" cy="12" r="9" '+F('moon')+'/><circle cx="15.5" cy="9.5" r="7.5" style="fill:var(--wall)"/><circle cx="10" cy="16" r="1.2" '+F('lamp')+'/>'
+};
+
+function $(id){return document.getElementById(id);}
+function fresh(){return {cups:0,total:0,counts:PROD.map(function(){return 0;}),extras:{},taps:0,mice:0,last:Date.now(),sound:false};}
+function load(){
+  var s=fresh();
+  try{
+    var raw=localStorage.getItem(KEY);
+    if(raw){
+      var o=JSON.parse(raw);
+      s.cups=isFinite(o.cups)?+o.cups:0;
+      s.total=isFinite(o.total)?+o.total:0;
+      s.taps=+o.taps||0; s.mice=+o.mice||0;
+      s.last=+o.last||Date.now();
+      s.sound=!!o.sound;
+      s.counts=PROD.map(function(_,i){return Math.max(0,Math.floor(+(o.counts&&o.counts[i])||0));});
+      s.extras=(o.extras&&typeof o.extras==='object')?o.extras:{};
+    }
+  }catch(e){}
+  return s;
+}
+var S=load();
+function save(){S.last=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+
+function fmt(n){
+  if(!isFinite(n)||n<0) return '0';
+  if(n<10000) return Math.floor(n).toLocaleString('en-US');
+  var u=['K','M','B','T','Qa','Qi'],i=-1;
+  while(n>=1000&&i<u.length-1){n/=1000;i++;}
+  return (n<10?n.toFixed(2):n<100?n.toFixed(1):String(Math.floor(n)))+u[i];
+}
+function rate(n){
+  if(n>=100) return fmt(Math.floor(n));
+  var r=Math.round(n*10)/10;
+  return String(r);
+}
+function cost(i){return Math.ceil(PROD[i].base*Math.pow(1.15,S.counts[i]));}
+function mult(){return (S.extras.anise?2:1)*(S.extras.quilt?1.5:1)*(S.extras.biscuit?2:1)*(S.extras.pillow?2:1)*(S.extras.moonhoney?2:1);}
+function cps(){var b=0;for(var i=0;i<PROD.length;i++)b+=S.counts[i]*PROD[i].cps;return b*mult();}
+function tapValue(){return (S.extras.mitts?2:1)*(S.extras.spoon?2:1)+cps()*0.02;}
+
+/* ---------- sound ---------- */
+var ac=null;
+function blip(f){
+  if(!S.sound) return;
+  try{
+    ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+    if(ac.state==='suspended'&&ac.resume) ac.resume();
+    var o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime;
+    o.type='sine';o.frequency.value=f*(1+Math.random()*0.06);
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(0.08,t+0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+0.2);
+    o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+0.22);
+  }catch(e){}
+}
+
+/* ---------- toast ---------- */
+var toastT;
+function toast(msg){
+  var t=$('toast');
+  t.textContent=msg;t.hidden=false;
+  t.classList.remove('show');void t.offsetWidth;t.classList.add('show');
+  clearTimeout(toastT);
+  toastT=setTimeout(function(){t.hidden=true;},4500);
+}
+
+/* ---------- lists ---------- */
+var prodEls=[],extraEls=[];
+function rowHTML(icon,name,desc){
+  return '<div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true">'+icon+'</svg></div>'+
+    '<div class="txt"><div class="nm">'+name+'</div><div class="ds">'+desc+'</div><div class="mt"></div></div>'+
+    '<button class="buy" type="button"></button>';
+}
+function buildLists(){
+  var p=$('prod'),x=$('extra');
+  PROD.forEach(function(it,i){
+    var r=document.createElement('div');r.className='row';
+    r.innerHTML=rowHTML(ICON[it.id],it.name,it.desc);
+    p.appendChild(r);
+    var btn=r.querySelector('.buy');
+    btn.addEventListener('click',function(){buy(i);});
+    prodEls[i]={row:r,btn:btn,mt:r.querySelector('.mt')};
+  });
+  EXTRA.forEach(function(it,i){
+    var r=document.createElement('div');r.className='row';
+    r.innerHTML=rowHTML(ICON[it.id],it.name,it.desc);
+    x.appendChild(r);
+    var btn=r.querySelector('.buy');
+    btn.addEventListener('click',function(){buyExtra(i);});
+    extraEls[i]={row:r,btn:btn,mt:r.querySelector('.mt')};
+  });
+}
+function buy(i){
+  var c=cost(i);
+  if(S.cups<c){blip(220);return;}
+  S.cups-=c;S.counts[i]++;
+  blip(560);renderScene();update();save();
+}
+function buyExtra(i){
+  var e=EXTRA[i];
+  if(S.extras[e.id]||S.cups<e.cost){if(!S.extras[e.id])blip(220);return;}
+  S.cups-=e.cost;S.extras[e.id]=true;
+  blip(640);update();save();
+}
+
+/* ---------- scene ---------- */
+function renderScene(){
+  PROD.forEach(function(it,i){
+    var g=$('s-'+it.id);
+    if(g) g.classList.toggle('on',S.counts[i]>0);
+  });
+  var n=0;for(var i=0;i<S.counts.length;i++)n+=S.counts[i];
+  $('glow').setAttribute('opacity',String(Math.min(1,0.4+n/50)));
+}
+
+/* ---------- update ---------- */
+function update(){
+  var c=cps();
+  $('cups').textContent=fmt(Math.floor(S.cups));
+  $('cps').textContent=rate(c)+' per second';
+  $('tapv').textContent='+'+rate(tapValue())+' per tap';
+  $('hint').hidden=S.total>=15;
+  PROD.forEach(function(it,i){
+    var el=prodEls[i],k=cost(i),can=S.cups>=k;
+    el.btn.textContent=fmt(k);
+    el.btn.classList.toggle('can',can);
+    el.btn.setAttribute('aria-label','Buy '+it.name+' for '+fmt(k)+' cups');
+    el.mt.textContent=S.counts[i]>0?('Owned '+S.counts[i]+' · '+rate(it.cps*mult())+'/s each'):('+'+rate(it.cps*mult())+'/s each');
+  });
+  EXTRA.forEach(function(it,i){
+    var el=extraEls[i],own=!!S.extras[it.id];
+    el.row.classList.toggle('done',own);
+    if(own){el.btn.textContent='Owned';el.btn.classList.remove('can');el.btn.setAttribute('aria-label',it.name+' owned');}
+    else{
+      var can=S.cups>=it.cost;
+      el.btn.textContent=fmt(it.cost);
+      el.btn.classList.toggle('can',can);
+      el.btn.setAttribute('aria-label','Buy '+it.name+' for '+fmt(it.cost)+' cups');
+    }
+  });
+}
+
+/* ---------- tapping ---------- */
+var scene=$('scene'),pot=$('pot'),hit=$('hit');
+function pop(x,y,txt){
+  var d=document.createElement('div');
+  d.className='pop';d.textContent=txt;
+  d.style.left=x+'px';d.style.top=y+'px';
+  scene.appendChild(d);
+  d.addEventListener('animationend',function(){d.remove();});
+}
+function tap(clientX,clientY){
+  var v=tapValue();
+  S.cups+=v;S.total+=v;S.taps++;
+  pot.classList.remove('squish');void pot.getBoundingClientRect();pot.classList.add('squish');
+  var r=scene.getBoundingClientRect();
+  pop(clientX-r.left+(Math.random()*24-12),clientY-r.top-18,'+'+rate(v));
+  blip(420);
+  update();
+}
+hit.addEventListener('pointerdown',function(e){e.preventDefault();tap(e.clientX,e.clientY);});
+hit.addEventListener('keydown',function(e){
+  if(e.key==='Enter'||e.key===' '){
+    e.preventDefault();
+    var b=hit.getBoundingClientRect();
+    tap(b.left+b.width/2,b.top+b.height/2);
+  }
+});
+
+/* ---------- visitors ---------- */
+var mouse=$('mouse'),mouseT,mouseHideT;
+function scheduleMouse(first){
+  clearTimeout(mouseT);
+  mouseT=setTimeout(showMouse,first?(15000+Math.random()*10000):(30000+Math.random()*35000));
+}
+function showMouse(){
+  if(document.hidden){scheduleMouse(false);return;}
+  mouse.hidden=false;
+  mouse.classList.remove('in');void mouse.offsetWidth;mouse.classList.add('in');
+  clearTimeout(mouseHideT);
+  mouseHideT=setTimeout(function(){mouse.hidden=true;scheduleMouse(false);},14000);
+}
+mouse.addEventListener('click',function(){
+  var tip=Math.max(25,Math.floor(cps()*40));
+  S.cups+=tip;S.total+=tip;S.mice++;
+  mouse.hidden=true;clearTimeout(mouseHideT);
+  toast('A little mouse left a thank-you tip: +'+fmt(tip)+' cups');
+  blip(700);update();save();scheduleMouse(false);
+});
+
+/* ---------- time ---------- */
+var lastTick=S.last||Date.now();
+function tick(){
+  var now=Date.now(),dt=(now-lastTick)/1000;
+  lastTick=now;
+  if(!(dt>0)) return;
+  var away=dt>20;
+  if(dt>MAX_AWAY) dt=MAX_AWAY;
+  var gain=cps()*dt;
+  S.cups+=gain;S.total+=gain;
+  if(away&&gain>=1) toast('Welcome back. The kettle kept going: +'+fmt(gain)+' cups');
+  update();
+}
+
+/* ---------- controls ---------- */
+function setSound(){
+  var b=$('snd');
+  b.textContent=S.sound?'Sound on':'Sound off';
+  b.setAttribute('aria-pressed',S.sound?'true':'false');
+}
+$('snd').addEventListener('click',function(){S.sound=!S.sound;setSound();blip(500);save();});
+$('reset').addEventListener('click',function(){$('confirm').hidden=false;});
+$('no').addEventListener('click',function(){$('confirm').hidden=true;});
+$('yes').addEventListener('click',function(){
+  S=fresh();
+  try{localStorage.removeItem(KEY);}catch(e){}
+  lastTick=Date.now();
+  $('confirm').hidden=true;
+  setSound();renderScene();update();
+});
+document.addEventListener('visibilitychange',function(){if(document.hidden)save();else tick();});
+window.addEventListener('pagehide',save);
+
+/* ---------- start ---------- */
+buildLists();
+setSound();
+renderScene();
+tick();
+update();
+setInterval(tick,100);
+setInterval(save,5000);
+scheduleMouse(true);
+})();
+</script>
+
+<script>
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}
+</script>
+</body>
+</html>
