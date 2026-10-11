@@ -110,8 +110,8 @@ h2{margin:6px 0 -4px;font-size:11px;font-weight:800;text-transform:uppercase;let
 footer{display:flex;flex-direction:column;gap:10px;align-items:center;color:var(--muted);font-size:12px;text-align:center}
 .confirm{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center}
 [hidden]{display:none!important}
-.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
-.tabs button{position:relative;background:transparent;border:1px solid var(--line);border-radius:12px;padding:8px 4px;font-size:13px;font-weight:800;color:var(--muted);cursor:pointer;min-width:0}
+.tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+.tabs button{position:relative;background:transparent;border:1px solid var(--line);border-radius:12px;padding:8px 2px;font-size:12px;font-weight:800;color:var(--muted);cursor:pointer;min-width:0}
 .tabs button[aria-selected="true"]{background:var(--panel);border-color:var(--lamp);color:var(--ink)}
 .tabs button.ping::after{content:'';position:absolute;top:5px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--lamp)}
 .tabs button:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
@@ -130,6 +130,19 @@ button.card:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
 .fresh{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px}
 .fresh .lv{font-family:var(--display);font-size:34px;line-height:1;color:var(--lamp)}
 .buy.wide{width:100%}
+.fresh .nm{font-weight:800;font-size:17px}
+.dots{display:flex;gap:8px;flex-wrap:wrap}
+.dots span{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--muted)}
+.dots span.got{background:var(--lamp);border-color:var(--lamp);color:var(--lamp-ink)}
+.dots span.bonus{border-color:var(--moss)}
+.ach:not(.got){opacity:.65}
+.ach.got{border-color:var(--lamp)}
+.fall{transform-box:fill-box;transform-origin:center;opacity:0;animation:drift 6s linear infinite}
+@keyframes drift{0%{opacity:0;transform:translate(0,0) rotate(0)}12%{opacity:.9}100%{opacity:0;transform:translate(16px,104px) rotate(240deg)}}
+#s-cat{transform-box:fill-box;transform-origin:50% 100%}
+#s-cat.purr{animation:purr .4s ease-out}
+@keyframes purr{0%{transform:scale(1)}40%{transform:scale(1.05,.96)}100%{transform:scale(1)}}
+#catHit:focus-visible{stroke:var(--lamp);stroke-width:2;stroke-dasharray:5 5}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 
@@ -300,6 +313,25 @@ button.card:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
         <text class="zz" x="262" y="210">z</text>
         <text class="zz" x="272" y="198" style="animation-delay:1.2s">z</text>
       </g>
+      <!-- October decor -->
+      <g id="s-october" class="item">
+        <g clip-path="url(#winclip)">
+          <g transform="translate(44 22)"><path class="fall" d="M0 0 q4 -7 9 0 q-4 7 -9 0z" fill="#e0833a" style="animation-delay:0s"/></g>
+          <g transform="translate(62 22)"><path class="fall" d="M0 0 q4 -7 9 0 q-4 7 -9 0z" fill="#f4bf62" style="animation-delay:1.3s;animation-duration:7s"/></g>
+          <g transform="translate(86 22)"><path class="fall" d="M0 0 q4 -7 9 0 q-4 7 -9 0z" fill="#c4651f" style="animation-delay:2.6s;animation-duration:5.5s"/></g>
+          <g transform="translate(100 22)"><path class="fall" d="M0 0 q4 -7 9 0 q-4 7 -9 0z" fill="#e0833a" style="animation-delay:3.8s"/></g>
+          <g transform="translate(74 22)"><path class="fall" d="M0 0 q4 -7 9 0 q-4 7 -9 0z" fill="#e9923f" style="animation-delay:4.9s;animation-duration:6.5s"/></g>
+        </g>
+        <ellipse cx="132" cy="239" rx="18" ry="13" fill="#e0833a"/>
+        <path d="M124 228 q-6 11 0 22 M132 226 v26 M140 228 q6 11 0 22" fill="none" stroke="#c4651f" stroke-width="2" stroke-linecap="round"/>
+        <rect x="130" y="221" width="5" height="8" rx="2" fill="#5b7a3c"/>
+        <path d="M126 236 l3 -3 l3 3z M135 236 l3 -3 l3 3z" fill="#2b1d08"/>
+        <path d="M126 243 q6 5 12 0" fill="none" stroke="#2b1d08" stroke-width="2" stroke-linecap="round"/>
+        <ellipse cx="164" cy="244" rx="12" ry="9" fill="#e9923f"/>
+        <path d="M159 237 q-4 8 0 15 M164 235 v18 M169 237 q4 8 0 15" fill="none" stroke="#c4651f" stroke-width="1.6" stroke-linecap="round"/>
+        <rect x="162" y="230" width="4" height="6" rx="2" fill="#5b7a3c"/>
+      </g>
+      <rect id="catHit" x="262" y="206" width="86" height="48" role="button" tabindex="-1" aria-label="Pet the cat" style="fill:transparent;cursor:pointer;pointer-events:none;outline:none"/>
     </svg>
 
     <div class="toast" id="toast" role="status" hidden></div>
@@ -326,6 +358,7 @@ button.card:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
     <button type="button" role="tab" data-tab="nook" aria-selected="true">Nook</button>
     <button type="button" role="tab" data-tab="blends" aria-selected="false">Blends</button>
     <button type="button" role="tab" data-tab="regulars" aria-selected="false">Regulars</button>
+    <button type="button" role="tab" id="tab-goals" data-tab="goals" aria-selected="false">Goals</button>
     <button type="button" role="tab" id="tab-fresh" data-tab="fresh" aria-selected="false">Fresh Pot</button>
   </div>
 
@@ -345,6 +378,18 @@ button.card:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
     <p class="note" id="bookCount"></p>
     <div class="grid" id="book"></div>
     <p class="note">Visitors tip three times more when you are brewing their favorite blend. Meeting someone new earns a welcome gift.</p>
+  </section>
+
+  <section class="panel" id="p-goals" hidden>
+    <div class="fresh">
+      <div class="nm">Daily gift</div>
+      <div class="note" id="giftNote"></div>
+      <div class="dots" id="giftDots"></div>
+      <button type="button" class="buy wide" id="giftBtn">Open today&rsquo;s gift</button>
+      <div class="note">Open a gift each day to build a streak. Every 7th day includes a Golden Leaf.</div>
+    </div>
+    <p class="note" id="achCount"></p>
+    <div class="list" id="achList"></div>
   </section>
 
   <section class="panel" id="p-fresh" hidden>
@@ -443,10 +488,12 @@ var REG=[
   {id:'fox',name:'Ember',kind:'fox',rarity:'Rare',weight:1.5,tipMult:2.5,min:25000000,fav:'rooibos',line:'Shows up when the lanterns are lit.',
    art:'<ellipse cx="9" cy="26" rx="10" ry="5" transform="rotate(-30 9 26)" fill="#e0833a"/><ellipse cx="3.5" cy="20" rx="3.4" ry="2.4" transform="rotate(-30 3.5 20)" fill="#f4e6d0"/><ellipse cx="22" cy="28" rx="13" ry="8" fill="#e0833a"/><polygon points="30,15 31,5 37,13" fill="#e0833a"/><polygon points="38,13 43,5 44,16" fill="#e0833a"/><circle cx="36" cy="21" r="8" fill="#e0833a"/><ellipse cx="42" cy="25" rx="5" ry="3.5" fill="#f4e6d0"/><circle cx="46" cy="24" r="1.5" fill="#1d2433"/><circle cx="38" cy="19" r="1.4" fill="#1d2433"/><rect x="15" y="34" width="4" height="5" rx="2" fill="#5b3a24"/><rect x="27" y="34" width="4" height="5" rx="2" fill="#5b3a24"/>'},
   {id:'moth',name:'Luna',kind:'moth',rarity:'Legendary',weight:1,tipMult:4,min:500000000,fav:'starleaf',line:'Drawn to the lamp, stays for the tea.',
-   art:'<circle cx="24" cy="20" r="19" fill="#f4bf62" opacity=".12"/><ellipse cx="16" cy="16" rx="12" ry="9" transform="rotate(-25 16 16)" fill="#b9a6e0"/><ellipse cx="32" cy="16" rx="12" ry="9" transform="rotate(25 32 16)" fill="#b9a6e0"/><ellipse cx="17" cy="27" rx="9" ry="7" transform="rotate(20 17 27)" fill="#9c88cc"/><ellipse cx="31" cy="27" rx="9" ry="7" transform="rotate(-20 31 27)" fill="#9c88cc"/><circle cx="14" cy="15" r="2.6" fill="#f4e6b8"/><circle cx="34" cy="15" r="2.6" fill="#f4e6b8"/><ellipse cx="24" cy="24" rx="3.2" ry="10" fill="#5d4e7a"/><circle cx="24" cy="12" r="3.2" fill="#5d4e7a"/><path d="M23 10 Q20 4 16 3 M25 10 Q28 4 32 3" stroke="#5d4e7a" stroke-width="1.4" fill="none" stroke-linecap="round"/>'}
+   art:'<circle cx="24" cy="20" r="19" fill="#f4bf62" opacity=".12"/><ellipse cx="16" cy="16" rx="12" ry="9" transform="rotate(-25 16 16)" fill="#b9a6e0"/><ellipse cx="32" cy="16" rx="12" ry="9" transform="rotate(25 32 16)" fill="#b9a6e0"/><ellipse cx="17" cy="27" rx="9" ry="7" transform="rotate(20 17 27)" fill="#9c88cc"/><ellipse cx="31" cy="27" rx="9" ry="7" transform="rotate(-20 31 27)" fill="#9c88cc"/><circle cx="14" cy="15" r="2.6" fill="#f4e6b8"/><circle cx="34" cy="15" r="2.6" fill="#f4e6b8"/><ellipse cx="24" cy="24" rx="3.2" ry="10" fill="#5d4e7a"/><circle cx="24" cy="12" r="3.2" fill="#5d4e7a"/><path d="M23 10 Q20 4 16 3 M25 10 Q28 4 32 3" stroke="#5d4e7a" stroke-width="1.4" fill="none" stroke-linecap="round"/>'},
+  {id:'ghost',name:'Boo',kind:'ghost',rarity:'Seasonal',weight:3,tipMult:2,min:0,fav:'berry',season:'october',seasonName:'October',line:'Only drops in for pumpkin season.',
+   art:'<path d="M10 36 V18 a14 14 0 0 1 28 0 V36 l-4.7 -3.5 l-4.7 3.5 l-4.6 -3.5 l-4.7 3.5 l-4.7 -3.5 z" fill="#eef1f8"/><circle cx="19" cy="19" r="2.2" fill="#1d2433"/><circle cx="29" cy="19" r="2.2" fill="#1d2433"/><ellipse cx="15" cy="25" rx="3" ry="2" fill="#e48a9c" opacity=".6"/><ellipse cx="33" cy="25" rx="3" ry="2" fill="#e48a9c" opacity=".6"/><path d="M21 26 q3 3 6 0" stroke="#1d2433" stroke-width="1.6" fill="none" stroke-linecap="round"/>'}
 ];
 function $(id){return document.getElementById(id);}
-function fresh(){return {cups:0,total:0,counts:PROD.map(function(){return 0;}),extras:{},taps:0,mice:0,last:Date.now(),sound:false,life:0,leaves:0,pots:0,blend:'classic',reg:{}};}
+function fresh(){return {cups:0,total:0,counts:PROD.map(function(){return 0;}),extras:{},taps:0,mice:0,last:Date.now(),sound:false,life:0,leaves:0,pots:0,blend:'classic',reg:{},ach:{},giftDay:-1,streak:0,bestStreak:0,pets:0,loved:0};}
 function load(){
   var s=fresh();
   try{
@@ -465,6 +512,12 @@ function load(){
       s.pots=Math.max(0,Math.floor(+o.pots||0));
       s.blend=(typeof o.blend==='string')?o.blend:'classic';
       s.reg=(o.reg&&typeof o.reg==='object')?o.reg:{};
+      s.ach=(o.ach&&typeof o.ach==='object')?o.ach:{};
+      s.giftDay=isFinite(o.giftDay)?+o.giftDay:-1;
+      s.streak=Math.max(0,Math.floor(+o.streak||0));
+      s.bestStreak=Math.max(s.streak,Math.floor(+o.bestStreak||0));
+      s.pets=Math.max(0,Math.floor(+o.pets||0));
+      s.loved=Math.max(0,Math.floor(+o.loved||0));
     }
   }catch(e){}
   return s;
@@ -484,7 +537,55 @@ function rate(n){
   var r=Math.round(n*10)/10;
   return String(r);
 }
-var blendN=-1;
+var blendN=-1,lastGiftReady=null,giftT=0;
+function seasonNow(){return new Date().getMonth()===9?'october':'';}
+function regOpen(r){return S.life>=r.min&&(!r.season||r.season===seasonNow());}
+function achMult(){var n=0,k;for(k in S.ach){if(S.ach[k])n++;}return 1+0.01*n;}
+function metCount(){var n=0,i;for(i=0;i<REG.length;i++){if(S.reg[REG[i].id])n++;}return n;}
+function visitsTotal(){var n=0,k;for(k in S.reg){n+=S.reg[k]||0;}return n;}
+function helpersTotal(){var n=0,i;for(i=0;i<S.counts.length;i++)n+=S.counts[i];return n;}
+function extrasTotal(){var n=0,i;for(i=0;i<EXTRA.length;i++){if(S.extras[EXTRA[i].id])n++;}return n;}
+function blendsOpen(){var n=0,i;for(i=0;i<BLENDS.length;i++){if(blendUnlocked(BLENDS[i]))n++;}return n;}
+var ACH=[
+  {id:'first',    name:'First Cup',        desc:'Tap the teapot once.',                  test:function(){return S.taps>=1;}},
+  {id:'taps100',  name:'Warm Hands',       desc:'Tap the teapot 100 times.',             test:function(){return S.taps>=100;}},
+  {id:'taps1000', name:'Steady Hands',     desc:'Tap the teapot 1,000 times.',           test:function(){return S.taps>=1000;}},
+  {id:'cups1k',   name:'Cupboard Full',    desc:'Steep 1,000 cups in all.',              test:function(){return S.life>=1000;}},
+  {id:'cups1m',   name:'Tea Shop',         desc:'Steep 1 million cups in all.',          test:function(){return S.life>=1e6;}},
+  {id:'cups1b',   name:'Tea Empire',       desc:'Steep 1 billion cups in all.',          test:function(){return S.life>=1e9;}},
+  {id:'cat',      name:'Cat Person',       desc:'Adopt the Sleepy Cat.',                 test:function(){return S.counts[2]>0;}},
+  {id:'pet25',    name:'Purr Machine',     desc:'Pet the cat 25 times.',                 test:function(){return S.pets>=25;}},
+  {id:'busy',     name:'Busy Kitchen',     desc:'Own 25 helpers at once.',               test:function(){return helpersTotal()>=25;}},
+  {id:'full',     name:'Full House',       desc:'Own at least one of every helper.',     test:function(){return S.counts.every(function(c){return c>0;});}},
+  {id:'stocked',  name:'Well Stocked',     desc:'Own 3 little extras.',                  test:function(){return extrasTotal()>=3;}},
+  {id:'collector',name:'Collector',        desc:'Own every little extra.',               test:function(){return extrasTotal()>=EXTRA.length;}},
+  {id:'friendly', name:'Friendly Face',    desc:'Meet 3 regulars.',                      test:function(){return metCount()>=3;}},
+  {id:'door',     name:'Open Door',        desc:'Welcome 25 visits in all.',             test:function(){return visitsTotal()>=25;}},
+  {id:'pair',     name:'Perfect Pairing',  desc:'Serve a regular their favorite blend.', test:function(){return S.loved>=1;}},
+  {id:'everyone', name:'Everyone Is Here', desc:'Meet every year-round regular.',        test:function(){return REG.every(function(r){return r.season||S.reg[r.id];});}},
+  {id:'ghost',    name:'Spooky Guest',     desc:'Meet Boo in October.',                  test:function(){return !!S.reg.ghost;}},
+  {id:'taster',   name:'Tea Taster',       desc:'Discover 4 tea blends.',                test:function(){return blendsOpen()>=4;}},
+  {id:'fresh1',   name:'Fresh Start',      desc:'Start your first Fresh Pot.',           test:function(){return S.pots>=1;}},
+  {id:'fresh5',   name:'Seasoned Brewer',  desc:'Start 5 Fresh Pots.',                   test:function(){return S.pots>=5;}},
+  {id:'leaves10', name:'Golden Touch',     desc:'Hold 10 Golden Leaves.',                test:function(){return S.leaves>=10;}},
+  {id:'streak3',  name:'Daily Ritual',     desc:'Reach a 3 day gift streak.',            test:function(){return S.bestStreak>=3;}},
+  {id:'streak7',  name:'Week of Warmth',   desc:'Reach a 7 day gift streak.',            test:function(){return S.bestStreak>=7;}}
+];
+function announce(msg){
+  if($('toast').hidden){toast(msg);}
+  else{setTimeout(function(){toast(msg);},3600);}
+}
+function checkAch(){
+  var got=[],i,a;
+  for(i=0;i<ACH.length;i++){
+    a=ACH[i];
+    if(!S.ach[a.id]&&a.test()){S.ach[a.id]=true;got.push(a.name);}
+  }
+  if(got.length){
+    announce(got.length<=2?('Achievement: '+got.join(', ')+' (+'+got.length+'% brewing)'):(got.length+' achievements unlocked (+'+got.length+'% brewing)'));
+    renderGoals();save();blip(740);
+  }
+}
 function blendById(id){for(var i=0;i<BLENDS.length;i++){if(BLENDS[i].id===id)return BLENDS[i];}return BLENDS[0];}
 function blendUnlocked(b){return S.life>=b.unlock;}
 function curBlend(){var b=blendById(S.blend);return blendUnlocked(b)?b:BLENDS[0];}
@@ -495,9 +596,9 @@ function earn(x){S.cups+=x;S.total+=x;S.life+=x;}
 function freshGain(){return Math.floor(Math.sqrt(S.total/500000));}
 function leafWord(n){return n===1?'Golden Leaf':'Golden Leaves';}
 function cost(i){return Math.ceil(PROD[i].base*Math.pow(1.15,S.counts[i]));}
-function mult(){return (S.extras.anise?2:1)*(S.extras.quilt?1.5:1)*(S.extras.biscuit?2:1)*(S.extras.pillow?2:1)*(S.extras.moonhoney?2:1)*leafMult()*blendProd();}
+function mult(){return (S.extras.anise?2:1)*(S.extras.quilt?1.5:1)*(S.extras.biscuit?2:1)*(S.extras.pillow?2:1)*(S.extras.moonhoney?2:1)*leafMult()*blendProd()*achMult();}
 function cps(){var b=0;for(var i=0;i<PROD.length;i++)b+=S.counts[i]*PROD[i].cps;return b*mult();}
-function tapValue(){return (S.extras.mitts?2:1)*(S.extras.spoon?2:1)*blendTap()*leafMult()+cps()*0.02;}
+function tapValue(){return (S.extras.mitts?2:1)*(S.extras.spoon?2:1)*blendTap()*leafMult()*achMult()+cps()*0.02;}
 
 /* ---------- sound ---------- */
 var ac=null;
@@ -572,6 +673,10 @@ function renderScene(){
   });
   var n=0;for(var i=0;i<S.counts.length;i++)n+=S.counts[i];
   $('glow').setAttribute('opacity',String(Math.min(1,0.4+n/50)));
+  $('s-october').classList.toggle('on',seasonNow()==='october');
+  var ch=$('catHit');
+  ch.style.pointerEvents=S.counts[2]>0?'all':'none';
+  ch.setAttribute('tabindex',S.counts[2]>0?'0':'-1');
 }
 
 /* ---------- update ---------- */
@@ -594,6 +699,11 @@ function update(){
   $('fGain').textContent=gain>=1?('A Fresh Pot now earns '+gain+' '+leafWord(gain)+', which is +'+(gain*5)+'% more brewing.'):('Steep 500K cups in a single run to earn your first Golden Leaf. You are at '+fmt(S.total)+'.');
   $('freshBtn').classList.toggle('can',gain>=1);
   $('tab-fresh').classList.toggle('ping',gain>=1);
+  var gr=giftReady();
+  if(gr!==lastGiftReady){lastGiftReady=gr;renderGift();}
+  else if(gr&&(++giftT%50===0)){renderGift();}
+  $('tab-goals').classList.toggle('ping',gr);
+  checkAch();
   PROD.forEach(function(it,i){
     var el=prodEls[i],k=cost(i),can=S.cups>=k;
     el.btn.textContent=fmt(k);
@@ -646,7 +756,7 @@ var mouse=$('mouse'),mouseT,mouseHideT,curVis=null;
 function pickVisitor(){
   var pool=[],w=0,i;
   for(i=0;i<REG.length;i++){
-    if(S.life>=REG[i].min){var wt=REG[i].weight*(S.reg[REG[i].id]?1:2);pool.push([REG[i],wt]);w+=wt;}
+    if(regOpen(REG[i])){var wt=REG[i].weight*(S.reg[REG[i].id]?1:2);pool.push([REG[i],wt]);w+=wt;}
   }
   var r=Math.random()*w;
   for(i=0;i<pool.length;i++){r-=pool[i][1];if(r<=0)return pool[i][0];}
@@ -671,6 +781,7 @@ mouse.addEventListener('click',function(){
   var v=curVis,first=!S.reg[v.id],loved=curBlend().id===v.fav;
   var tip=Math.max(25,Math.floor(cps()*40))*v.tipMult*(loved?3:1)*(first?5:1);
   S.reg[v.id]=(S.reg[v.id]||0)+1;
+  if(loved) S.loved++;
   earn(tip);S.mice++;
   mouse.hidden=true;clearTimeout(mouseHideT);
   toast(first?('You met '+v.name+' the '+v.kind+'! Welcome gift: +'+fmt(tip)+' cups'):(loved?(v.name+' adores the '+curBlend().name+'! Tip: +'+fmt(tip)+' cups'):(v.name+' left a thank-you tip: +'+fmt(tip)+' cups')));
@@ -725,7 +836,7 @@ function renderBook(){
     el.className='card reg'+(n?'':' lock');
     var art='<svg viewBox="0 0 48 40" aria-hidden="true"'+(n?'':' style="filter:brightness(0) opacity(.5)"')+'>'+r.art+'</svg>';
     var fav=blendById(r.fav);
-    var desc=n?r.line:(S.life>=r.min?'Has not stopped by yet. Keep the kettle warm.':'Arrives after '+fmt(r.min)+' lifetime cups.');
+    var desc=n?r.line:((r.season&&r.season!==seasonNow())?('Only visits in '+r.seasonName+'.'):(S.life>=r.min?'Has not stopped by yet. Keep the kettle warm.':'Arrives after '+fmt(r.min)+' lifetime cups.'));
     var meta=n?(r.rarity+' · '+n+(n===1?' visit':' visits')+' · loves '+fav.name):r.rarity;
     el.innerHTML=art+'<span class="cn">'+(n?(r.name+' the '+r.kind):'???')+'</span><span class="cd">'+desc+'</span><span class="cs">'+meta+'</span>';
     g.appendChild(el);
@@ -745,6 +856,72 @@ function showTab(name){
 }
 Array.prototype.forEach.call(tabBtns,function(b){
   b.addEventListener('click',function(){showTab(b.getAttribute('data-tab'));});
+});
+
+/* ---------- daily gift and goals ---------- */
+function dayNum(d){return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000);}
+function giftReady(){return dayNum(new Date())>S.giftDay;}
+function effStreak(){var t=dayNum(new Date());return (S.giftDay>=0&&t-S.giftDay<=1)?S.streak:0;}
+function giftReward(streak){return Math.max(200,Math.floor(cps()*900))*(1+0.2*Math.min(streak-1,6));}
+function renderGift(){
+  var ready=giftReady(),es=effStreak(),i,dots='',note;
+  var filled=(es>0&&es%7===0)?(ready?0:7):es%7;
+  for(i=1;i<=7;i++){dots+='<span class="'+(i<=filled?'got':'')+(i===7?' bonus':'')+'">'+i+'</span>';}
+  $('giftDots').innerHTML=dots;
+  if(ready){
+    var nd=es+1;
+    note=(S.giftDay>=0&&es===0?'Your streak starts fresh today. ':'')+'Today’s gift is worth about '+fmt(giftReward(nd))+' cups'+(nd%7===0?' and a Golden Leaf':'')+'.';
+  }else{
+    note='Claimed today. Come back tomorrow'+(es%7===6?' for a Golden Leaf':' to keep your streak going')+'. Streak: '+es+(es===1?' day.':' days.');
+  }
+  $('giftNote').textContent=note;
+  $('giftBtn').textContent=ready?'Open today’s gift':'Come back tomorrow';
+  $('giftBtn').classList.toggle('can',ready);
+}
+$('giftBtn').addEventListener('click',function(){
+  if(!giftReady()){blip(220);return;}
+  var t=dayNum(new Date());
+  S.streak=(S.giftDay>=0&&t-S.giftDay===1)?S.streak+1:1;
+  S.bestStreak=Math.max(S.bestStreak,S.streak);
+  S.giftDay=t;
+  var r=Math.floor(giftReward(S.streak)),leaf=(S.streak%7===0);
+  earn(r);
+  if(leaf) S.leaves++;
+  toast('Daily gift: +'+fmt(r)+' cups'+(leaf?' and a Golden Leaf':'')+'. Streak: '+S.streak+(S.streak===1?' day':' days'));
+  blip(700);lastGiftReady=null;update();save();
+});
+function renderGoals(){
+  var l=$('achList'),n=0;
+  l.innerHTML='';
+  ACH.forEach(function(a){
+    var got=!!S.ach[a.id];
+    if(got) n++;
+    var r=document.createElement('div');
+    r.className='row ach'+(got?' got':'');
+    var star=got?ICON.anise:'<path d="M12 2l2.2 6.3L21 6l-4 5.6L22 14l-6.6 1.2L12 22l-3.4-6.8L2 14l5-2.4L3 6l6.8 2.3z" style="fill:none;stroke:var(--line);stroke-width:1.5"/>';
+    r.innerHTML='<div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true">'+star+'</svg></div><div class="txt"><div class="nm">'+a.name+'</div><div class="ds">'+a.desc+'</div></div>';
+    l.appendChild(r);
+  });
+  $('achCount').textContent=n+' of '+ACH.length+' achievements · +'+n+'% to everything you brew';
+}
+
+/* ---------- petting the cat ---------- */
+var catHit=$('catHit'),lastPet=0;
+function petCat(cx,cy){
+  if(S.counts[2]<1) return;
+  var now=Date.now(),g=0,r=scene.getBoundingClientRect(),cat=$('s-cat');
+  cat.classList.remove('purr');void cat.getBoundingClientRect();cat.classList.add('purr');
+  if(now-lastPet>=2500){lastPet=now;g=Math.max(5,Math.floor(cps()*5));earn(g);S.pets++;}
+  pop(cx-r.left,cy-r.top-12,g?('purr +'+fmt(g)):'purr');
+  blip(300);update();
+}
+catHit.addEventListener('pointerdown',function(e){e.preventDefault();petCat(e.clientX,e.clientY);});
+catHit.addEventListener('keydown',function(e){
+  if(e.key==='Enter'||e.key===' '){
+    e.preventDefault();
+    var b=catHit.getBoundingClientRect();
+    petCat(b.left+b.width/2,b.top+b.height/2);
+  }
 });
 
 /* ---------- fresh pot ---------- */
@@ -780,7 +957,7 @@ $('yes').addEventListener('click',function(){
   try{localStorage.removeItem(KEY);}catch(e){}
   lastTick=Date.now();
   $('confirm').hidden=true;
-  blendN=-1;setSound();renderScene();update();renderBook();
+  blendN=-1;lastGiftReady=null;setSound();renderScene();update();renderBook();renderGoals();
 });
 document.addEventListener('visibilitychange',function(){if(document.hidden)save();else tick();});
 window.addEventListener('pagehide',save);
@@ -794,6 +971,7 @@ update();
 setInterval(tick,100);
 setInterval(save,5000);
 renderBook();
+renderGoals();
 scheduleMouse(true);
 })();
 </script>
