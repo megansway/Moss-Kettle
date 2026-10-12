@@ -95,43 +95,6 @@ To protect your nook or move it to a new phone:
 
 Restoring replaces whatever nook is on that device, so the game asks you to confirm first. Make a fresh code every so often, since a code is a snapshot from the moment you made it.
 
-## Host your own copy
-
-You can host the game for free on GitHub Pages.
-
-1. Create a new **public** repository on GitHub, for example `moss-kettle`.
-2. Upload every file from this project to the root of the repository.
-3. Go to **Settings**, then **Pages**. Under **Build and deployment**, set **Source** to **Deploy from a branch**, choose the `main` branch and the `/ (root)` folder, and save.
-4. After about a minute, the game is live at `https://YOUR-USERNAME.github.io/REPO-NAME/`.
-
-### What is in the project
-
-| File | What it does |
-| --- | --- |
-| `index.html` | The whole game: page, styles, art and code in one file |
-| `manifest.webmanifest` | Tells phones the name, icon and colors for the installed app |
-| `sw.js` | The service worker that lets the game run offline |
-| `icon-180.png` | Home Screen icon for iPhone |
-| `icon-192.png`, `icon-512.png` | Icons for Android and other browsers |
-
-There is no build step and nothing to install.
-
-### Updating the game
-
-1. Replace `index.html` in your repository with the new version.
-2. In `sw.js`, change the version number in `const CACHE = 'moss-kettle-v1';` to a new one (for example `v2`). This tells phones to drop the old cached copy.
-3. Commit the change. Players should close the app fully and open it again, once or twice, to get the update.
-
-### Running it locally
-
-Open `index.html` in a browser to play. To test the offline and install features, serve the folder over HTTP, because service workers do not run from `file://` links:
-
-```
-python3 -m http.server 8000
-```
-
-Then visit `http://localhost:8000`.
-
 ### Notes
 
 - The game uses the Bagel Fat One and Nunito fonts from Google Fonts. They load on the first visit and are cached after that. If they cannot load, the game falls back to your device's rounded system font.
