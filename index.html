@@ -110,8 +110,8 @@ h2{margin:6px 0 -4px;font-size:11px;font-weight:800;text-transform:uppercase;let
 footer{display:flex;flex-direction:column;gap:10px;align-items:center;color:var(--muted);font-size:12px;text-align:center}
 .confirm{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center}
 [hidden]{display:none!important}
-.tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
-.tabs button{position:relative;background:transparent;border:1px solid var(--line);border-radius:12px;padding:8px 2px;font-size:12px;font-weight:800;color:var(--muted);cursor:pointer;min-width:0}
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.tabs button{position:relative;background:transparent;border:1px solid var(--line);border-radius:12px;padding:10px 4px;font-size:13px;font-weight:800;color:var(--muted);cursor:pointer;min-width:0}
 .tabs button[aria-selected="true"]{background:var(--panel);border-color:var(--lamp);color:var(--ink)}
 .tabs button.ping::after{content:'';position:absolute;top:5px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--lamp)}
 .tabs button:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
@@ -143,6 +143,22 @@ button.card:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
 #s-cat.purr{animation:purr .4s ease-out}
 @keyframes purr{0%{transform:scale(1)}40%{transform:scale(1.05,.96)}100%{transform:scale(1)}}
 #catHit:focus-visible{stroke:var(--lamp);stroke-width:2;stroke-dasharray:5 5}
+.decor{pointer-events:none}
+.bar{height:10px;border-radius:999px;background:var(--bg);border:1px solid var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--lamp);border-radius:999px;transition:width .25s ease}
+.sw{display:inline-block;width:14px;height:14px;border-radius:50%;border:1px solid rgba(255,255,255,.35);vertical-align:-2px;margin-right:6px}
+.srow{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
+.srow:last-child{border-bottom:0}
+.srow span:first-child{color:var(--muted)}
+.srow span:last-child{font-weight:800;font-variant-numeric:tabular-nums;text-align:right}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.seg button{background:transparent;border:1.5px solid var(--line);border-radius:12px;padding:10px 4px;font-weight:800;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{border-color:var(--lamp);color:var(--ink);background:var(--bg)}
+.seg button:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
+textarea{width:100%;min-height:78px;resize:vertical;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px;font:16px/1.3 ui-monospace,Menlo,Consolas,monospace;overflow-wrap:anywhere}
+textarea:focus-visible{outline:2px solid var(--lamp);outline-offset:1px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.btnrow .buy{flex:1;min-width:120px}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 
@@ -158,7 +174,7 @@ button.card:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
   </section>
 
   <section class="scene" id="scene">
-    <svg id="nook" viewBox="0 0 360 260" role="img" aria-label="A cozy tea nook at night with a smiling teapot on a table">
+    <svg id="nook" viewBox="0 0 360 260" role="img" aria-label="A cozy tea nook with a smiling teapot on a table">
       <defs>
         <radialGradient id="glowG" cx="50%" cy="50%" r="50%">
           <stop offset="0" style="stop-color:var(--lamp);stop-opacity:.55"/>
@@ -173,13 +189,14 @@ button.card:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
       <!-- window -->
       <rect x="24" y="22" width="96" height="108" rx="14" class="f-wood"/>
       <rect x="31" y="29" width="82" height="94" rx="9" class="f-sky"/>
-      <circle cx="90" cy="56" r="13" class="f-moon"/>
-      <circle cx="96" cy="52" r="11" class="f-sky"/>
-      <circle class="star" cx="50" cy="48" r="1.7"/>
+      <g clip-path="url(#winclip)"><g id="sun" transform="translate(70 80)" style="opacity:0"><circle r="21" fill="#ffd27a" opacity=".25"/><circle r="11" fill="#ffdc8f"/></g></g>
+      <g id="moon"><circle cx="90" cy="56" r="13" class="f-moon"/>
+      <circle cx="96" cy="52" r="11" class="f-sky"/></g>
+      <g id="stars"><circle class="star" cx="50" cy="48" r="1.7"/>
       <circle class="star" cx="62" cy="86" r="1.5" style="animation-delay:.8s"/>
       <circle class="star" cx="100" cy="100" r="1.7" style="animation-delay:1.6s"/>
       <circle class="star" cx="44" cy="106" r="1.4" style="animation-delay:2.2s"/>
-      <circle class="star" cx="78" cy="38" r="1.4" style="animation-delay:1.1s"/>
+      <circle class="star" cx="78" cy="38" r="1.4" style="animation-delay:1.1s"/></g>
       <g id="s-rain" class="item" clip-path="url(#winclip)">
         <path class="drop" d="M40 24 l-3 9" style="animation-delay:0s"/>
         <path class="drop" d="M52 24 l-3 9" style="animation-delay:.5s;animation-duration:1.1s"/>
@@ -314,7 +331,7 @@ button.card:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
         <text class="zz" x="272" y="198" style="animation-delay:1.2s">z</text>
       </g>
       <!-- October decor -->
-      <g id="s-october" class="item">
+      <g id="s-october" class="item decor">
         <g clip-path="url(#winclip)">
           <g transform="translate(44 22)"><path class="fall" d="M0 0 q4 -7 9 0 q-4 7 -9 0z" fill="#e0833a" style="animation-delay:0s"/></g>
           <g transform="translate(62 22)"><path class="fall" d="M0 0 q4 -7 9 0 q-4 7 -9 0z" fill="#f4bf62" style="animation-delay:1.3s;animation-duration:7s"/></g>
@@ -330,6 +347,55 @@ button.card:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
         <ellipse cx="164" cy="244" rx="12" ry="9" fill="#e9923f"/>
         <path d="M159 237 q-4 8 0 15 M164 235 v18 M169 237 q4 8 0 15" fill="none" stroke="#c4651f" stroke-width="1.6" stroke-linecap="round"/>
         <rect x="162" y="230" width="4" height="6" rx="2" fill="#5b7a3c"/>
+      </g>
+      <!-- Winter decor -->
+      <g id="s-winter" class="item decor">
+        <g clip-path="url(#winclip)">
+          <g transform="translate(40 22)"><circle class="fall" r="1.8" fill="#fff" style="animation-delay:0s"/></g>
+          <g transform="translate(52 22)"><circle class="fall" r="1.5" fill="#fff" style="animation-delay:1.1s;animation-duration:7s"/></g>
+          <g transform="translate(64 22)"><circle class="fall" r="2" fill="#fff" style="animation-delay:2.2s;animation-duration:6.5s"/></g>
+          <g transform="translate(76 22)"><circle class="fall" r="1.6" fill="#fff" style="animation-delay:3.3s"/></g>
+          <g transform="translate(88 22)"><circle class="fall" r="1.8" fill="#fff" style="animation-delay:4.4s;animation-duration:7.5s"/></g>
+          <g transform="translate(100 22)"><circle class="fall" r="1.5" fill="#fff" style="animation-delay:.6s;animation-duration:5.5s"/></g>
+          <g transform="translate(46 22)"><circle class="fall" r="1.4" fill="#fff" style="animation-delay:5s"/></g>
+          <g transform="translate(94 22)"><circle class="fall" r="1.9" fill="#fff" style="animation-delay:2.8s;animation-duration:6s"/></g>
+        </g>
+        <ellipse cx="146" cy="241" rx="14" ry="12" fill="#eef1f8"/>
+        <ellipse cx="146" cy="222" rx="10" ry="9" fill="#f6f8fc"/>
+        <circle cx="146" cy="207" r="7.5" fill="#fff"/>
+        <path d="M136 222 L124 214 M156 222 L168 216" stroke="#7a5a46" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <rect x="137" y="212" width="18" height="4.5" rx="2.2" fill="#e48a9c"/>
+        <path d="M153 214 l2 8" stroke="#e48a9c" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="143" cy="205.5" r="1.1" fill="#1d2433"/><circle cx="149" cy="205.5" r="1.1" fill="#1d2433"/>
+        <path d="M146 208 l7 2 l-7 1.6z" fill="#e0833a"/>
+        <circle cx="146" cy="222" r="1.3" fill="#1d2433"/><circle cx="146" cy="228" r="1.3" fill="#1d2433"/>
+      </g>
+      <!-- Spring decor -->
+      <g id="s-spring" class="item decor">
+        <g clip-path="url(#winclip)">
+          <g transform="translate(44 22)"><ellipse class="fall" rx="3" ry="1.8" fill="#f4a8bd" style="animation-delay:0s"/></g>
+          <g transform="translate(58 22)"><ellipse class="fall" rx="3" ry="1.8" fill="#f9c4d2" style="animation-delay:1.4s;animation-duration:7s"/></g>
+          <g transform="translate(74 22)"><ellipse class="fall" rx="3" ry="1.8" fill="#f4a8bd" style="animation-delay:2.7s;animation-duration:5.5s"/></g>
+          <g transform="translate(90 22)"><ellipse class="fall" rx="3" ry="1.8" fill="#f9c4d2" style="animation-delay:4s"/></g>
+          <g transform="translate(102 22)"><ellipse class="fall" rx="3" ry="1.8" fill="#f4a8bd" style="animation-delay:5.1s;animation-duration:6.5s"/></g>
+        </g>
+        <path d="M126 252 L130 238 L162 238 L166 252 Z" style="fill:var(--wood-dk)"/>
+        <path d="M138 238 V222 M146 238 V216 M154 238 V224" stroke="#8dbf9e" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+        <path d="M146 238 q-10 -2 -14 -10 q10 0 14 10z" fill="#8dbf9e"/>
+        <path d="M133 222 q5 -12 10 0 q-5 5 -10 0z" fill="#e48a9c"/>
+        <path d="M141 216 q5 -13 10 0 q-5 5 -10 0z" fill="#f4bf62"/>
+        <path d="M149 224 q5 -12 10 0 q-5 5 -10 0z" fill="#b39ddb"/>
+      </g>
+      <!-- Summer decor -->
+      <g id="s-summer" class="item decor">
+        <circle class="star" cx="40" cy="168" r="2" style="fill:var(--lamp);animation-delay:.3s"/>
+        <circle class="star" cx="205" cy="128" r="2" style="fill:var(--lamp);animation-delay:1.2s"/>
+        <circle class="star" cx="330" cy="150" r="2" style="fill:var(--lamp);animation-delay:2.1s"/>
+        <circle class="star" cx="150" cy="60" r="1.8" style="fill:var(--lamp);animation-delay:.9s"/>
+        <circle class="star" cx="318" cy="52" r="1.8" style="fill:var(--lamp);animation-delay:1.7s"/>
+        <path d="M124 248 A22 22 0 0 1 168 248 Z" fill="#e0475f"/>
+        <path d="M124 248 H168 q-2 7 -22 7 q-20 0 -22 -7 z" fill="#5b9a52"/>
+        <circle cx="136" cy="241" r="1.2" fill="#2b1d08"/><circle cx="146" cy="236" r="1.2" fill="#2b1d08"/><circle cx="156" cy="241" r="1.2" fill="#2b1d08"/>
       </g>
       <rect id="catHit" x="262" y="206" width="86" height="48" role="button" tabindex="-1" aria-label="Pet the cat" style="fill:transparent;cursor:pointer;pointer-events:none;outline:none"/>
     </svg>
@@ -360,6 +426,7 @@ button.card:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
     <button type="button" role="tab" data-tab="regulars" aria-selected="false">Regulars</button>
     <button type="button" role="tab" id="tab-goals" data-tab="goals" aria-selected="false">Goals</button>
     <button type="button" role="tab" id="tab-fresh" data-tab="fresh" aria-selected="false">Fresh Pot</button>
+    <button type="button" role="tab" data-tab="more" aria-selected="false">More</button>
   </div>
 
   <section class="panel" id="p-nook">
@@ -388,6 +455,13 @@ button.card:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
       <button type="button" class="buy wide" id="giftBtn">Open today&rsquo;s gift</button>
       <div class="note">Open a gift each day to build a streak. Every 7th day includes a Golden Leaf.</div>
     </div>
+    <div class="fresh">
+      <div class="nm">Wishes</div>
+      <div class="note" id="wishText"></div>
+      <div class="bar" id="wishBar" role="progressbar" aria-label="Wish progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="wishFill"></i></div>
+      <div class="note" id="wishProg"></div>
+      <button type="button" class="buy wide" id="wishBtn" hidden>Grant wish</button>
+    </div>
     <p class="note" id="achCount"></p>
     <div class="list" id="achList"></div>
   </section>
@@ -406,6 +480,36 @@ button.card:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
       </div>
     </div>
     <p class="note">Each Golden Leaf adds 5% to everything you brew, for good. Later runs go faster.</p>
+  </section>
+
+  <section class="panel" id="p-more" hidden>
+    <div class="fresh"><div class="nm">Your nook in numbers</div><div id="statList"></div></div>
+    <div class="fresh"><div class="nm">Teapot color</div><div class="grid" id="potGrid"></div></div>
+    <div class="fresh"><div class="nm">Wall color</div><div class="grid" id="wallGrid"></div></div>
+    <div class="fresh">
+      <div class="nm">Ambient sound</div>
+      <p class="note">A soft background loop. It pauses when the app is in the background.</p>
+      <div class="seg" id="ambSeg">
+        <button type="button" data-amb="off" aria-pressed="true">Off</button>
+        <button type="button" data-amb="rain" aria-pressed="false">Rain</button>
+        <button type="button" data-amb="fire" aria-pressed="false">Fireside</button>
+      </div>
+    </div>
+    <div class="fresh">
+      <div class="nm">Back up your nook</div>
+      <p class="note">Your game is saved on this device only. Make a code to keep somewhere safe, or to move your nook to another phone.</p>
+      <div class="btnrow"><button type="button" class="buy can" id="bkMake">Make my code</button><button type="button" class="buy" id="bkCopy" hidden>Copy code</button></div>
+      <textarea id="bkOut" readonly rows="3" hidden aria-label="Your backup code"></textarea>
+      <p class="note">Restore a nook from a code:</p>
+      <textarea id="bkIn" rows="3" placeholder="Paste a code here" aria-label="Paste a backup code"></textarea>
+      <button type="button" class="buy wide" id="bkRestore">Restore from code</button>
+      <div class="confirm" id="bkConfirm" hidden>
+        <span>This replaces the nook on this device with the one in the code.</span>
+        <button type="button" class="ghost" id="bkYes">Yes, restore</button>
+        <button type="button" class="ghost" id="bkNo">Cancel</button>
+      </div>
+      <p class="note" id="bkMsg" role="status"></p>
+    </div>
   </section>
 
   <footer>
@@ -490,16 +594,20 @@ var REG=[
   {id:'moth',name:'Luna',kind:'moth',rarity:'Legendary',weight:1,tipMult:4,min:500000000,fav:'starleaf',line:'Drawn to the lamp, stays for the tea.',
    art:'<circle cx="24" cy="20" r="19" fill="#f4bf62" opacity=".12"/><ellipse cx="16" cy="16" rx="12" ry="9" transform="rotate(-25 16 16)" fill="#b9a6e0"/><ellipse cx="32" cy="16" rx="12" ry="9" transform="rotate(25 32 16)" fill="#b9a6e0"/><ellipse cx="17" cy="27" rx="9" ry="7" transform="rotate(20 17 27)" fill="#9c88cc"/><ellipse cx="31" cy="27" rx="9" ry="7" transform="rotate(-20 31 27)" fill="#9c88cc"/><circle cx="14" cy="15" r="2.6" fill="#f4e6b8"/><circle cx="34" cy="15" r="2.6" fill="#f4e6b8"/><ellipse cx="24" cy="24" rx="3.2" ry="10" fill="#5d4e7a"/><circle cx="24" cy="12" r="3.2" fill="#5d4e7a"/><path d="M23 10 Q20 4 16 3 M25 10 Q28 4 32 3" stroke="#5d4e7a" stroke-width="1.4" fill="none" stroke-linecap="round"/>'},
   {id:'ghost',name:'Boo',kind:'ghost',rarity:'Seasonal',weight:3,tipMult:2,min:0,fav:'berry',season:'october',seasonName:'October',line:'Only drops in for pumpkin season.',
-   art:'<path d="M10 36 V18 a14 14 0 0 1 28 0 V36 l-4.7 -3.5 l-4.7 3.5 l-4.6 -3.5 l-4.7 3.5 l-4.7 -3.5 z" fill="#eef1f8"/><circle cx="19" cy="19" r="2.2" fill="#1d2433"/><circle cx="29" cy="19" r="2.2" fill="#1d2433"/><ellipse cx="15" cy="25" rx="3" ry="2" fill="#e48a9c" opacity=".6"/><ellipse cx="33" cy="25" rx="3" ry="2" fill="#e48a9c" opacity=".6"/><path d="M21 26 q3 3 6 0" stroke="#1d2433" stroke-width="1.6" fill="none" stroke-linecap="round"/>'}
+   art:'<path d="M10 36 V18 a14 14 0 0 1 28 0 V36 l-4.7 -3.5 l-4.7 3.5 l-4.6 -3.5 l-4.7 3.5 l-4.7 -3.5 z" fill="#eef1f8"/><circle cx="19" cy="19" r="2.2" fill="#1d2433"/><circle cx="29" cy="19" r="2.2" fill="#1d2433"/><ellipse cx="15" cy="25" rx="3" ry="2" fill="#e48a9c" opacity=".6"/><ellipse cx="33" cy="25" rx="3" ry="2" fill="#e48a9c" opacity=".6"/><path d="M21 26 q3 3 6 0" stroke="#1d2433" stroke-width="1.6" fill="none" stroke-linecap="round"/>'},
+  {id:'hare',name:'Mochi',kind:'hare',rarity:'Seasonal',weight:3,tipMult:2,min:0,fav:'chamomile',season:'winter',seasonName:'Winter',line:'Hops in with snow on her whiskers.',
+   art:'<ellipse cx="22" cy="28" rx="15" ry="10" fill="#eef1f8"/><circle cx="36" cy="24" r="8" fill="#f6f8fc"/><ellipse cx="33" cy="9" rx="3" ry="9" transform="rotate(-8 33 9)" fill="#eef1f8"/><ellipse cx="40" cy="9" rx="3" ry="9" transform="rotate(8 40 9)" fill="#eef1f8"/><ellipse cx="33" cy="10" rx="1.3" ry="6" fill="#e48a9c" opacity=".6"/><ellipse cx="40" cy="10" rx="1.3" ry="6" fill="#e48a9c" opacity=".6"/><circle cx="39" cy="23" r="1.3" fill="#1d2433"/><circle cx="44" cy="26" r="1.5" fill="#e48a9c"/><circle cx="8" cy="28" r="4" fill="#fff"/><rect x="14" y="35" width="6" height="4" rx="2" fill="#eef1f8"/><rect x="28" y="35" width="6" height="4" rx="2" fill="#eef1f8"/>'},
+  {id:'ladybug',name:'Dot',kind:'ladybug',rarity:'Seasonal',weight:3,tipMult:2,min:0,fav:'jasmine',season:'spring',seasonName:'Spring',line:'Follows the first blossoms inside.',
+   art:'<circle cx="24" cy="14" r="6" fill="#1d2433"/><path d="M8 32 a16 16 0 0 1 32 0 z" fill="#d9453a"/><path d="M24 16 V32" stroke="#1d2433" stroke-width="1.6"/><circle cx="16" cy="26" r="2.6" fill="#1d2433"/><circle cx="32" cy="26" r="2.6" fill="#1d2433"/><circle cx="19" cy="20" r="1.8" fill="#1d2433"/><circle cx="29" cy="20" r="1.8" fill="#1d2433"/><circle cx="21.5" cy="12" r="1.2" fill="#fff"/><circle cx="26.5" cy="12" r="1.2" fill="#fff"/><path d="M21 9 Q18 3 14 3 M27 9 Q30 3 34 3" stroke="#1d2433" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M12 33 l-3 4 M20 33 v5 M28 33 v5 M36 33 l3 4" stroke="#1d2433" stroke-width="1.6" stroke-linecap="round"/>'},
+  {id:'frog',name:'Lily',kind:'frog',rarity:'Seasonal',weight:3,tipMult:2,min:0,fav:'rooibos',season:'summer',seasonName:'Summer',line:'Loves a warm cup on a cool evening.',
+   art:'<ellipse cx="24" cy="29" rx="17" ry="10" fill="#7fb36b"/><circle cx="14" cy="17" r="6.5" fill="#7fb36b"/><circle cx="34" cy="17" r="6.5" fill="#7fb36b"/><circle cx="14" cy="16" r="3.6" fill="#fff"/><circle cx="34" cy="16" r="3.6" fill="#fff"/><circle cx="14.8" cy="16.4" r="1.8" fill="#1d2433"/><circle cx="33.2" cy="16.4" r="1.8" fill="#1d2433"/><path d="M15 29 q9 6 18 0" stroke="#1d2433" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="12" cy="27" r="2.6" fill="#e48a9c" opacity=".55"/><circle cx="36" cy="27" r="2.6" fill="#e48a9c" opacity=".55"/><ellipse cx="11" cy="37" rx="5" ry="2.6" fill="#6aa058"/><ellipse cx="37" cy="37" rx="5" ry="2.6" fill="#6aa058"/>'}
 ];
 function $(id){return document.getElementById(id);}
-function fresh(){return {cups:0,total:0,counts:PROD.map(function(){return 0;}),extras:{},taps:0,mice:0,last:Date.now(),sound:false,life:0,leaves:0,pots:0,blend:'classic',reg:{},ach:{},giftDay:-1,streak:0,bestStreak:0,pets:0,loved:0};}
-function load(){
+function fresh(){return {cups:0,total:0,counts:PROD.map(function(){return 0;}),extras:{},taps:0,mice:0,last:Date.now(),sound:false,life:0,leaves:0,pots:0,blend:'classic',reg:{},ach:{},giftDay:-1,streak:0,bestStreak:0,pets:0,loved:0,played:0,wish:null,wishes:0,amb:'off',potc:'moss',wallc:'dusk'};}
+function normalize(o){
   var s=fresh();
   try{
-    var raw=localStorage.getItem(KEY);
-    if(raw){
-      var o=JSON.parse(raw);
+    if(o&&typeof o==='object'){
       s.cups=isFinite(o.cups)?+o.cups:0;
       s.total=isFinite(o.total)?+o.total:0;
       s.taps=+o.taps||0; s.mice=+o.mice||0;
@@ -518,9 +626,22 @@ function load(){
       s.bestStreak=Math.max(s.streak,Math.floor(+o.bestStreak||0));
       s.pets=Math.max(0,Math.floor(+o.pets||0));
       s.loved=Math.max(0,Math.floor(+o.loved||0));
+      s.played=Math.max(0,+o.played||0);
+      s.wishes=Math.max(0,Math.floor(+o.wishes||0));
+      s.amb=(o.amb==='rain'||o.amb==='fire')?o.amb:'off';
+      s.potc=(typeof o.potc==='string')?o.potc:'moss';
+      s.wallc=(typeof o.wallc==='string')?o.wallc:'dusk';
+      var w=o.wish;
+      if(w&&typeof w==='object'&&typeof w.reg==='string'&&['taps','visits','pets','cups'].indexOf(w.type)>=0&&isFinite(w.target)&&+w.target>0&&isFinite(w.base)){
+        s.wish={reg:w.reg,type:w.type,target:+w.target,base:+w.base};
+      }
     }
   }catch(e){}
   return s;
+}
+function load(){
+  try{var raw=localStorage.getItem(KEY);if(raw)return normalize(JSON.parse(raw));}catch(e){}
+  return fresh();
 }
 var S=load();
 function save(){S.last=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
@@ -538,7 +659,7 @@ function rate(n){
   return String(r);
 }
 var blendN=-1,lastGiftReady=null,giftT=0;
-function seasonNow(){return new Date().getMonth()===9?'october':'';}
+function seasonNow(){var m=new Date().getMonth();return m===9?'october':((m===11||m<=1)?'winter':((m>=2&&m<=4)?'spring':((m>=5&&m<=7)?'summer':'')));}
 function regOpen(r){return S.life>=r.min&&(!r.season||r.season===seasonNow());}
 function achMult(){var n=0,k;for(k in S.ach){if(S.ach[k])n++;}return 1+0.01*n;}
 function metCount(){var n=0,i;for(i=0;i<REG.length;i++){if(S.reg[REG[i].id])n++;}return n;}
@@ -569,7 +690,13 @@ var ACH=[
   {id:'fresh5',   name:'Seasoned Brewer',  desc:'Start 5 Fresh Pots.',                   test:function(){return S.pots>=5;}},
   {id:'leaves10', name:'Golden Touch',     desc:'Hold 10 Golden Leaves.',                test:function(){return S.leaves>=10;}},
   {id:'streak3',  name:'Daily Ritual',     desc:'Reach a 3 day gift streak.',            test:function(){return S.bestStreak>=3;}},
-  {id:'streak7',  name:'Week of Warmth',   desc:'Reach a 7 day gift streak.',            test:function(){return S.bestStreak>=7;}}
+  {id:'streak7',  name:'Week of Warmth',   desc:'Reach a 7 day gift streak.',            test:function(){return S.bestStreak>=7;}},
+  {id:'wish1',    name:'Wish Granter',     desc:'Grant your first wish.',                test:function(){return S.wishes>=1;}},
+  {id:'wish10',   name:'Dream Weaver',     desc:'Grant 10 wishes.',                      test:function(){return S.wishes>=10;}},
+  {id:'decor',    name:'Interior Designer',desc:'Change your teapot or wall color.',     test:function(){return S.potc!=='moss'||S.wallc!=='dusk';}},
+  {id:'ambient',  name:'Cozy Soundscape',  desc:'Turn on an ambient sound.',             test:function(){return S.amb!=='off';}},
+  {id:'seasonal', name:'Seasonal Friend',  desc:'Meet a seasonal visitor.',              test:function(){return REG.some(function(r){return r.season&&S.reg[r.id];});}},
+  {id:'hour',     name:'Long Evening',     desc:'Spend an hour in the nook.',            test:function(){return S.played>=3600;}}
 ];
 function announce(msg){
   if($('toast').hidden){toast(msg);}
@@ -673,7 +800,8 @@ function renderScene(){
   });
   var n=0;for(var i=0;i<S.counts.length;i++)n+=S.counts[i];
   $('glow').setAttribute('opacity',String(Math.min(1,0.4+n/50)));
-  $('s-october').classList.toggle('on',seasonNow()==='october');
+  var sn=seasonNow();
+  ['october','winter','spring','summer'].forEach(function(k){$('s-'+k).classList.toggle('on',sn===k);});
   var ch=$('catHit');
   ch.style.pointerEvents=S.counts[2]>0?'all':'none';
   ch.setAttribute('tabindex',S.counts[2]>0?'0':'-1');
@@ -702,7 +830,11 @@ function update(){
   var gr=giftReady();
   if(gr!==lastGiftReady){lastGiftReady=gr;renderGift();}
   else if(gr&&(++giftT%50===0)){renderGift();}
-  $('tab-goals').classList.toggle('ping',gr);
+  if(!S.wish){S.wish=newWish();if(S.wish)renderWish();}
+  var wd=!!S.wish&&(wishStat(S.wish.type)-S.wish.base>=S.wish.target);
+  if(!$('p-goals').hidden)renderWish();
+  if(!$('p-more').hidden&&(++moreT%10===0))renderStats();
+  $('tab-goals').classList.toggle('ping',gr||wd);
   checkAch();
   PROD.forEach(function(it,i){
     var el=prodEls[i],k=cost(i),can=S.cups>=k;
@@ -796,6 +928,7 @@ function tick(){
   lastTick=now;
   if(!(dt>0)) return;
   var away=dt>20;
+  if(!away&&!document.hidden) S.played+=dt;
   if(dt>MAX_AWAY) dt=MAX_AWAY;
   var gain=cps()*dt*(away&&curBlend().id==='rooibos'?1.5:1);
   earn(gain);
@@ -853,6 +986,8 @@ function showTab(name){
     $('p-'+t).hidden=!on;
   });
   if(name==='regulars') renderBook();
+  if(name==='goals') renderWish();
+  if(name==='more') renderMore();
 }
 Array.prototype.forEach.call(tabBtns,function(b){
   b.addEventListener('click',function(){showTab(b.getAttribute('data-tab'));});
@@ -924,6 +1059,252 @@ catHit.addEventListener('keydown',function(e){
   }
 });
 
+/* ---------- wishes ---------- */
+var moreT=0;
+var WISH_TASK={
+  taps:function(n){return 'tap the teapot '+n+' times';},
+  visits:function(n){return 'welcome '+n+(n===1?' visitor':' visitors')+' to the nook';},
+  pets:function(n){return 'pet the cat '+n+' times';},
+  cups:function(n){return 'steep '+fmt(n)+' more cups';}
+};
+function regById(id){for(var i=0;i<REG.length;i++){if(REG[i].id===id)return REG[i];}return null;}
+function wishStat(t){return t==='taps'?S.taps:(t==='visits'?visitsTotal():(t==='pets'?S.pets:S.life));}
+function pickOf(a){return a[Math.floor(Math.random()*a.length)];}
+function niceNum(x){var p=Math.pow(10,Math.max(0,Math.floor(Math.log(x)/Math.LN10)-1));return Math.max(1,Math.round(x/p)*p);}
+function newWish(){
+  var who=[],i;
+  for(i=0;i<REG.length;i++){if(S.reg[REG[i].id]&&regOpen(REG[i]))who.push(REG[i]);}
+  if(!who.length) return null;
+  var types=['taps','visits','cups'];
+  if(S.counts[2]>0) types.push('pets');
+  var t=pickOf(types),n;
+  if(t==='taps') n=pickOf([40,80,150,300]);
+  else if(t==='visits') n=pickOf([1,2,2,3]);
+  else if(t==='pets') n=pickOf([3,4,5]);
+  else n=niceNum(Math.max(1500,cps()*pickOf([200,400,800])));
+  return {reg:pickOf(who).id,type:t,target:n,base:wishStat(t)};
+}
+function wishReward(w){return Math.max(500,Math.floor(cps()*(w.type==='cups'?300:600)));}
+function renderWish(){
+  var w=S.wish,txt=$('wishText'),bar=$('wishBar'),prog=$('wishProg'),btn=$('wishBtn');
+  if(!w){
+    txt.textContent=metCount()?'No wish right now. Check back in a moment.':'Meet a regular to hear their wishes. Tap visitors when they stop by.';
+    bar.hidden=true;prog.hidden=true;btn.hidden=true;return;
+  }
+  var r=regById(w.reg)||REG[0],cur=Math.max(0,wishStat(w.type)-w.base),done=cur>=w.target;
+  txt.textContent=r.name+' the '+r.kind+' wishes you would '+WISH_TASK[w.type](w.target)+'.';
+  var pct=Math.min(100,cur/w.target*100);
+  bar.hidden=false;prog.hidden=false;
+  $('wishFill').style.width=pct+'%';
+  bar.setAttribute('aria-valuenow',String(Math.round(pct)));
+  prog.textContent=(done?'Done':(w.type==='cups'?(fmt(cur)+' of '+fmt(w.target)):(Math.floor(cur)+' of '+w.target)))+' · Reward: about '+fmt(wishReward(w))+' cups';
+  btn.hidden=!done;
+  btn.classList.toggle('can',done);
+}
+$('wishBtn').addEventListener('click',function(){
+  var w=S.wish;
+  if(!w) return;
+  if(wishStat(w.type)-w.base<w.target){blip(220);return;}
+  var r=wishReward(w),who=regById(w.reg)||REG[0];
+  earn(r);S.wishes++;S.wish=null;
+  toast(who.name+' is delighted! Wish reward: +'+fmt(r)+' cups');
+  blip(720);
+  S.wish=newWish();renderWish();update();save();
+});
+
+/* ---------- sky ---------- */
+var SKY=[[0,'#0f1830',1],[5,'#101a38',1],[6,'#6b5a8c',.5],[7,'#e8a077',.1],[8.5,'#8cc2e8',0],[16,'#8cc2e8',0],[17.5,'#eaa45f',.1],[18.5,'#8a4f6a',.5],[19.5,'#2a2a55',.9],[21,'#0f1830',1],[24,'#0f1830',1]];
+function hex3(c){return [parseInt(c.substr(1,2),16),parseInt(c.substr(3,2),16),parseInt(c.substr(5,2),16)];}
+function updateSky(){
+  var d=new Date(),h=d.getHours()+d.getMinutes()/60,i=0,k;
+  while(i<SKY.length-2&&h>=SKY[i+1][0]) i++;
+  var a=SKY[i],b=SKY[i+1],t=Math.max(0,Math.min(1,(h-a[0])/(b[0]-a[0])));
+  var ca=hex3(a[1]),cb=hex3(b[1]),col='#';
+  for(k=0;k<3;k++){col+=('0'+Math.round(ca[k]+(cb[k]-ca[k])*t).toString(16)).slice(-2);}
+  var night=a[2]+(b[2]-a[2])*t;
+  document.documentElement.style.setProperty('--sky',col);
+  $('stars').style.opacity=String(Math.max(0,(night-0.15)/0.85));
+  $('moon').style.opacity=String(Math.min(1,night*1.1));
+  var sun=$('sun'),u=Math.max(0,Math.min(1,(h-6)/12));
+  sun.setAttribute('transform','translate('+(42+u*58).toFixed(1)+' '+(112-Math.sin(u*Math.PI)*64).toFixed(1)+')');
+  sun.style.opacity=String(Math.max(0,1-night*1.4));
+}
+
+/* ---------- teapot and wall colors ---------- */
+var POTC=[
+  {id:'moss',name:'Moss',pot:'#7fb3a5',dk:'#5f968a'},
+  {id:'rose',name:'Rose',pot:'#d9919f',dk:'#b86f80',life:1e5,hint:'Steep 100K cups in all'},
+  {id:'sky',name:'Sky',pot:'#86aee0',dk:'#6489bd',life:1e7,hint:'Steep 10M cups in all'},
+  {id:'lilac',name:'Lilac',pot:'#b39ddb',dk:'#8f7ab8',life:1e9,hint:'Steep 1B cups in all'},
+  {id:'gold',name:'Honey Gold',pot:'#e8b94f',dk:'#c4942f',leaves:3,hint:'Hold 3 Golden Leaves'}
+];
+var WALLC=[
+  {id:'dusk',name:'Dusk',wall:'#26304a'},
+  {id:'plum',name:'Plum',wall:'#3a2a45',ach:5,hint:'Unlock 5 achievements'},
+  {id:'pine',name:'Pine',wall:'#22393a',ach:10,hint:'Unlock 10 achievements'},
+  {id:'cocoa',name:'Cocoa',wall:'#3d2f2a',ach:15,hint:'Unlock 15 achievements'}
+];
+function achCount(){var n=0,k;for(k in S.ach){if(S.ach[k])n++;}return n;}
+function opened(x){return x.life?S.life>=x.life:(x.leaves?S.leaves>=x.leaves:(x.ach?achCount()>=x.ach:true));}
+function findBy(list,id){for(var i=0;i<list.length;i++){if(list[i].id===id)return list[i];}return list[0];}
+function applyLook(){
+  var p=findBy(POTC,S.potc),w=findBy(WALLC,S.wallc),st=document.documentElement.style;
+  if(!opened(p)) p=POTC[0];
+  if(!opened(w)) w=WALLC[0];
+  st.setProperty('--pot',p.pot);st.setProperty('--pot-dk',p.dk);st.setProperty('--wall',w.wall);
+}
+function lookCards(list,key,gridId){
+  var g=$(gridId),cur=findBy(list,S[key]).id;
+  g.innerHTML='';
+  list.forEach(function(x){
+    var un=opened(x),on=(cur===x.id);
+    var el=document.createElement('button');
+    el.type='button';
+    el.className='card'+(on?' on':'')+(un?'':' lock');
+    el.setAttribute('aria-pressed',on?'true':'false');
+    el.innerHTML='<span class="cn"><i class="sw" style="background:'+(x.pot||x.wall)+'"></i>'+x.name+'</span><span class="cs">'+(on?'In use':(un?'Tap to use':x.hint))+'</span>';
+    el.addEventListener('click',function(){
+      if(!un){blip(220);return;}
+      S[key]=x.id;applyLook();renderLook();blip(520);update();save();
+    });
+    g.appendChild(el);
+  });
+}
+function renderLook(){lookCards(POTC,'potc','potGrid');lookCards(WALLC,'wallc','wallGrid');}
+
+/* ---------- ambient sound ---------- */
+var amb={nodes:null,crT:0};
+function getAC(){ac=ac||new (window.AudioContext||window.webkitAudioContext)();return ac;}
+function noiseBuf(c,secs,brown){
+  var len=Math.floor(c.sampleRate*secs),b=c.createBuffer(1,len,c.sampleRate),d=b.getChannelData(0),last=0,i,w;
+  for(i=0;i<len;i++){w=Math.random()*2-1;if(brown){last=(last+0.02*w)/1.02;d[i]=last*3.5;}else{d[i]=w;}}
+  return b;
+}
+function stopAmb(){
+  clearTimeout(amb.crT);
+  if(amb.nodes){var n=amb.nodes;amb.nodes=null;try{n.stop();}catch(e){}}
+}
+function crackle(){
+  if(S.amb!=='fire'||!amb.nodes) return;
+  try{
+    var c=getAC();
+    if(c.state==='running'){
+      var len=Math.floor(c.sampleRate*0.03),b=c.createBuffer(1,len,c.sampleRate),d=b.getChannelData(0),i;
+      for(i=0;i<len;i++){d[i]=(Math.random()*2-1)*(1-i/len);}
+      var s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();
+      s.buffer=b;f.type='highpass';f.frequency.value=1200+Math.random()*2500;g.gain.value=0.05+Math.random()*0.07;
+      s.connect(f);f.connect(g);g.connect(c.destination);s.start();
+    }
+  }catch(e){}
+  amb.crT=setTimeout(crackle,90+Math.random()*850);
+}
+function startAmb(){
+  stopAmb();
+  if(S.amb==='off') return;
+  try{
+    var c=getAC(),brown=(S.amb==='fire');
+    if(c.state==='suspended'&&c.resume) c.resume();
+    var g=c.createGain(),src=c.createBufferSource(),f1=c.createBiquadFilter(),f2;
+    src.buffer=noiseBuf(c,3,brown);src.loop=true;
+    g.gain.setValueAtTime(0.0001,c.currentTime);
+    g.gain.linearRampToValueAtTime(brown?0.09:0.06,c.currentTime+1.5);
+    if(brown){f1.type='lowpass';f1.frequency.value=420;src.connect(f1);f1.connect(g);}
+    else{f1.type='highpass';f1.frequency.value=600;f2=c.createBiquadFilter();f2.type='lowpass';f2.frequency.value=4200;src.connect(f1);f1.connect(f2);f2.connect(g);}
+    g.connect(c.destination);
+    src.start();
+    amb.nodes={stop:function(){
+      try{g.gain.cancelScheduledValues(c.currentTime);g.gain.setValueAtTime(Math.max(0.0001,g.gain.value),c.currentTime);g.gain.linearRampToValueAtTime(0.0001,c.currentTime+0.3);}catch(e){}
+      setTimeout(function(){try{src.stop();g.disconnect();}catch(e){}},400);
+    }};
+    if(brown) amb.crT=setTimeout(crackle,400);
+  }catch(e){}
+}
+function renderAmb(){
+  Array.prototype.forEach.call($('ambSeg').querySelectorAll('button'),function(b){
+    b.setAttribute('aria-pressed',b.getAttribute('data-amb')===S.amb?'true':'false');
+  });
+}
+$('ambSeg').addEventListener('click',function(e){
+  var b=e.target.closest?e.target.closest('button'):null;
+  if(!b) return;
+  S.amb=b.getAttribute('data-amb');
+  renderAmb();
+  if(S.amb==='off') stopAmb(); else startAmb();
+  update();save();
+});
+document.addEventListener('pointerdown',function(){
+  if(S.amb==='off') return;
+  if(!amb.nodes){startAmb();}
+  else if(ac&&ac.state!=='running'&&ac.resume){ac.resume();}
+},{passive:true});
+
+/* ---------- stats and backup ---------- */
+function fmtTime(sec){var m=Math.floor(sec/60),h=Math.floor(m/60);return h>0?(h+'h '+(m%60)+'m'):(m+'m');}
+function renderStats(){
+  var rows=[
+    ['Lifetime cups',fmt(S.life)],['This run',fmt(S.total)],['Teapot taps',S.taps.toLocaleString('en-US')],
+    ['Visitors welcomed',String(visitsTotal())],['Regulars met',metCount()+' of '+REG.length],['Cat pets',String(S.pets)],
+    ['Wishes granted',String(S.wishes)],['Fresh Pots',String(S.pots)],
+    ['Best gift streak',S.bestStreak+(S.bestStreak===1?' day':' days')],
+    ['Achievements',achCount()+' of '+ACH.length],['Time in the nook',fmtTime(S.played)]
+  ];
+  $('statList').innerHTML=rows.map(function(r){return '<div class="srow"><span>'+r[0]+'</span><span>'+r[1]+'</span></div>';}).join('');
+}
+function renderMore(){renderStats();renderLook();renderAmb();}
+function makeCode(){save();return 'MK1:'+btoa(unescape(encodeURIComponent(JSON.stringify(S))));}
+function readCode(txt){
+  txt=String(txt||'').replace(/\s+/g,'');
+  if(txt.indexOf('MK1:')!==0) return null;
+  try{
+    var o=JSON.parse(decodeURIComponent(escape(atob(txt.slice(4)))));
+    if(!o||typeof o!=='object'||!Array.isArray(o.counts)) return null;
+    return normalize(o);
+  }catch(e){return null;}
+}
+var pendingRestore=null;
+$('bkMake').addEventListener('click',function(){
+  var out=$('bkOut');
+  out.value=makeCode();out.hidden=false;$('bkCopy').hidden=false;
+  $('bkMsg').textContent='Code ready. Copy it somewhere safe, like a note to yourself.';
+});
+$('bkCopy').addEventListener('click',function(){
+  var out=$('bkOut');
+  function fallback(){
+    out.focus();out.select();
+    try{out.setSelectionRange(0,out.value.length);}catch(e){}
+    $('bkMsg').textContent='Code selected. Touch and hold it, then tap Copy.';
+  }
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(out.value).then(function(){$('bkMsg').textContent='Copied to your clipboard.';},fallback);
+    }else{fallback();}
+  }catch(e){fallback();}
+});
+$('bkRestore').addEventListener('click',function(){
+  var s=readCode($('bkIn').value);
+  if(!s){
+    pendingRestore=null;$('bkConfirm').hidden=true;
+    $('bkMsg').textContent='That code did not work. Make sure you pasted all of it, starting with MK1:';
+    return;
+  }
+  pendingRestore=s;$('bkConfirm').hidden=false;$('bkMsg').textContent='';
+});
+$('bkNo').addEventListener('click',function(){pendingRestore=null;$('bkConfirm').hidden=true;});
+$('bkYes').addEventListener('click',function(){
+  if(!pendingRestore) return;
+  S=pendingRestore;pendingRestore=null;S.last=Date.now();
+  $('bkConfirm').hidden=true;$('bkIn').value='';
+  save();refreshAll();
+  $('bkMsg').textContent='Nook restored.';
+  toast('Nook restored from your code.');
+});
+function refreshAll(){
+  lastTick=Date.now();
+  blendN=-1;lastGiftReady=null;
+  setSound();applyLook();updateSky();renderScene();update();renderBook();renderGoals();renderMore();renderWish();
+  if(S.amb==='off') stopAmb(); else startAmb();
+}
+
 /* ---------- fresh pot ---------- */
 $('freshBtn').addEventListener('click',function(){
   if(freshGain()<1){blip(220);return;}
@@ -937,6 +1318,7 @@ $('freshYes').addEventListener('click',function(){
   S.cups=0;S.total=0;
   S.counts=PROD.map(function(){return 0;});
   S.extras={};
+  if(S.wish&&S.wish.type==='pets') S.wish=null;
   $('freshConfirm').hidden=true;
   renderScene();update();save();blip(660);
   toast('Fresh pot! You earned '+g+' '+leafWord(g)+'.');
@@ -955,23 +1337,36 @@ $('no').addEventListener('click',function(){$('confirm').hidden=true;});
 $('yes').addEventListener('click',function(){
   S=fresh();
   try{localStorage.removeItem(KEY);}catch(e){}
-  lastTick=Date.now();
   $('confirm').hidden=true;
-  blendN=-1;lastGiftReady=null;setSound();renderScene();update();renderBook();renderGoals();
+  refreshAll();
 });
-document.addEventListener('visibilitychange',function(){if(document.hidden)save();else tick();});
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden){
+    save();
+    try{if(ac&&amb.nodes&&ac.suspend)ac.suspend();}catch(e){}
+  }else{
+    tick();updateSky();renderScene();
+    try{if(ac&&S.amb!=='off'&&ac.resume)ac.resume();}catch(e){}
+  }
+});
 window.addEventListener('pagehide',save);
 
 /* ---------- start ---------- */
 buildLists();
 setSound();
+applyLook();
+updateSky();
 renderScene();
 tick();
 update();
 setInterval(tick,100);
 setInterval(save,5000);
+setInterval(updateSky,30000);
+setInterval(renderScene,60000);
 renderBook();
 renderGoals();
+renderMore();
+renderWish();
 scheduleMouse(true);
 })();
 </script>

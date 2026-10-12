@@ -1,5 +1,5 @@
 // Offline support for Moss Kettle. Bump CACHE when you want phones to drop old files.
-const CACHE = 'moss-kettle-v3';
+const CACHE = 'moss-kettle-v4';
 const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icon-180.png', 'icon-192.png', 'icon-512.png'];
 const FONT_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com'];
 
