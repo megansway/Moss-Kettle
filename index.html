@@ -110,8 +110,8 @@ h2{margin:6px 0 -4px;font-size:11px;font-weight:800;text-transform:uppercase;let
 footer{display:flex;flex-direction:column;gap:10px;align-items:center;color:var(--muted);font-size:12px;text-align:center}
 .confirm{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center}
 [hidden]{display:none!important}
-.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-.tabs button{position:relative;background:transparent;border:1px solid var(--line);border-radius:12px;padding:10px 4px;font-size:13px;font-weight:800;color:var(--muted);cursor:pointer;min-width:0}
+.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.tabs button{position:relative;background:transparent;border:1px solid var(--line);border-radius:12px;padding:10px 2px;font-size:13px;font-weight:800;color:var(--muted);cursor:pointer;min-width:0}
 .tabs button[aria-selected="true"]{background:var(--panel);border-color:var(--lamp);color:var(--ink)}
 .tabs button.ping::after{content:'';position:absolute;top:5px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--lamp)}
 .tabs button:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
@@ -159,18 +159,46 @@ textarea{width:100%;min-height:78px;resize:vertical;background:var(--bg);color:v
 textarea:focus-visible{outline:2px solid var(--lamp);outline-offset:1px}
 .btnrow{display:flex;gap:8px;flex-wrap:wrap}
 .btnrow .buy{flex:1;min-width:120px}
+.plot{display:flex;flex-direction:column;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:10px;min-width:0}
+.plot svg{width:100%;max-width:92px;height:auto;align-self:center}
+.plot .pn{font-weight:800}
+.seed{display:flex;justify-content:space-between;align-items:center;gap:6px;background:transparent;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--ink);font-weight:800;font-size:13px;cursor:pointer;min-width:0}
+.seed small{color:var(--muted);font-weight:700;font-size:12px}
+.seed:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
+.newtag{align-self:flex-start;background:var(--lamp);color:var(--lamp-ink);border-radius:999px;padding:1px 8px;font-size:11px;font-weight:800}
+#regBack{align-self:flex-start}
+#regCard{align-items:flex-start}
+#regCard svg{width:88px;height:auto}
+#regCard .bar{width:100%}
+.letter{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.letter p{margin:0;overflow-wrap:anywhere}
+.letter .sig{font-family:var(--display);color:var(--lamp);font-size:16px}
+.letter .cs{color:var(--moss);font-size:12px;font-weight:700}
+.letter.lock{opacity:.6}
+.hl{display:flex;flex-direction:column;min-width:0}
+.nn{color:var(--lamp);font-weight:700;font-size:13px;overflow-wrap:anywhere}
+input[type=text]{width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px;font:16px/1.3 inherit;font-family:inherit}
+input[type=text]:focus-visible{outline:2px solid var(--lamp);outline-offset:1px}
+label.lbl{font-size:13px;font-weight:700;color:var(--muted)}
+#s-pot2 .rg{opacity:0}
+#s-pot2.ready .rg{animation:p2pulse 1.6s ease-in-out infinite}
+@keyframes p2pulse{0%,100%{opacity:.15}50%{opacity:.5}}
+#s-pot2 .p2s{opacity:0}
+#s-pot2.ready .p2s{animation:steam 3.2s ease-in-out infinite}
+#pot2Hit{fill:transparent;cursor:pointer;pointer-events:none;outline:none}
+#pot2Hit:focus-visible{stroke:var(--lamp);stroke-width:2;stroke-dasharray:5 5}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 
 <main class="wrap">
   <header class="top">
-    <h1>Moss Kettle</h1>
+    <div class="hl"><h1>Moss Kettle</h1><span class="nn" id="nookName" hidden></span></div>
     <button id="snd" class="ghost" aria-pressed="false">Sound off</button>
   </header>
 
   <section class="stats" aria-live="off">
     <div class="big"><span id="cups">0</span><span class="unit">cups steeped</span></div>
-    <div class="chips"><span class="chip" id="cps">0 per second</span><span class="chip" id="tapv">+1 per tap</span><span class="chip" id="blendChip"></span><span class="chip" id="leafChip" hidden></span></div>
+    <div class="chips"><span class="chip" id="cps">0 per second</span><span class="chip" id="tapv">+1 per tap</span><span class="chip" id="blendChip"></span><span class="chip" id="leafChip" hidden></span><span class="chip" id="buffChip" hidden></span></div>
   </section>
 
   <section class="scene" id="scene">
@@ -318,6 +346,19 @@ textarea:focus-visible{outline:2px solid var(--lamp);outline-offset:1px}
         <circle class="star" cx="110" cy="116" r="1.5" style="fill:var(--lamp);animation-delay:2.5s"/>
       </g>
 
+      <!-- little pot on the sill -->
+      <g id="s-pot2" class="item">
+        <circle class="rg f-lamp" cx="78" cy="120" r="15"/>
+        <ellipse cx="78" cy="130" rx="11" ry="2" fill="#000" opacity=".25"/>
+        <path d="M69 119 q-8 0 -6 6 q2 3 7 1" class="s-pot" stroke-width="3" stroke-linecap="round"/>
+        <path d="M86 118 q7 -1 9 -8" class="s-pot" stroke-width="3" stroke-linecap="round"/>
+        <ellipse cx="78" cy="122" rx="10" ry="8" class="f-moon"/>
+        <path d="M69 125 Q78 131 87 125" fill="none" style="stroke:var(--berry)" stroke-width="1.6"/>
+        <ellipse cx="78" cy="115" rx="6" ry="2.4" class="f-potdk"/>
+        <circle cx="78" cy="112.5" r="2" class="f-potdk"/>
+        <path d="M74 121 q1.5 1.6 3 0 M80 121 q1.5 1.6 3 0" class="s-ink" stroke-width="1.4"/>
+        <g class="p2s"><path d="M93 104 q-4 -5 0 -9 q4 -4 0 -9" fill="none" stroke="var(--steam)" stroke-width="2.4" stroke-linecap="round"/></g>
+      </g>
       <!-- cat -->
       <g id="s-cat" class="item">
         <ellipse cx="306" cy="236" rx="32" ry="17" class="f-cat"/>
@@ -397,6 +438,7 @@ textarea:focus-visible{outline:2px solid var(--lamp);outline-offset:1px}
         <path d="M124 248 H168 q-2 7 -22 7 q-20 0 -22 -7 z" fill="#5b9a52"/>
         <circle cx="136" cy="241" r="1.2" fill="#2b1d08"/><circle cx="146" cy="236" r="1.2" fill="#2b1d08"/><circle cx="156" cy="241" r="1.2" fill="#2b1d08"/>
       </g>
+      <rect id="pot2Hit" x="62" y="104" width="36" height="28" role="button" tabindex="-1" aria-label="Collect the Little Pot"/>
       <rect id="catHit" x="262" y="206" width="86" height="48" role="button" tabindex="-1" aria-label="Pet the cat" style="fill:transparent;cursor:pointer;pointer-events:none;outline:none"/>
     </svg>
 
@@ -421,15 +463,23 @@ textarea:focus-visible{outline:2px solid var(--lamp);outline-offset:1px}
   <p class="hint" id="hint">Tap the teapot to steep a cup.</p>
 
   <div class="tabs" role="tablist" aria-label="Sections">
-    <button type="button" role="tab" data-tab="nook" aria-selected="true">Nook</button>
+    <button type="button" role="tab" id="tab-nook" data-tab="nook" aria-selected="true">Nook</button>
     <button type="button" role="tab" data-tab="blends" aria-selected="false">Blends</button>
-    <button type="button" role="tab" data-tab="regulars" aria-selected="false">Regulars</button>
+    <button type="button" role="tab" id="tab-garden" data-tab="garden" aria-selected="false">Garden</button>
+    <button type="button" role="tab" id="tab-regulars" data-tab="regulars" aria-selected="false">Regulars</button>
     <button type="button" role="tab" id="tab-goals" data-tab="goals" aria-selected="false">Goals</button>
     <button type="button" role="tab" id="tab-fresh" data-tab="fresh" aria-selected="false">Fresh Pot</button>
+    <button type="button" role="tab" id="tab-shop" data-tab="shop" aria-selected="false">Shop</button>
     <button type="button" role="tab" data-tab="more" aria-selected="false">More</button>
   </div>
 
   <section class="panel" id="p-nook">
+    <div class="fresh" id="potCard" hidden>
+      <div class="nm">Little Pot</div>
+      <div class="note" id="potNote"></div>
+      <div class="bar" role="progressbar" aria-label="Little Pot steeping" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="potBar"><i id="potFill"></i></div>
+      <button type="button" class="buy wide" id="potBtn">Steeping</button>
+    </div>
     <h2>Helpers</h2>
     <div class="list" id="prod"></div>
     <h2>Little extras</h2>
@@ -439,12 +489,32 @@ textarea:focus-visible{outline:2px solid var(--lamp);outline-offset:1px}
   <section class="panel" id="p-blends" hidden>
     <p class="note">Brew one blend at a time. Each plays a little differently, and new blends appear as you steep more cups.</p>
     <div class="grid" id="blends"></div>
+    <h2>Recipe book</h2>
+    <p class="note" id="recipeCount"></p>
+    <div class="grid" id="recipes"></div>
+    <p class="note">Brew a herb from the Garden tab while the right blend is steeping to discover a recipe. Once found, a recipe glows whenever you repeat the pairing, for +25% brewing.</p>
+  </section>
+
+  <section class="panel" id="p-garden" hidden>
+    <p class="note">Plant a seed and come back later. Plants grow in real time, even while the app is closed. Harvest them for cups and herbs.</p>
+    <div class="grid" id="plots"></div>
+    <h2>Herb cupboard</h2>
+    <p class="note" id="buffNote"></p>
+    <div class="list" id="cupboard"></div>
+    <p class="note">Brew a herb for a temporary boost. Infusions only count down while you are in the nook, and you can brew one kind at a time.</p>
   </section>
 
   <section class="panel" id="p-regulars" hidden>
-    <p class="note" id="bookCount"></p>
-    <div class="grid" id="book"></div>
-    <p class="note">Visitors tip three times more when you are brewing their favorite blend. Meeting someone new earns a welcome gift.</p>
+    <div class="panel" id="regList">
+      <p class="note" id="bookCount"></p>
+      <div class="grid" id="book"></div>
+      <p class="note">Tap a friend you have met to read their letters. Visitors tip three times more when you are brewing their favorite blend, and meeting someone new earns a welcome gift.</p>
+    </div>
+    <div class="panel" id="regDetail" hidden>
+      <button type="button" class="ghost" id="regBack">Back to all regulars</button>
+      <div class="fresh" id="regCard"></div>
+      <div class="list" id="letters"></div>
+    </div>
   </section>
 
   <section class="panel" id="p-goals" hidden>
@@ -479,11 +549,26 @@ textarea:focus-visible{outline:2px solid var(--lamp);outline-offset:1px}
         <button type="button" class="ghost" id="freshNo">Not yet</button>
       </div>
     </div>
-    <p class="note">Each Golden Leaf adds 5% to everything you brew, for good. Later runs go faster.</p>
+    <p class="note">Each Golden Leaf adds 5% to everything you brew, for good. You can also spend leaves on upgrades in the Shop tab, and spending never lowers that bonus. Later runs go faster.</p>
+  </section>
+
+  <section class="panel" id="p-shop" hidden>
+    <div class="fresh">
+      <div><span class="lv" id="shLeaves">0</span> <span class="unit">Golden Leaves to spend</span></div>
+      <div class="note">Spending leaves never reduces the +5% each one gives you. Earn more by starting Fresh Pots and by reaching day 7 of a gift streak.</div>
+    </div>
+    <div class="list" id="shopList"></div>
   </section>
 
   <section class="panel" id="p-more" hidden>
     <div class="fresh"><div class="nm">Your nook in numbers</div><div id="statList"></div></div>
+    <div class="fresh">
+      <div class="nm">Names</div>
+      <label class="lbl" for="nameNook">Your nook</label>
+      <input type="text" id="nameNook" maxlength="16" autocomplete="off" autocapitalize="words" placeholder="Name your nook">
+      <label class="lbl" for="nameCat">Your cat</label>
+      <input type="text" id="nameCat" maxlength="16" autocomplete="off" autocapitalize="words" placeholder="Name your cat">
+    </div>
     <div class="fresh"><div class="nm">Teapot color</div><div class="grid" id="potGrid"></div></div>
     <div class="fresh"><div class="nm">Wall color</div><div class="grid" id="wallGrid"></div></div>
     <div class="fresh">
@@ -513,7 +598,7 @@ textarea:focus-visible{outline:2px solid var(--lamp);outline-offset:1px}
   </section>
 
   <footer>
-    <span>Saved on this device. The kettle keeps brewing for up to 8 hours while you are away.</span>
+    <span>Saved on this device. The kettle keeps brewing for up to <span id="awayHrs">8</span> hours while you are away.</span>
     <button class="ghost" id="reset">Start a new nook</button>
     <div class="confirm" id="confirm" hidden>
       <span>Erase everything and start over?</span>
@@ -526,7 +611,7 @@ textarea:focus-visible{outline:2px solid var(--lamp);outline-offset:1px}
 <script>
 (function(){
 'use strict';
-var KEY='moss-kettle-v1', MAX_AWAY=8*3600;
+var KEY='moss-kettle-v1';
 
 var PROD=[
   {id:'flame',   name:'Tea-light Warmer', desc:'A steady little flame under the pot.', base:15,     cps:0.2},
@@ -569,7 +654,13 @@ var ICON={
   rain:'<path d="M6 14a4 4 0 0 1 1-7.9A5.5 5.5 0 0 1 17.5 7 3.8 3.8 0 0 1 18 14z" '+F('steam')+'/><path d="M8 17l-1 4M13 17l-1 4M18 17l-1 4" style="stroke:var(--pot);stroke-width:1.8;fill:none;stroke-linecap:round"/>',
   firefly:'<rect x="6" y="7" width="12" height="15" rx="3.5" style="fill:var(--steam);fill-opacity:.25;stroke:var(--steam);stroke-opacity:.7"/><rect x="7.5" y="3.5" width="9" height="4" rx="1.5" '+F('wood')+'/><circle cx="10" cy="13" r="1.4" '+F('lamp')+'/><circle cx="14" cy="16" r="1.4" '+F('lamp')+'/><circle cx="12" cy="10.5" r="1.1" '+F('lamp')+'/>',
   pillow:'<rect x="3" y="6" width="18" height="12" rx="5" '+F('moss')+'/><circle cx="12" cy="12" r="1.6" '+F('moon')+'/>',
-  moonhoney:'<circle cx="12" cy="12" r="9" '+F('moon')+'/><circle cx="15.5" cy="9.5" r="7.5" style="fill:var(--wall)"/><circle cx="10" cy="16" r="1.2" '+F('lamp')+'/>'
+  moonhoney:'<circle cx="12" cy="12" r="9" '+F('moon')+'/><circle cx="15.5" cy="9.5" r="7.5" style="fill:var(--wall)"/><circle cx="10" cy="16" r="1.2" '+F('lamp')+'/>',
+  gift:'<rect x="4" y="11" width="16" height="10" rx="2" '+F('lamp')+'/><rect x="3" y="7.5" width="18" height="4" rx="1.5" '+F('berry')+'/><rect x="11" y="7.5" width="2" height="13.5" '+F('moon')+'/><path d="M12 7.5C9.5 2.5 5.5 4.5 8.5 7.5M12 7.5c2.5-5 6.5-3 3.5 0" style="stroke:var(--berry);fill:none;stroke-width:1.6;stroke-linecap:round"/>',
+  heart:'<path d="M12 21C4 15 3 10 6 7c2-2 5-1 6 1 1-2 4-3 6-1 3 3 2 8-6 14z" '+F('berry')+'/>',
+  mint:'<path d="M12 21V9" style="stroke:var(--moss);stroke-width:2;fill:none;stroke-linecap:round"/><ellipse cx="7.5" cy="10" rx="5" ry="2.8" transform="rotate(-30 7.5 10)" '+F('moss')+'/><ellipse cx="16.5" cy="10" rx="5" ry="2.8" transform="rotate(30 16.5 10)" '+F('moss')+'/><ellipse cx="8" cy="16" rx="4.2" ry="2.4" transform="rotate(-30 8 16)" '+F('moss')+'/><ellipse cx="16" cy="16" rx="4.2" ry="2.4" transform="rotate(30 16 16)" '+F('moss')+'/>',
+  lavender:'<path d="M12 22V10" style="stroke:var(--moss);stroke-width:1.8;fill:none;stroke-linecap:round"/><ellipse cx="12" cy="6.5" rx="2.2" ry="4.5" style="fill:#b39ddb"/><ellipse cx="8.8" cy="9" rx="2" ry="4" transform="rotate(-18 8.8 9)" style="fill:#9c88cc"/><ellipse cx="15.2" cy="9" rx="2" ry="4" transform="rotate(18 15.2 9)" style="fill:#9c88cc"/>',
+  chamomile:'<path d="M12 22V13" style="stroke:var(--moss);stroke-width:1.8;fill:none;stroke-linecap:round"/><g style="fill:#fff"><ellipse cx="12" cy="5.5" rx="2.1" ry="3.6"/><ellipse cx="12" cy="5.5" rx="2.1" ry="3.6" transform="rotate(60 12 9.5)"/><ellipse cx="12" cy="5.5" rx="2.1" ry="3.6" transform="rotate(120 12 9.5)"/><ellipse cx="12" cy="5.5" rx="2.1" ry="3.6" transform="rotate(180 12 9.5)"/><ellipse cx="12" cy="5.5" rx="2.1" ry="3.6" transform="rotate(240 12 9.5)"/><ellipse cx="12" cy="5.5" rx="2.1" ry="3.6" transform="rotate(300 12 9.5)"/></g><circle cx="12" cy="9.5" r="2.6" '+F('lamp')+'/>',
+  moonflower:'<path d="M12 22V12" style="stroke:var(--moss);stroke-width:1.8;fill:none;stroke-linecap:round"/><circle cx="12" cy="9" r="8" style="fill:var(--moon);fill-opacity:.25"/><circle cx="12" cy="9" r="5" '+F('moon')+'/><circle cx="12" cy="9" r="1.8" '+F('lamp')+'/>'
 };
 
 var BLENDS=[
@@ -602,8 +693,82 @@ var REG=[
   {id:'frog',name:'Lily',kind:'frog',rarity:'Seasonal',weight:3,tipMult:2,min:0,fav:'rooibos',season:'summer',seasonName:'Summer',line:'Loves a warm cup on a cool evening.',
    art:'<ellipse cx="24" cy="29" rx="17" ry="10" fill="#7fb36b"/><circle cx="14" cy="17" r="6.5" fill="#7fb36b"/><circle cx="34" cy="17" r="6.5" fill="#7fb36b"/><circle cx="14" cy="16" r="3.6" fill="#fff"/><circle cx="34" cy="16" r="3.6" fill="#fff"/><circle cx="14.8" cy="16.4" r="1.8" fill="#1d2433"/><circle cx="33.2" cy="16.4" r="1.8" fill="#1d2433"/><path d="M15 29 q9 6 18 0" stroke="#1d2433" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="12" cy="27" r="2.6" fill="#e48a9c" opacity=".55"/><circle cx="36" cy="27" r="2.6" fill="#e48a9c" opacity=".55"/><ellipse cx="11" cy="37" rx="5" ry="2.6" fill="#6aa058"/><ellipse cx="37" cy="37" rx="5" ry="2.6" fill="#6aa058"/>'}
 ];
+var LVL_AT=[0,3,10,25],LVL_NAME=['','New friend','Friendly','Close','Dearest'];
+var LETTERS={
+  mouse:[
+    'Dear friend, I counted my crumbs this morning and I have forty. Thank you for letting me visit. Your teapot is the kindest-looking one I have ever met.',
+    'I made a tiny scarf from yarn I found near your basket. It is much too small for you, which is why it is perfect for me. Please do not tell the cat where I got it.',
+    'I told my whole family about your nook. Mother says a place that smells of tea and honey is a good place to grow old. I think I will visit every evening from now on.'],
+  hedgehog:[
+    'It rained again, so I arrived soggy. You dried my spines with a towel and never said a word about it. That was the nicest thing anyone has done for me all week.',
+    'I have been collecting acorn caps for you. I know a teapot has no use for acorn caps. I just wanted to bring you something.',
+    'Winter is coming and I will be asleep for a while. Please do not worry. Keep the kettle warm, and I will be back in spring with a very large appetite.'],
+  sparrow:[
+    'I wrote a little song while I waited for my tea. It only has one line so far: warm cup, warm window, warm heart. I am still working on the rest.',
+    'I sang your song to the other sparrows at dawn. They asked where it came from. I told them there is a teapot by a window that makes everyone want to sing.',
+    'The song is finished! It has seven verses and a very long ending that nobody asked for. I would love to sing it for you the next time I visit, if you do not mind.'],
+  owl:[
+    'I read one page of my book here and stayed until the lamp burned low. I cannot remember what the page said. I do remember the tea.',
+    'I have decided your nook is the best reading room in the forest. Nothing is too loud, and the cat makes an excellent bookmark. Please never move the shelf.',
+    'I finally finished my book, after many evenings. The last line was about coming home. I thought of this place, and I was not even sad to reach the end.'],
+  fox:[
+    'I only stopped by because the lanterns looked interesting. That is what I told myself on the way over. It was not true. I wanted the tea.',
+    'People say foxes are tricky, and I do not mind. But with you I never have to be clever. I sit, and you pour. It is a rare thing.',
+    'I brought you a gift: the first red leaf of autumn, the very first one any fox has seen this year. I have never given anyone a leaf before. Please keep it somewhere warm.'],
+  moth:[
+    'I travel a long way every night, always toward the brightest light. Yours is the first one that ever felt like arriving.',
+    'The moon asked what I have been doing with all my nights. I told her I found a place that glows even when she is hiding. She seemed a little jealous.',
+    'My wings are dusty now and my journeys are shorter. I do not mind. I would much rather spend my evenings by your lamp than cross the whole sky again.'],
+  ghost:[
+    'Boo! Did I scare you? No? Good, I was only practicing. Nobody has ever stayed to chat with me before.',
+    'I have haunted the same attic for a hundred years and it was never this cozy. Your nook has better snacks, and the cat does not even flinch.',
+    'I will have to go when the leaves are gone, but I promise to come back every October. A ghost always keeps a promise. It is practically our whole job.'],
+  hare:[
+    'My ears were so cold this morning that I almost turned back. Then I saw your window glowing, and my paws knew the way. Thank you for the warm cup.',
+    'I left tiny footprints in the snow all the way to your door. I hope you saw them. I like to think they make a map that says: someone kind lives here.',
+    'When the snow melts I will have to leave for a while. But I will remember this: a teapot, a cat, a lamp, and a place by the window where I never had to be cold.'],
+  ladybug:[
+    'I counted my spots this morning and I still have all seven! The flowers are just starting to open outside. I wanted you to be the first to know.',
+    'I flew past a hundred windows on my way here, and yours was the only one with a teapot that waved back. Maybe it did not wave. I like to think it did.',
+    'My cousins say good luck follows ladybugs, but I think it works the other way around. I have been very lucky since I found your nook.'],
+  frog:[
+    'It was a warm night and I was sitting by the pond with nothing to do. Then I thought, a cup of tea would be nice. So here I am. Ribbit.',
+    'I learned something new this week: tea tastes better after a long swim. I do not know why. I just wanted to share my discovery.',
+    'The pond is wonderful, but the nights get cool, and it is nice to have somewhere to come to. You have made a corner of the world where a frog can feel she belongs.']
+};
+var HERBS=[
+  {id:'mint',      name:'Mint',       icon:'mint',      grow:1800,  buffName:'Minty Burst',      buffSec:600,  desc:'Taps brew 3x as much for 10 minutes.'},
+  {id:'lavender',  name:'Lavender',   icon:'lavender',  grow:7200,  buffName:'Lavender Calm',    buffSec:900,  desc:'Helpers brew 50% more for 15 minutes.'},
+  {id:'chamomile', name:'Chamomile',  icon:'chamomile', grow:14400, buffName:'Chamomile Glow',   buffSec:1200, desc:'Everything brews 50% more for 20 minutes.'},
+  {id:'moonflower',name:'Moonflower', icon:'moonflower',grow:28800, buffName:'Moonflower Dream', buffSec:1800, desc:'Everything brews twice as much for 30 minutes.'}
+];
+var RECIPES=[
+  {id:'gardenmint',  name:'Garden Mint',          blend:'classic',   herb:'mint',       clue:'The plainest blend has a friend in the garden. Think cool and green.'},
+  {id:'moonlitam',   name:'Moonlit Morning',      blend:'classic',   herb:'moonflower', clue:'A simple cup under a very bright night flower.'},
+  {id:'bedtime',     name:'Bedtime Blend',        blend:'chamomile', herb:'lavender',   clue:'Two sleepy things that belong together.'},
+  {id:'coolcham',    name:'Cool Chamomile',       blend:'chamomile', herb:'mint',       clue:'Calm, with a little chill.'},
+  {id:'jasmint',     name:'Jasmine Mint Pearls',  blend:'jasmine',   herb:'mint',       clue:'Little pearls like something fresh and green.'},
+  {id:'nightjas',    name:'Night Jasmine',        blend:'jasmine',   herb:'moonflower', clue:'Jasmine smells best after dark.'},
+  {id:'duskberry',   name:'Dusk Berry',           blend:'berry',     herb:'lavender',   clue:'Berries and a purple evening.'},
+  {id:'berrypos',    name:'Berry Posset',         blend:'berry',     herb:'chamomile',  clue:'Sweet berries and soft white petals.'},
+  {id:'honeyroo',    name:'Honeyed Rooibos',      blend:'rooibos',   herb:'chamomile',  clue:'Warm and golden all the way down.'},
+  {id:'midnightstar',name:'Midnight Star',        blend:'starleaf',  herb:'moonflower', clue:'The two rarest things in the nook.'}
+];
+var HEAD=[null,[5,3,1],[10,8,3,2,1]];
+var SHOP=[
+  {id:'sleep',  name:'Cozy Blanket',    icon:'moonhoney', max:3, cost:[2,3,5], desc:'The kettle keeps brewing 4 hours longer while you are away.', eff:function(l){return 'Away limit: '+(8+4*l)+' hours';}},
+  {id:'head',   name:'Head Start',      icon:'bakery',    max:2, cost:[3,8],   desc:'Begin every new Fresh Pot with helpers already working.', eff:function(l){return l?(['','5 Warmers, 3 Honey Jars, 1 Cat','10 Warmers, 8 Honey Jars, 3 Cats, 2 Ferns, 1 Shelf'][l]):'Not owned yet';}},
+  {id:'taps',   name:'Gilded Lid',      icon:'spoon',     max:5, cost:[1,2,3,4,5], desc:'Each tap brews 50% more.', eff:function(l){return l?('Taps +'+(50*l)+'%'):'Not owned yet';}},
+  {id:'host',   name:'Gracious Host',   icon:'honey',     max:3, cost:[2,4,6], desc:'Visitors tip 50% more.', eff:function(l){return l?('Tips +'+(50*l)+'%'):'Not owned yet';}},
+  {id:'parcel', name:'Ribbon Parcels',  icon:'gift',      max:3, cost:[2,3,5], desc:'Daily gifts are 50% bigger.', eff:function(l){return l?('Gifts +'+(50*l)+'%'):'Not owned yet';}},
+  {id:'wishes', name:'Wishing Star',    icon:'anise',     max:3, cost:[2,3,4], desc:'Wish rewards are 50% bigger.', eff:function(l){return l?('Wish rewards +'+(50*l)+'%'):'Not owned yet';}},
+  {id:'plots',  name:'Window Box',      icon:'mint',      max:2, cost:[2,4],   desc:'Adds another plot to your garden.', eff:function(l){return 'Garden plots: '+(2+l);}},
+  {id:'bond',   name:'Warm Welcome',    icon:'heart',     max:2, cost:[3,5],   desc:'Friendships with your regulars grow 50% faster.', eff:function(l){return l?('Friendship +'+(50*l)+'% faster'):'Not owned yet';}}
+];
 function $(id){return document.getElementById(id);}
-function fresh(){return {cups:0,total:0,counts:PROD.map(function(){return 0;}),extras:{},taps:0,mice:0,last:Date.now(),sound:false,life:0,leaves:0,pots:0,blend:'classic',reg:{},ach:{},giftDay:-1,streak:0,bestStreak:0,pets:0,loved:0,played:0,wish:null,wishes:0,amb:'off',potc:'moss',wallc:'dusk'};}
+var POT2_SEC=300,POT2_AT=100000;
+function cleanName(v){return String(v||'').replace(/[\u0000-\u001f<>]/g,'').replace(/\s+/g,' ').trim().slice(0,16);}
+function fresh(){return {cups:0,total:0,counts:PROD.map(function(){return 0;}),extras:{},taps:0,mice:0,last:Date.now(),sound:false,life:0,leaves:0,pots:0,blend:'classic',reg:{},ach:{},giftDay:-1,streak:0,bestStreak:0,pets:0,loved:0,played:0,wish:null,wishes:0,amb:'off',potc:'moss',wallc:'dusk',spent:0,shopSeen:0,shop:{},harvests:0,infusions:0,herbs:{mint:0,lavender:0,chamomile:0,moonflower:0},garden:[null,null,null,null],buff:null,fr:{},seenLv:{},nookName:'',catName:'',recipes:{},pot2:null,pot2n:0};}
 function normalize(o){
   var s=fresh();
   try{
@@ -631,6 +796,32 @@ function normalize(o){
       s.amb=(o.amb==='rain'||o.amb==='fire')?o.amb:'off';
       s.potc=(typeof o.potc==='string')?o.potc:'moss';
       s.wallc=(typeof o.wallc==='string')?o.wallc:'dusk';
+      s.spent=Math.max(0,Math.min(s.leaves,Math.floor(+o.spent||0)));
+      s.shopSeen=Math.max(0,Math.floor(+o.shopSeen||0));
+      s.shop={};
+      SHOP.forEach(function(it){var v=Math.floor(+(o.shop&&o.shop[it.id])||0);s.shop[it.id]=Math.max(0,Math.min(it.max,v));});
+      s.harvests=Math.max(0,Math.floor(+o.harvests||0));
+      s.infusions=Math.max(0,Math.floor(+o.infusions||0));
+      s.herbs={};
+      HERBS.forEach(function(h){s.herbs[h.id]=Math.max(0,Math.floor(+(o.herbs&&o.herbs[h.id])||0));});
+      var gd=Array.isArray(o.garden)?o.garden:[];
+      s.garden=[0,1,2,3].map(function(i){
+        var p=gd[i];
+        return (p&&typeof p==='object'&&HERBS.some(function(h){return h.id===p.herb;})&&isFinite(p.planted))?{herb:p.herb,planted:+p.planted}:null;
+      });
+      var bfv=o.buff;
+      if(bfv&&typeof bfv==='object'&&HERBS.some(function(h){return h.id===bfv.id;})&&isFinite(bfv.left)&&+bfv.left>0){s.buff={id:bfv.id,left:Math.min(+bfv.left,7200)};}
+      s.fr={};
+      if(o.fr&&typeof o.fr==='object'){REG.forEach(function(r){if(isFinite(o.fr[r.id])&&+o.fr[r.id]>0) s.fr[r.id]=+o.fr[r.id];});}
+      else{REG.forEach(function(r){if(s.reg[r.id]) s.fr[r.id]=+s.reg[r.id]||0;});}
+      s.seenLv={};
+      if(o.seenLv&&typeof o.seenLv==='object'){REG.forEach(function(r){var v=Math.floor(+o.seenLv[r.id]||0);if(v>0) s.seenLv[r.id]=v;});}
+      s.nookName=(typeof o.nookName==='string')?cleanName(o.nookName):'';
+      s.catName=(typeof o.catName==='string')?cleanName(o.catName):'';
+      s.recipes={};
+      RECIPES.forEach(function(r){if(o.recipes&&o.recipes[r.id]) s.recipes[r.id]=true;});
+      s.pot2n=Math.max(0,Math.floor(+o.pot2n||0));
+      if(o.pot2&&typeof o.pot2==='object'&&isFinite(o.pot2.at)){s.pot2={at:Math.min(+o.pot2.at,Date.now()+POT2_SEC*1000)};}
       var w=o.wish;
       if(w&&typeof w==='object'&&typeof w.reg==='string'&&['taps','visits','pets','cups'].indexOf(w.type)>=0&&isFinite(w.target)&&+w.target>0&&isFinite(w.base)){
         s.wish={reg:w.reg,type:w.type,target:+w.target,base:+w.base};
@@ -696,7 +887,20 @@ var ACH=[
   {id:'decor',    name:'Interior Designer',desc:'Change your teapot or wall color.',     test:function(){return S.potc!=='moss'||S.wallc!=='dusk';}},
   {id:'ambient',  name:'Cozy Soundscape',  desc:'Turn on an ambient sound.',             test:function(){return S.amb!=='off';}},
   {id:'seasonal', name:'Seasonal Friend',  desc:'Meet a seasonal visitor.',              test:function(){return REG.some(function(r){return r.season&&S.reg[r.id];});}},
-  {id:'hour',     name:'Long Evening',     desc:'Spend an hour in the nook.',            test:function(){return S.played>=3600;}}
+  {id:'hour',     name:'Long Evening',     desc:'Spend an hour in the nook.',            test:function(){return S.played>=3600;}},
+  {id:'sprout',   name:'Green Thumb',      desc:'Harvest your first herb.',              test:function(){return S.harvests>=1;}},
+  {id:'garden25', name:'Master Gardener',  desc:'Harvest 25 times.',                     test:function(){return S.harvests>=25;}},
+  {id:'infuse',   name:'Herbal Remedy',    desc:'Brew your first infusion.',             test:function(){return S.infusions>=1;}},
+  {id:'letter1',  name:'You Have Mail',    desc:'Unlock a letter from a regular.',       test:function(){return lettersTotal()>=1;}},
+  {id:'letter10', name:'Pen Pal',          desc:'Unlock 10 letters.',                    test:function(){return lettersTotal()>=10;}},
+  {id:'bff',      name:'Dearest Friend',   desc:'Reach the highest friendship level.',   test:function(){return REG.some(function(r){return frLevel(r.id)>=4;});}},
+  {id:'spender',  name:'Leaf Spender',     desc:'Buy something in the Leaf Shop.',       test:function(){return S.spent>=1;}},
+  {id:'named',    name:'Making It Home',   desc:'Name your nook or your cat.',           test:function(){return !!(S.nookName||S.catName);}},
+  {id:'recipe1',  name:'Recipe Reader',    desc:'Discover your first recipe.',           test:function(){return recipeCount()>=1;}},
+  {id:'recipe5',  name:'Tea Sommelier',    desc:'Discover 5 recipes.',                   test:function(){return recipeCount()>=5;}},
+  {id:'recipe10', name:'Master Blender',   desc:'Discover every recipe.',                test:function(){return recipeCount()>=RECIPES.length;}},
+  {id:'pot2a',    name:'Little Helper',    desc:'Collect from the Little Pot.',          test:function(){return S.pot2n>=1;}},
+  {id:'pot2b',    name:'Pot Pal',          desc:'Collect from the Little Pot 25 times.', test:function(){return S.pot2n>=25;}}
 ];
 function announce(msg){
   if($('toast').hidden){toast(msg);}
@@ -723,9 +927,13 @@ function earn(x){S.cups+=x;S.total+=x;S.life+=x;}
 function freshGain(){return Math.floor(Math.sqrt(S.total/500000));}
 function leafWord(n){return n===1?'Golden Leaf':'Golden Leaves';}
 function cost(i){return Math.ceil(PROD[i].base*Math.pow(1.15,S.counts[i]));}
-function mult(){return (S.extras.anise?2:1)*(S.extras.quilt?1.5:1)*(S.extras.biscuit?2:1)*(S.extras.pillow?2:1)*(S.extras.moonhoney?2:1)*leafMult()*blendProd()*achMult();}
+function recipeCount(){var n=0;RECIPES.forEach(function(r){if(S.recipes[r.id])n++;});return n;}
+function recipeMult(){return 1+0.02*recipeCount();}
+function recipeActive(){var b=buffId();if(!b)return null;var cb=curBlend().id;for(var i=0;i<RECIPES.length;i++){var r=RECIPES[i];if(S.recipes[r.id]&&r.blend===cb&&r.herb===b)return r;}return null;}
+function pairMult(){return recipeActive()?1.25:1;}
+function mult(){return (S.extras.anise?2:1)*(S.extras.quilt?1.5:1)*(S.extras.biscuit?2:1)*(S.extras.pillow?2:1)*(S.extras.moonhoney?2:1)*leafMult()*blendProd()*achMult()*friendMult()*buffProd()*recipeMult()*pairMult();}
 function cps(){var b=0;for(var i=0;i<PROD.length;i++)b+=S.counts[i]*PROD[i].cps;return b*mult();}
-function tapValue(){return (S.extras.mitts?2:1)*(S.extras.spoon?2:1)*blendTap()*leafMult()*achMult()+cps()*0.02;}
+function tapValue(){return (S.extras.mitts?2:1)*(S.extras.spoon?2:1)*blendTap()*leafMult()*achMult()*friendMult()*buffTap()*recipeMult()*pairMult()*(1+0.5*lvl('taps'))+cps()*0.02;}
 
 /* ---------- sound ---------- */
 var ac=null;
@@ -835,6 +1043,13 @@ function update(){
   if(!$('p-goals').hidden)renderWish();
   if(!$('p-more').hidden&&(++moreT%10===0))renderStats();
   $('tab-goals').classList.toggle('ping',gr||wd);
+  var bf=(S.buff&&S.buff.left>0)?S.buff:null;
+  $('buffChip').hidden=!bf;
+  if(bf) $('buffChip').textContent=herbById(bf.id).buffName+' '+fmtLeft(bf.left)+(recipeActive()?' · recipe +25%':'');
+  updatePot2();
+  gardenTick();
+  $('tab-regulars').classList.toggle('ping',unreadLetters()>0);
+  $('tab-shop').classList.toggle('ping',S.leaves>S.shopSeen);
   checkAch();
   PROD.forEach(function(it,i){
     var el=prodEls[i],k=cost(i),can=S.cups>=k;
@@ -855,6 +1070,53 @@ function update(){
     }
   });
 }
+
+/* ---------- little pot ---------- */
+function pot2Reward(){return Math.max(250,Math.floor(cps()*150));}
+function pot2Left(){return S.pot2?Math.max(0,(S.pot2.at-Date.now())/1000):0;}
+function updatePot2(){
+  if(!S.pot2&&S.life>=POT2_AT){
+    S.pot2={at:Date.now()+POT2_SEC*1000};
+    announce('A little pot appeared on your windowsill! Tap it when it is ready.');
+  }
+  var on=!!S.pot2,left=pot2Left(),ready=on&&left<=0;
+  var g=$('s-pot2'),h=$('pot2Hit');
+  g.classList.toggle('on',on);g.classList.toggle('ready',ready);
+  h.style.pointerEvents=on?'all':'none';
+  h.setAttribute('tabindex',on?'0':'-1');
+  $('potCard').hidden=!on;
+  $('tab-nook').classList.toggle('ping',ready);
+  if(!on) return;
+  var pct=Math.max(0,Math.min(100,100*(1-left/POT2_SEC)));
+  $('potFill').style.width=pct+'%';
+  $('potBar').setAttribute('aria-valuenow',String(Math.round(pct)));
+  $('potNote').textContent=ready?('Ready! Tap the little pot on the windowsill or the button below. It brews again right after.'):('Steeping on the windowsill. Ready in '+fmtLeft(left)+'. It keeps steeping while you are away.');
+  var b=$('potBtn');
+  b.textContent=ready?('Collect +'+fmt(pot2Reward())):('Steeping '+fmtLeft(left));
+  b.classList.toggle('can',ready);
+}
+function collectPot2(cx,cy){
+  if(!S.pot2) return;
+  var r=scene.getBoundingClientRect();
+  if(pot2Left()>0){blip(220);if(cx!=null)pop(cx-r.left,cy-r.top-12,'still steeping');return;}
+  var g=pot2Reward(),extra='';
+  earn(g);S.pot2n++;
+  if(Math.random()<0.2){var h=pickOf(HERBS);S.herbs[h.id]=(S.herbs[h.id]||0)+1;extra=' and 1 '+h.name;}
+  S.pot2={at:Date.now()+POT2_SEC*1000};
+  if(cx!=null)pop(cx-r.left,cy-r.top-12,'+'+fmt(g));
+  toast('The little pot is ready: +'+fmt(g)+' cups'+extra);
+  blip(720);update();save();
+}
+var p2Hit=$('pot2Hit');
+p2Hit.addEventListener('pointerdown',function(e){e.preventDefault();collectPot2(e.clientX,e.clientY);});
+p2Hit.addEventListener('keydown',function(e){
+  if(e.key==='Enter'||e.key===' '){
+    e.preventDefault();
+    var b=p2Hit.getBoundingClientRect();
+    collectPot2(b.left+b.width/2,b.top+b.height/2);
+  }
+});
+$('potBtn').addEventListener('click',function(){collectPot2();});
 
 /* ---------- tapping ---------- */
 var scene=$('scene'),pot=$('pot'),hit=$('hit');
@@ -911,12 +1173,13 @@ function showMouse(){
 mouse.addEventListener('click',function(){
   if(!curVis) return;
   var v=curVis,first=!S.reg[v.id],loved=curBlend().id===v.fav;
-  var tip=Math.max(25,Math.floor(cps()*40))*v.tipMult*(loved?3:1)*(first?5:1);
+  var tip=Math.max(25,Math.floor(cps()*40))*v.tipMult*(loved?3:1)*(first?5:1)*(1+0.25*Math.max(0,frLevel(v.id)-1))*(1+0.5*lvl('host'));
   S.reg[v.id]=(S.reg[v.id]||0)+1;
   if(loved) S.loved++;
   earn(tip);S.mice++;
   mouse.hidden=true;clearTimeout(mouseHideT);
   toast(first?('You met '+v.name+' the '+v.kind+'! Welcome gift: +'+fmt(tip)+' cups'):(loved?(v.name+' adores the '+curBlend().name+'! Tip: +'+fmt(tip)+' cups'):(v.name+' left a thank-you tip: +'+fmt(tip)+' cups')));
+  addFriend(v.id,loved?3:1);
   renderBook();
   blip(700);update();save();scheduleMouse(false);
 });
@@ -929,7 +1192,12 @@ function tick(){
   if(!(dt>0)) return;
   var away=dt>20;
   if(!away&&!document.hidden) S.played+=dt;
-  if(dt>MAX_AWAY) dt=MAX_AWAY;
+  if(S.buff&&!away){
+    S.buff.left-=dt;
+    if(S.buff.left<=0){var bn=herbById(S.buff.id).buffName;S.buff=null;announce(bn+' has faded.');renderRecipes();}
+  }
+  var capS=awayCap();
+  if(dt>capS) dt=capS;
   var gain=cps()*dt*(away&&curBlend().id==='rooibos'?1.5:1);
   earn(gain);
   if(away&&gain>=1) toast('Welcome back. The kettle kept going: +'+fmt(gain)+' cups');
@@ -956,6 +1224,18 @@ function renderBlends(){
     });
     g.appendChild(el);
   });
+  renderRecipes();
+}
+function renderRecipes(){
+  var g=$('recipes'),act=recipeActive();
+  g.innerHTML='';
+  RECIPES.forEach(function(r){
+    var got=!!S.recipes[r.id],glow=!!(act&&act.id===r.id),el=document.createElement('div');
+    el.className='card'+(got?(glow?' on':''):' lock');
+    el.innerHTML=got?('<span class="cn">'+r.name+'</span><span class="cd">'+herbById(r.herb).name+' brewed with '+blendById(r.blend).name+'.</span><span class="cs">'+(glow?'Glowing now: +25% brewing':'Repeat it for +25% brewing')+'</span>'):('<span class="cn">???</span><span class="cd">'+r.clue+'</span><span class="cs">Undiscovered</span>');
+    g.appendChild(el);
+  });
+  $('recipeCount').textContent=recipeCount()+' of '+RECIPES.length+' recipes found. Each one adds 2% to everything you brew.';
 }
 
 /* ---------- regulars ---------- */
@@ -965,13 +1245,14 @@ function renderBook(){
   REG.forEach(function(r){
     var n=S.reg[r.id]||0;
     if(n) met++;
-    var el=document.createElement('div');
+    var el=document.createElement(n?'button':'div');
+    if(n){el.type='button';el.addEventListener('click',function(){showReg(r.id);});}
     el.className='card reg'+(n?'':' lock');
     var art='<svg viewBox="0 0 48 40" aria-hidden="true"'+(n?'':' style="filter:brightness(0) opacity(.5)"')+'>'+r.art+'</svg>';
     var fav=blendById(r.fav);
     var desc=n?r.line:((r.season&&r.season!==seasonNow())?('Only visits in '+r.seasonName+'.'):(S.life>=r.min?'Has not stopped by yet. Keep the kettle warm.':'Arrives after '+fmt(r.min)+' lifetime cups.'));
-    var meta=n?(r.rarity+' · '+n+(n===1?' visit':' visits')+' · loves '+fav.name):r.rarity;
-    el.innerHTML=art+'<span class="cn">'+(n?(r.name+' the '+r.kind):'???')+'</span><span class="cd">'+desc+'</span><span class="cs">'+meta+'</span>';
+    var meta=n?(r.rarity+' · '+LVL_NAME[frLevel(r.id)]+' · loves '+fav.name):r.rarity;
+    el.innerHTML=art+'<span class="cn">'+(n?(r.name+' the '+r.kind):'???')+'</span><span class="cd">'+desc+'</span><span class="cs">'+meta+'</span>'+((n&&frLevel(r.id)>Math.max(1,S.seenLv[r.id]||1))?'<span class="newtag">New letter</span>':'');
     g.appendChild(el);
   });
   $('bookCount').textContent=met+' of '+REG.length+' regulars met';
@@ -988,6 +1269,8 @@ function showTab(name){
   if(name==='regulars') renderBook();
   if(name==='goals') renderWish();
   if(name==='more') renderMore();
+  if(name==='garden') renderGarden();
+  if(name==='shop'){S.shopSeen=S.leaves;renderShop();update();save();}
 }
 Array.prototype.forEach.call(tabBtns,function(b){
   b.addEventListener('click',function(){showTab(b.getAttribute('data-tab'));});
@@ -997,7 +1280,7 @@ Array.prototype.forEach.call(tabBtns,function(b){
 function dayNum(d){return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000);}
 function giftReady(){return dayNum(new Date())>S.giftDay;}
 function effStreak(){var t=dayNum(new Date());return (S.giftDay>=0&&t-S.giftDay<=1)?S.streak:0;}
-function giftReward(streak){return Math.max(200,Math.floor(cps()*900))*(1+0.2*Math.min(streak-1,6));}
+function giftReward(streak){return Math.max(200,Math.floor(cps()*900))*(1+0.2*Math.min(streak-1,6))*(1+0.5*lvl('parcel'));}
 function renderGift(){
   var ready=giftReady(),es=effStreak(),i,dots='',note;
   var filled=(es>0&&es%7===0)?(ready?0:7):es%7;
@@ -1047,7 +1330,8 @@ function petCat(cx,cy){
   var now=Date.now(),g=0,r=scene.getBoundingClientRect(),cat=$('s-cat');
   cat.classList.remove('purr');void cat.getBoundingClientRect();cat.classList.add('purr');
   if(now-lastPet>=2500){lastPet=now;g=Math.max(5,Math.floor(cps()*5));earn(g);S.pets++;}
-  pop(cx-r.left,cy-r.top-12,g?('purr +'+fmt(g)):'purr');
+  var cn=S.catName?(S.catName+' '):'';
+  pop(cx-r.left,cy-r.top-12,g?(cn+'purrs +'+fmt(g)):(cn?(cn+'purrs'):'purr'));
   blip(300);update();
 }
 catHit.addEventListener('pointerdown',function(e){e.preventDefault();petCat(e.clientX,e.clientY);});
@@ -1084,7 +1368,7 @@ function newWish(){
   else n=niceNum(Math.max(1500,cps()*pickOf([200,400,800])));
   return {reg:pickOf(who).id,type:t,target:n,base:wishStat(t)};
 }
-function wishReward(w){return Math.max(500,Math.floor(cps()*(w.type==='cups'?300:600)));}
+function wishReward(w){return Math.floor(Math.max(500,Math.floor(cps()*(w.type==='cups'?300:600)))*(1+0.5*lvl('wishes')));}
 function renderWish(){
   var w=S.wish,txt=$('wishText'),bar=$('wishBar'),prog=$('wishProg'),btn=$('wishBtn');
   if(!w){
@@ -1107,6 +1391,7 @@ $('wishBtn').addEventListener('click',function(){
   if(wishStat(w.type)-w.base<w.target){blip(220);return;}
   var r=wishReward(w),who=regById(w.reg)||REG[0];
   earn(r);S.wishes++;S.wish=null;
+  if(who&&who.id) addFriend(who.id,3);
   toast(who.name+' is delighted! Wish reward: +'+fmt(r)+' cups');
   blip(720);
   S.wish=newWish();renderWish();update();save();
@@ -1244,7 +1529,7 @@ function renderStats(){
   var rows=[
     ['Lifetime cups',fmt(S.life)],['This run',fmt(S.total)],['Teapot taps',S.taps.toLocaleString('en-US')],
     ['Visitors welcomed',String(visitsTotal())],['Regulars met',metCount()+' of '+REG.length],['Cat pets',String(S.pets)],
-    ['Wishes granted',String(S.wishes)],['Fresh Pots',String(S.pots)],
+    ['Wishes granted',String(S.wishes)],['Herbs harvested',String(S.harvests)],['Infusions brewed',String(S.infusions)],['Letters unlocked',String(lettersTotal())],['Fresh Pots',String(S.pots)],
     ['Best gift streak',S.bestStreak+(S.bestStreak===1?' day':' days')],
     ['Achievements',achCount()+' of '+ACH.length],['Time in the nook',fmtTime(S.played)]
   ];
@@ -1298,11 +1583,268 @@ $('bkYes').addEventListener('click',function(){
   $('bkMsg').textContent='Nook restored.';
   toast('Nook restored from your code.');
 });
+function applyNames(){
+  var nn=$('nookName');
+  nn.hidden=!S.nookName;nn.textContent=S.nookName;
+  $('catHit').setAttribute('aria-label',S.catName?('Pet '+S.catName):'Pet the cat');
+}
+function syncNameInputs(){$('nameNook').value=S.nookName;$('nameCat').value=S.catName;}
+$('nameNook').addEventListener('input',function(){S.nookName=cleanName(this.value);applyNames();save();});
+$('nameCat').addEventListener('input',function(){S.catName=cleanName(this.value);applyNames();save();});
+$('nameNook').addEventListener('blur',function(){this.value=S.nookName;});
+$('nameCat').addEventListener('blur',function(){this.value=S.catName;});
 function refreshAll(){
-  lastTick=Date.now();
+  lastTick=Date.now();applyNames();syncNameInputs();
   blendN=-1;lastGiftReady=null;
-  setSound();applyLook();updateSky();renderScene();update();renderBook();renderGoals();renderMore();renderWish();
+  curReg=null;$('regDetail').hidden=true;$('regList').hidden=false;gardenView=[];
+  setSound();applyLook();updateSky();renderScene();update();renderBook();renderGoals();renderMore();renderWish();renderGarden();renderShop();
   if(S.amb==='off') stopAmb(); else startAmb();
+}
+
+/* ---------- leaf shop ---------- */
+function lvl(id){return (S.shop&&S.shop[id])|0;}
+function availLeaves(){return Math.max(0,S.leaves-S.spent);}
+function awayCap(){return (8+4*lvl('sleep'))*3600;}
+function renderShop(){
+  $('shLeaves').textContent=String(availLeaves());
+  $('awayHrs').textContent=String(awayCap()/3600);
+  var l=$('shopList');
+  l.innerHTML='';
+  SHOP.forEach(function(it,i){
+    var lv=lvl(it.id),maxed=lv>=it.max,c=maxed?0:it.cost[lv],can=!maxed&&availLeaves()>=c;
+    var r=document.createElement('div');
+    r.className='row'+(maxed?' done':'');
+    r.innerHTML='<div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true">'+ICON[it.icon]+'</svg></div>'+
+      '<div class="txt"><div class="nm">'+it.name+' <span class="note">'+lv+' of '+it.max+'</span></div><div class="ds">'+it.desc+'</div><div class="mt">'+it.eff(lv)+'</div></div>'+
+      '<button class="buy'+(can?' can':'')+'" type="button">'+(maxed?'Maxed':(c+(c===1?' leaf':' leaves')))+'</button>';
+    r.querySelector('button').addEventListener('click',function(){buyShop(i);});
+    l.appendChild(r);
+  });
+}
+function buyShop(i){
+  var it=SHOP[i],lv=lvl(it.id);
+  if(lv>=it.max) return;
+  var c=it.cost[lv];
+  if(availLeaves()<c){blip(220);return;}
+  S.spent+=c;S.shop[it.id]=lv+1;
+  blip(660);
+  toast(it.name+' upgraded to level '+(lv+1)+'.');
+  renderShop();update();save();
+}
+
+/* ---------- friendship and letters ---------- */
+var curReg=null;
+function frPts(id){return S.fr[id]||0;}
+function frLevel(id){
+  if(!S.reg[id]) return 0;
+  var p=frPts(id),l=1,i;
+  for(i=1;i<LVL_AT.length;i++){if(p>=LVL_AT[i]) l=i+1;}
+  return l;
+}
+function lettersTotal(){var n=0,i;for(i=0;i<REG.length;i++){n+=Math.max(0,frLevel(REG[i].id)-1);}return n;}
+function friendMult(){return 1+0.01*lettersTotal();}
+function unreadLetters(){
+  var n=0,i,id;
+  for(i=0;i<REG.length;i++){id=REG[i].id;if(frLevel(id)>Math.max(1,S.seenLv[id]||1)) n++;}
+  return n;
+}
+function addFriend(id,pts){
+  var before=frLevel(id);
+  S.fr[id]=frPts(id)+pts*(1+0.5*lvl('bond'));
+  var after=frLevel(id);
+  if(after>before){
+    var r=regById(id);
+    announce('Friendship with '+r.name+' grew: '+LVL_NAME[after]+'. A new letter is waiting.');
+  }
+}
+function showReg(id){
+  if(!regById(id)) return;
+  curReg=id;
+  S.seenLv[id]=frLevel(id);
+  $('regList').hidden=true;$('regDetail').hidden=false;
+  renderRegDetail();update();save();
+}
+function hideReg(){
+  curReg=null;
+  $('regDetail').hidden=true;$('regList').hidden=false;
+  renderBook();
+}
+function renderRegDetail(){
+  var r=regById(curReg);
+  if(!r) return;
+  var lv=frLevel(r.id),pts=frPts(r.id),fav=blendById(r.fav);
+  var next=lv<LVL_AT.length?LVL_AT[lv]:null,base=LVL_AT[Math.max(0,lv-1)];
+  var pct=next===null?100:Math.max(0,Math.min(100,(pts-base)/(next-base)*100));
+  $('regCard').innerHTML='<svg viewBox="0 0 48 40" aria-hidden="true">'+r.art+'</svg>'+
+    '<div class="nm">'+r.name+' the '+r.kind+'</div>'+
+    '<div class="note">'+r.rarity+' · loves '+fav.name+' · '+(S.reg[r.id]||0)+(S.reg[r.id]===1?' visit':' visits')+'</div>'+
+    '<div>Friendship: <strong>'+LVL_NAME[lv]+'</strong></div>'+
+    '<div class="bar" role="progressbar" aria-label="Friendship progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(pct)+'"><i style="width:'+pct+'%"></i></div>'+
+    '<div class="note">'+(next===null?'This is the deepest friendship there is.':(Math.floor(pts)+' of '+next+' points to the next level'))+'</div>'+
+    '<div class="note">Friendship adds +'+(25*(lv-1))+'% to this friend’s tips, and every level adds 1% to everything you brew.</div>';
+  var list=$('letters'),L=LETTERS[r.id]||[],k,need,el;
+  list.innerHTML='';
+  for(k=0;k<L.length;k++){
+    need=k+2;
+    el=document.createElement('div');
+    if(lv>=need){
+      el.className='letter';
+      el.innerHTML='<div class="cs">Letter '+(k+1)+' of '+L.length+'</div><p>'+L[k]+'</p><div class="sig">'+r.name+'</div>';
+    }else{
+      el.className='letter lock';
+      el.innerHTML='<div class="cs">Letter '+(k+1)+' of '+L.length+'</div><p>Reach the '+LVL_NAME[need]+' level ('+LVL_AT[need-1]+' friendship points) to read this letter.</p>';
+    }
+    list.appendChild(el);
+  }
+}
+$('regBack').addEventListener('click',hideReg);
+
+/* ---------- garden ---------- */
+var gardenView=[],gardenT=0;
+function plotCount(){return 2+lvl('plots');}
+function herbById(id){for(var i=0;i<HERBS.length;i++){if(HERBS[i].id===id) return HERBS[i];}return HERBS[0];}
+function buffId(){return (S.buff&&S.buff.left>0)?S.buff.id:'';}
+function buffProd(){var b=buffId();return (b==='lavender'||b==='chamomile')?1.5:(b==='moonflower'?2:1);}
+function buffTap(){var b=buffId();return b==='mint'?3:(b==='chamomile'?1.5:(b==='moonflower'?2:1));}
+function plotState(p,now){
+  if(!p) return {st:'empty'};
+  var h=herbById(p.herb),total=h.grow*1000,left=p.planted+total-now;
+  if(left<=0) return {st:'ready',h:h};
+  return {st:'grow',h:h,left:left/1000,frac:Math.max(0,Math.min(1,1-left/total))};
+}
+function plotStage(f){return f<0.25?0:(f<0.6?1:2);}
+function fmtLeft(sec){
+  sec=Math.max(0,Math.ceil(sec));
+  var h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60);
+  if(h>0) return h+'h '+m+'m';
+  if(m>=5) return m+'m';
+  return m>0?(m+'m '+(sec%60)+'s'):(sec+'s');
+}
+function fmtGrow(sec){return sec>=3600?(sec/3600)+'h':(sec/60)+'m';}
+function plantSVG(h,frac,ready){
+  var s='<ellipse cx="32" cy="52" rx="26" ry="5" fill="#5b4132"/><path d="M9 52 Q32 36 55 52Z" fill="#7a5a46"/>';
+  if(!h) return '<svg viewBox="0 0 64 56" aria-hidden="true">'+s+'<circle cx="26" cy="47" r="1.2" fill="#3e2c21"/><circle cx="38" cy="48" r="1.2" fill="#3e2c21"/></svg>';
+  var g=ready?1:frac,sh=5+g*25,top=44-sh,n=g<0.25?1:(g<0.6?2:3),i,y,t=top.toFixed(1);
+  s+='<path d="M32 45 V'+t+'" stroke="#6fa882" stroke-width="3" stroke-linecap="round" fill="none"/>';
+  for(i=0;i<n;i++){
+    y=(40-i*(sh/(n+0.6))).toFixed(1);
+    s+='<ellipse cx="24" cy="'+y+'" rx="6.5" ry="3" transform="rotate(-25 24 '+y+')" fill="#7fc08e"/><ellipse cx="40" cy="'+y+'" rx="6.5" ry="3" transform="rotate(25 40 '+y+')" fill="#6fb07e"/>';
+  }
+  if(ready){
+    if(h.id==='mint'){
+      s+='<circle cx="29" cy="'+t+'" r="2.6" fill="#eef1f8"/><circle cx="35" cy="'+t+'" r="2.6" fill="#eef1f8"/><circle cx="32" cy="'+(top-3).toFixed(1)+'" r="2.6" fill="#eef1f8"/>';
+    }else if(h.id==='lavender'){
+      s+='<ellipse cx="32" cy="'+t+'" rx="2.6" ry="5.5" fill="#b39ddb"/><ellipse cx="27" cy="'+(top+3).toFixed(1)+'" rx="2.4" ry="5" fill="#9c88cc" transform="rotate(-15 27 '+(top+3).toFixed(1)+')"/><ellipse cx="37" cy="'+(top+3).toFixed(1)+'" rx="2.4" ry="5" fill="#9c88cc" transform="rotate(15 37 '+(top+3).toFixed(1)+')"/>';
+    }else if(h.id==='chamomile'){
+      for(i=0;i<6;i++){s+='<ellipse cx="32" cy="'+(top-5).toFixed(1)+'" rx="2.2" ry="4" fill="#fff" transform="rotate('+(i*60)+' 32 '+t+')"/>';}
+      s+='<circle cx="32" cy="'+t+'" r="3" fill="#f4bf62"/>';
+    }else{
+      s+='<circle cx="32" cy="'+t+'" r="9" fill="#f4e6b8" opacity=".35"/><circle cx="32" cy="'+t+'" r="5" fill="#f4e6b8"/><circle cx="32" cy="'+t+'" r="2" fill="#f4bf62"/>';
+    }
+    s+='<path d="M54 10 l1.6 4 4 1.6 -4 1.6 -1.6 4 -1.6 -4 -4 -1.6 4 -1.6z" fill="#f4bf62"/>';
+  }
+  return '<svg viewBox="0 0 64 56" aria-hidden="true">'+s+'</svg>';
+}
+function renderBuffNote(){
+  var b=(S.buff&&S.buff.left>0)?S.buff:null;
+  $('buffNote').textContent=b?('Brewing now: '+herbById(b.id).buffName+', '+fmtLeft(b.left)+' left.'):'No infusion is brewing right now.';
+}
+function renderGarden(){
+  var g=$('plots'),now=Date.now(),n=plotCount(),i;
+  g.innerHTML='';gardenView=[];
+  for(i=0;i<n;i++){
+    (function(i){
+      var st=plotState(S.garden[i],now),el=document.createElement('div'),html='<div class="pn">Plot '+(i+1)+'</div>';
+      el.className='plot';
+      if(st.st==='empty'){
+        html+=plantSVG(null,0,false)+'<div class="note">Empty. Pick a seed:</div>';
+        HERBS.forEach(function(h){html+='<button type="button" class="seed" data-herb="'+h.id+'">'+h.name+'<small>'+fmtGrow(h.grow)+'</small></button>';});
+      }else if(st.st==='grow'){
+        html+=plantSVG(st.h,st.frac,false)+'<div>'+st.h.name+'</div><div class="bar"><i id="plf'+i+'"></i></div><div class="note" id="plt'+i+'">'+fmtLeft(st.left)+' left</div>';
+      }else{
+        html+=plantSVG(st.h,1,true)+'<div>'+st.h.name+' is ready!</div><button type="button" class="buy can wide" data-harvest="1">Harvest</button>';
+      }
+      el.innerHTML=html;
+      Array.prototype.forEach.call(el.querySelectorAll('.seed'),function(b){
+        b.addEventListener('click',function(){plant(i,b.getAttribute('data-herb'));});
+      });
+      var hb=el.querySelector('[data-harvest]');
+      if(hb) hb.addEventListener('click',function(){harvest(i);});
+      g.appendChild(el);
+      if(st.st==='grow') $('plf'+i).style.width=(st.frac*100)+'%';
+      gardenView[i]={st:st.st,id:st.h?st.h.id:'',stage:st.st==='grow'?plotStage(st.frac):-1};
+    })(i);
+  }
+  var cb=$('cupboard');
+  cb.innerHTML='';
+  HERBS.forEach(function(h){
+    var cnt=S.herbs[h.id]||0,r=document.createElement('div');
+    r.className='row';
+    r.innerHTML='<div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true">'+ICON[h.icon]+'</svg></div>'+
+      '<div class="txt"><div class="nm">'+h.buffName+'</div><div class="ds">'+h.desc+'</div><div class="mt">'+h.name+' in the cupboard: '+cnt+'</div></div>'+
+      '<button class="buy'+(cnt>0?' can':'')+'" type="button">Brew</button>';
+    r.querySelector('button').addEventListener('click',function(){useHerb(h.id);});
+    cb.appendChild(r);
+  });
+  renderBuffNote();
+}
+function gardenTick(){
+  var now=Date.now(),n=plotCount(),i,st,v,id,stage,any=false,redo=(gardenView.length!==n),sts=[];
+  for(i=0;i<n;i++){
+    st=plotState(S.garden[i],now);sts.push(st);
+    if(st.st==='ready') any=true;
+    v=gardenView[i];id=st.h?st.h.id:'';stage=st.st==='grow'?plotStage(st.frac):-1;
+    if(!v||v.st!==st.st||v.id!==id||v.stage!==stage) redo=true;
+  }
+  $('tab-garden').classList.toggle('ping',any);
+  if($('p-garden').hidden) return;
+  if(redo){renderGarden();return;}
+  if(++gardenT%10===0){
+    for(i=0;i<n;i++){
+      if(sts[i].st==='grow'){$('plt'+i).textContent=fmtLeft(sts[i].left)+' left';$('plf'+i).style.width=(sts[i].frac*100)+'%';}
+    }
+    renderBuffNote();
+  }
+}
+function plant(i,hid){
+  if(S.garden[i]||!HERBS.some(function(h){return h.id===hid;})) return;
+  S.garden[i]={herb:hid,planted:Date.now()};
+  blip(560);renderGarden();save();
+}
+function harvest(i){
+  var st=plotState(S.garden[i],Date.now());
+  if(st.st!=='ready') return;
+  var h=st.h,n=1+(Math.random()<0.35?1:0),c=Math.max(300,Math.floor(cps()*h.grow*0.2));
+  S.herbs[h.id]=(S.herbs[h.id]||0)+n;
+  S.harvests++;S.garden[i]=null;
+  earn(c);
+  toast('Harvested '+n+' '+h.name+' and +'+fmt(c)+' cups');
+  blip(700);renderGarden();update();save();
+}
+function useHerb(id){
+  var h=herbById(id);
+  if(!(S.herbs[id]>0)){blip(220);return;}
+  if(S.buff&&S.buff.left>0&&S.buff.id!==id){
+    toast('Finish your '+herbById(S.buff.id).buffName+' first ('+fmtLeft(S.buff.left)+' left).');
+    blip(220);return;
+  }
+  S.herbs[id]--;
+  if(S.buff&&S.buff.left>0) S.buff.left+=h.buffSec; else S.buff={id:id,left:h.buffSec};
+  S.infusions++;
+  var rc=null,cb=curBlend().id;
+  RECIPES.forEach(function(r){if(r.blend===cb&&r.herb===id&&!S.recipes[r.id]) rc=r;});
+  if(rc){
+    S.recipes[rc.id]=true;
+    var rb=Math.max(1000,Math.floor(cps()*600));
+    earn(rb);
+    toast('New recipe: '+rc.name+'! +'+fmt(rb)+' cups, and +2% brewing for good');
+    blip(780);
+  }else if(recipeActive()){
+    toast(h.buffName+' is brewing, and your recipe glows: +25%!');blip(680);
+  }else{
+    toast(h.buffName+' is brewing!');blip(680);
+  }
+  renderRecipes();renderGarden();update();save();
 }
 
 /* ---------- fresh pot ---------- */
@@ -1318,7 +1860,9 @@ $('freshYes').addEventListener('click',function(){
   S.cups=0;S.total=0;
   S.counts=PROD.map(function(){return 0;});
   S.extras={};
-  if(S.wish&&S.wish.type==='pets') S.wish=null;
+  var hs=HEAD[lvl('head')];
+  if(hs){hs.forEach(function(n,i){S.counts[i]=n;});}
+  if(S.wish&&S.wish.type==='pets'&&S.counts[2]<1) S.wish=null;
   $('freshConfirm').hidden=true;
   renderScene();update();save();blip(660);
   toast('Fresh pot! You earned '+g+' '+leafWord(g)+'.');
@@ -1353,6 +1897,7 @@ window.addEventListener('pagehide',save);
 
 /* ---------- start ---------- */
 buildLists();
+applyNames();syncNameInputs();
 setSound();
 applyLook();
 updateSky();
@@ -1367,6 +1912,8 @@ renderBook();
 renderGoals();
 renderMore();
 renderWish();
+renderGarden();
+renderShop();
 scheduleMouse(true);
 })();
 </script>
