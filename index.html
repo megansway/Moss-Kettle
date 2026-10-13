@@ -175,6 +175,20 @@ textarea:focus-visible{outline:2px solid var(--lamp);outline-offset:1px}
 .letter .sig{font-family:var(--display);color:var(--lamp);font-size:16px}
 .letter .cs{color:var(--moss);font-size:12px;font-weight:700}
 .letter.lock{opacity:.6}
+.lvline{display:flex;align-items:center;gap:10px}
+.lvtxt{font-size:13px;font-weight:800;color:var(--lamp);white-space:nowrap}
+.lvline .bar{flex:1;height:8px}
+#lvBig{font-family:var(--display);font-size:34px;line-height:1;color:var(--lamp)}
+.blades{transform-box:fill-box;transform-origin:50% 50%;animation:spin 9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.mote{fill:var(--lamp);animation:mote 5s ease-in-out infinite}
+@keyframes mote{0%,100%{opacity:.1;transform:translateY(0)}50%{opacity:.8;transform:translateY(-12px)}}
+.cloudf{animation:drift 14s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translateX(-6px)}to{transform:translateX(6px)}}
+button.row{font:inherit;color:inherit;text-align:left;width:100%;cursor:pointer}
+button.row:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
+.row.on{border-color:var(--lamp)}
+.row.lock{opacity:.65}
 .hl{display:flex;flex-direction:column;min-width:0}
 .nn{color:var(--lamp);font-weight:700;font-size:13px;overflow-wrap:anywhere}
 input[type=text]{width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px;font:16px/1.3 inherit;font-family:inherit}
@@ -199,6 +213,7 @@ label.lbl{font-size:13px;font-weight:700;color:var(--muted)}
   <section class="stats" aria-live="off">
     <div class="big"><span id="cups">0</span><span class="unit">cups steeped</span></div>
     <div class="chips"><span class="chip" id="cps">0 per second</span><span class="chip" id="tapv">+1 per tap</span><span class="chip" id="blendChip"></span><span class="chip" id="leafChip" hidden></span><span class="chip" id="buffChip" hidden></span></div>
+    <div class="lvline"><span class="lvtxt" id="lvText"></span><div class="bar" id="lvBar" role="progressbar" aria-label="Nook level progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="lvFill"></i></div></div>
   </section>
 
   <section class="scene" id="scene">
@@ -225,6 +240,44 @@ label.lbl{font-size:13px;font-weight:700;color:var(--muted)}
       <circle class="star" cx="100" cy="100" r="1.7" style="animation-delay:1.6s"/>
       <circle class="star" cx="44" cy="106" r="1.4" style="animation-delay:2.2s"/>
       <circle class="star" cx="78" cy="38" r="1.4" style="animation-delay:1.1s"/></g>
+      <!-- window views by area -->
+      <g id="v-1" class="item"><g clip-path="url(#winclip)">
+        <rect x="31" y="102" width="82" height="21" fill="#4f8a5a"/>
+        <ellipse cx="44" cy="103" rx="18" ry="8" fill="#5fa06a"/><ellipse cx="100" cy="104" rx="20" ry="9" fill="#58966a"/>
+        <rect x="31" y="100" width="82" height="3" fill="#d8cfb8"/><rect x="31" y="110" width="82" height="3" fill="#d8cfb8"/>
+        <path d="M34 92 l3 -4 l3 4 v31 h-6z M47 92 l3 -4 l3 4 v31 h-6z M60 92 l3 -4 l3 4 v31 h-6z M78 92 l3 -4 l3 4 v31 h-6z M91 92 l3 -4 l3 4 v31 h-6z M104 92 l3 -4 l3 4 v31 h-6z" fill="#efe8d6"/>
+        <path d="M44 96 v-8 M68 94 v-9 M98 94 v-8" stroke="#4f8a5a" stroke-width="1.5"/>
+        <circle cx="44" cy="87" r="2.6" fill="#e48a9c"/><circle cx="68" cy="84" r="2.6" fill="#f4bf62"/><circle cx="98" cy="86" r="2.6" fill="#b39ddb"/>
+      </g></g>
+      <g id="v-2" class="item"><g clip-path="url(#winclip)">
+        <ellipse cx="70" cy="122" rx="62" ry="15" fill="#5c9250"/>
+        <rect x="31" y="110" width="82" height="13" fill="#6a9f55"/>
+        <rect x="48" y="84" width="6" height="28" fill="#7a5a46"/><circle cx="51" cy="76" r="18" fill="#4f8a4a"/>
+        <circle cx="45" cy="72" r="2.2" fill="#d9453a"/><circle cx="56" cy="80" r="2.2" fill="#d9453a"/><circle cx="50" cy="66" r="2" fill="#e9a23a"/><circle cx="60" cy="70" r="2" fill="#d9453a"/>
+        <rect x="93" y="92" width="5" height="20" fill="#7a5a46"/><circle cx="95" cy="86" r="14" fill="#5c9a50"/>
+        <circle cx="90" cy="84" r="2" fill="#d9453a"/><circle cx="100" cy="90" r="2" fill="#d9453a"/><circle cx="96" cy="80" r="1.8" fill="#e9a23a"/>
+      </g></g>
+      <g id="v-3" class="item"><g clip-path="url(#winclip)">
+        <ellipse cx="42" cy="118" rx="50" ry="26" fill="#5b8f7c"/><ellipse cx="102" cy="124" rx="56" ry="30" fill="#4c7a68"/>
+        <path d="M40 94 h10 v9 h-10z" fill="#e8d8bf"/><path d="M38 94 l7 -7 l7 7z" fill="#c4651f"/><rect x="44" y="97" width="3" height="3" fill="var(--lamp)"/>
+        <path d="M58 100 h8 v7 h-8z" fill="#efe3cf"/><path d="M56 100 l6 -6 l6 6z" fill="#a8543a"/><rect x="61" y="102" width="2.5" height="3" fill="var(--lamp)"/>
+        <path d="M92 92 l4 -22 l4 22z" fill="#d8cfb8"/><g class="blades"><path d="M96 68 L96 52 M96 68 L112 68 M96 68 L96 84 M96 68 L80 68" stroke="#efe8d6" stroke-width="2.4" stroke-linecap="round"/></g><circle cx="96" cy="68" r="2" fill="#7a5a46"/>
+      </g></g>
+      <g id="v-4" class="item"><g clip-path="url(#winclip)">
+        <ellipse cx="62" cy="100" rx="64" ry="13" fill="#3d6b73"/>
+        <rect x="31" y="98" width="82" height="25" fill="#4a8fb0"/>
+        <path d="M38 106 h18 M70 112 h22 M44 118 h16 M88 104 h14" stroke="#b7e0ee" stroke-width="1.6" stroke-linecap="round" opacity=".6"/>
+        <path d="M60 104 h20 q-3 6 -8 6 h-4 q-5 0 -8 -6z" fill="#7a5a46"/><path d="M70 102 V84 L82 102z" fill="#f2ece0"/><path d="M70 102 V90 L60 102z" fill="#e8c9a0"/>
+        <path d="M100 123 V102 M104 123 V98 M108 123 V104" stroke="#5b8f5a" stroke-width="2" stroke-linecap="round"/><ellipse cx="104" cy="97" rx="2" ry="4" fill="#7a5a46"/><ellipse cx="108" cy="103" rx="1.8" ry="3.4" fill="#7a5a46"/>
+      </g></g>
+      <g id="v-5" class="item"><g clip-path="url(#winclip)">
+        <circle class="star" cx="44" cy="44" r="1.4"/><circle class="star" cx="100" cy="42" r="1.6" style="animation-delay:1s"/><circle class="star" cx="62" cy="60" r="1.3" style="animation-delay:2s"/>
+        <g class="cloudf"><ellipse cx="88" cy="74" rx="16" ry="4" fill="#8a6f58"/><ellipse cx="88" cy="70" rx="17" ry="4.5" fill="#7fb37a"/><circle cx="92" cy="64" r="5" fill="#5b9a52"/><rect x="91" y="66" width="2" height="5" fill="#7a5a46"/></g>
+        <g class="cloudf" style="animation-delay:-5s"><ellipse cx="50" cy="96" rx="14" ry="4" fill="#8a6f58"/><ellipse cx="50" cy="93" rx="15" ry="4" fill="#7fb37a"/></g>
+        <g fill="#f4f1fb" opacity=".95"><circle cx="40" cy="116" r="12"/><circle cx="58" cy="112" r="15"/><circle cx="78" cy="116" r="13"/><circle cx="98" cy="112" r="14"/><circle cx="112" cy="118" r="11"/><rect x="31" y="116" width="82" height="9"/></g>
+        <g fill="#dcd6f0"><circle cx="48" cy="120" r="9"/><circle cx="88" cy="121" r="10"/></g>
+      </g></g>
+      <g clip-path="url(#winclip)"><rect id="vShade" x="31" y="29" width="82" height="94" fill="#0b1226" opacity="0" pointer-events="none"/></g>
       <g id="s-rain" class="item" clip-path="url(#winclip)">
         <path class="drop" d="M40 24 l-3 9" style="animation-delay:0s"/>
         <path class="drop" d="M52 24 l-3 9" style="animation-delay:.5s;animation-duration:1.1s"/>
@@ -280,6 +333,36 @@ label.lbl{font-size:13px;font-weight:700;color:var(--muted)}
       <path d="M272 72 L308 72 L300 42 L280 42 Z" class="f-lamp"/>
       <circle cx="290" cy="74" r="5" class="f-moon"/>
 
+      <!-- area props -->
+      <g id="i-1" class="item">
+        <ellipse cx="172" cy="236" rx="76" ry="9" fill="#a3536a" opacity=".55"/><ellipse cx="172" cy="236" rx="60" ry="6" fill="none" stroke="#f4e6b8" stroke-width="1.4" opacity=".5"/>
+        <path d="M322 0 L336 42 M350 0 L336 42" stroke="var(--wood)" stroke-width="1.6" fill="none"/>
+        <path d="M321 42 h30 q-2 14 -15 14 q-13 0 -15 -14z" style="fill:var(--wood-dk)"/>
+        <circle cx="325" cy="40" r="6" class="f-moss"/><circle cx="336" cy="36" r="7.5" class="f-moss"/><circle cx="347" cy="40" r="6" class="f-moss"/>
+        <circle cx="331" cy="34" r="2.4" fill="#e48a9c"/><circle cx="341" cy="33" r="2.4" fill="#f4bf62"/><circle cx="337" cy="41" r="2.2" fill="#b39ddb"/>
+        <path d="M324 52 q-3 8 0 14 M348 52 q3 7 0 12" stroke="var(--moss)" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </g>
+      <g id="i-2" class="item">
+        <rect x="104" y="228" width="36" height="22" rx="3" class="f-wood"/>
+        <path d="M104 236 h36 M104 243 h36" stroke="#1d2433" stroke-opacity=".3" stroke-width="1.4"/>
+        <circle cx="112" cy="226" r="6" fill="#d9453a"/><circle cx="123" cy="224" r="6.5" fill="#c9372e"/><circle cx="133" cy="226" r="6" fill="#8dbf6a"/>
+        <path d="M123 218 q2 -4 5 -4" stroke="#5b4132" stroke-width="1.4" fill="none"/>
+      </g>
+      <g id="i-3" class="item">
+        <path d="M340 156 L328 204 M340 156 L352 204 M340 156 L340 204" stroke="var(--wood)" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <g transform="rotate(-30 340 154)"><rect x="318" y="148" width="40" height="11" rx="4" fill="#c49a46"/><rect x="312" y="146" width="9" height="15" rx="2" fill="#8a6a2a"/><rect x="352" y="147" width="8" height="13" rx="3" fill="#8a6a2a"/></g>
+        <circle cx="340" cy="156" r="3" fill="#8a6a2a"/>
+      </g>
+      <g id="i-4" class="item">
+        <circle cx="338" cy="100" r="10" fill="none" stroke="#f2ece0" stroke-width="5"/><circle cx="338" cy="100" r="10" fill="none" stroke="#d9453a" stroke-width="5" stroke-dasharray="7.85 7.85"/>
+        <path d="M11 64 V186" stroke="var(--wood)" stroke-width="3" stroke-linecap="round"/><ellipse cx="11" cy="196" rx="5.5" ry="11" fill="var(--wood)"/><path d="M11 188 v16" stroke="var(--wood-dk)" stroke-width="1.4"/>
+      </g>
+      <g id="i-5" class="item">
+        <rect x="24" y="22" width="96" height="108" rx="14" fill="none" style="stroke:var(--lamp)" stroke-width="2.4" opacity=".55"/>
+        <circle class="mote" cx="150" cy="70" r="2" style="animation-delay:.2s"/><circle class="mote" cx="196" cy="52" r="1.8" style="animation-delay:1.4s"/><circle class="mote" cx="236" cy="84" r="2.2" style="animation-delay:2.6s"/>
+        <circle class="mote" cx="318" cy="130" r="2" style="animation-delay:.9s"/><circle class="mote" cx="276" cy="150" r="1.8" style="animation-delay:3.1s"/><circle class="mote" cx="136" cy="190" r="2" style="animation-delay:2s"/>
+        <circle class="mote" cx="224" cy="196" r="2.2" style="animation-delay:3.8s"/><circle class="mote" cx="52" cy="160" r="1.8" style="animation-delay:1.9s"/>
+      </g>
       <!-- table -->
       <ellipse cx="180" cy="250" rx="120" ry="6" fill="#000" opacity=".22"/>
       <rect x="84" y="188" width="10" height="58" class="f-wooddk"/>
@@ -518,6 +601,17 @@ label.lbl{font-size:13px;font-weight:700;color:var(--muted)}
   </section>
 
   <section class="panel" id="p-goals" hidden>
+    <div class="fresh" id="lvCard">
+      <div><span id="lvBig">1</span> <span class="unit" id="lvTitle"></span></div>
+      <div class="bar" id="lvBar2" role="progressbar" aria-label="Nook level progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="lvFill2"></i></div>
+      <div class="note" id="lvNote"></div>
+      <div class="note" id="lvNext"></div>
+      <div class="note" id="lvArea"></div>
+      <div class="note">Earn XP from almost everything: tapping, visitors, wishes, daily gifts, harvests, recipes, letters and achievements. Every level adds 1% to everything you brew and pays out a reward. Levels never reset, even with a Fresh Pot.</div>
+    </div>
+    <h2>Journey</h2>
+    <p class="note" id="areaNote">Your nook grows as you level up. Each new area changes the view from your window and adds something to the room. Tap an area you have unlocked to look out of it.</p>
+    <div class="list" id="journey"></div>
     <div class="fresh">
       <div class="nm">Daily gift</div>
       <div class="note" id="giftNote"></div>
@@ -754,6 +848,20 @@ var RECIPES=[
   {id:'honeyroo',    name:'Honeyed Rooibos',      blend:'rooibos',   herb:'chamomile',  clue:'Warm and golden all the way down.'},
   {id:'midnightstar',name:'Midnight Star',        blend:'starleaf',  herb:'moonflower', clue:'The two rarest things in the nook.'}
 ];
+var LV_MAX=50;
+function xpNeed(L){return Math.round(80*Math.pow(1.15,L-1));}
+var CUM=[0];(function(){var t=0;for(var L=1;L<LV_MAX;L++){t+=xpNeed(L);CUM[L]=t;}})();
+var AREAS=[
+  {id:'nook',   name:'Windowsill Nook', lv:1,  g:'#26304a,#0f1830', desc:'Where it all began: a teapot, a lamp and a quiet window.'},
+  {id:'porch',  name:'Garden Porch',    lv:5,  g:'#5fa06a,#e9e2d0', desc:'A picket fence and blooming beds outside, a hanging basket and a welcome rug inside.'},
+  {id:'orchard',name:'Apple Orchard',   lv:10, g:'#6a9f55,#c4453a', desc:'Apple trees outside the window and a crate of fresh apples under the table.'},
+  {id:'hill',   name:'Hilltop Village', lv:16, g:'#4c7a68,#e0a23a', desc:'Rolling hills, glowing cottages, a spinning windmill and a brass telescope.'},
+  {id:'lake',   name:'Lakeside Dock',   lv:24, g:'#4a8fb0,#3d6b73', desc:'A quiet lake with a little sailboat, whispering reeds, an oar and a lifebuoy.'},
+  {id:'cloud',  name:'Cloud Cottage',   lv:34, g:'#cfd8ee,#b39ddb', desc:'Floating islands, drifting clouds, golden window trim and glowing motes.'}
+];
+var TITLES=[[1,'Tea Novice'],[5,'Kettle Keeper'],[10,'Nook Tender'],[15,'Leaf Whisperer'],[20,'Cozy Curator'],[30,'Moonlit Brewer'],[40,'Grand Steeper'],[50,'Moss Kettle Master']];
+function titleFor(L){var t=TITLES[0][1];for(var i=0;i<TITLES.length;i++){if(L>=TITLES[i][0])t=TITLES[i][1];}return t;}
+function lvFromXp(x){var L=1;while(L<LV_MAX&&x>=CUM[L])L++;return L;}
 var HEAD=[null,[5,3,1],[10,8,3,2,1]];
 var SHOP=[
   {id:'sleep',  name:'Cozy Blanket',    icon:'moonhoney', max:3, cost:[2,3,5], desc:'The kettle keeps brewing 4 hours longer while you are away.', eff:function(l){return 'Away limit: '+(8+4*l)+' hours';}},
@@ -768,7 +876,7 @@ var SHOP=[
 function $(id){return document.getElementById(id);}
 var POT2_SEC=300,POT2_AT=100000;
 function cleanName(v){return String(v||'').replace(/[\u0000-\u001f<>]/g,'').replace(/\s+/g,' ').trim().slice(0,16);}
-function fresh(){return {cups:0,total:0,counts:PROD.map(function(){return 0;}),extras:{},taps:0,mice:0,last:Date.now(),sound:false,life:0,leaves:0,pots:0,blend:'classic',reg:{},ach:{},giftDay:-1,streak:0,bestStreak:0,pets:0,loved:0,played:0,wish:null,wishes:0,amb:'off',potc:'moss',wallc:'dusk',spent:0,shopSeen:0,shop:{},harvests:0,infusions:0,herbs:{mint:0,lavender:0,chamomile:0,moonflower:0},garden:[null,null,null,null],buff:null,fr:{},seenLv:{},nookName:'',catName:'',recipes:{},pot2:null,pot2n:0};}
+function fresh(){return {cups:0,total:0,counts:PROD.map(function(){return 0;}),extras:{},taps:0,mice:0,last:Date.now(),sound:false,life:0,leaves:0,pots:0,blend:'classic',reg:{},ach:{},giftDay:-1,streak:0,bestStreak:0,pets:0,loved:0,played:0,wish:null,wishes:0,amb:'off',potc:'moss',wallc:'dusk',spent:0,shopSeen:0,shop:{},harvests:0,infusions:0,herbs:{mint:0,lavender:0,chamomile:0,moonflower:0},garden:[null,null,null,null],buff:null,fr:{},seenLv:{},nookName:'',catName:'',recipes:{},pot2:null,pot2n:0,xp:0,lv:1,lvGot:1,view:-1,areaSeen:0};}
 function normalize(o){
   var s=fresh();
   try{
@@ -822,6 +930,16 @@ function normalize(o){
       RECIPES.forEach(function(r){if(o.recipes&&o.recipes[r.id]) s.recipes[r.id]=true;});
       s.pot2n=Math.max(0,Math.floor(+o.pot2n||0));
       if(o.pot2&&typeof o.pot2==='object'&&isFinite(o.pot2.at)){s.pot2={at:Math.min(+o.pot2.at,Date.now()+POT2_SEC*1000)};}
+      if(isFinite(o.xp)&&+o.xp>=0){s.xp=Math.floor(+o.xp);s.lv=lvFromXp(s.xp);s.lvGot=Math.max(1,Math.min(s.lv,Math.floor(+o.lvGot||1)));}
+      else{
+        var ac=0,rc=0,k;
+        for(k in s.ach){if(s.ach[k])ac++;}
+        for(k in s.recipes){if(s.recipes[k])rc++;}
+        s.xp=Math.floor(Math.min(s.taps,20000)+s.mice*10+s.harvests*25+s.wishes*60+s.pot2n*20+s.infusions*10+ac*50+rc*80+s.pots*200);
+        s.lv=lvFromXp(s.xp);s.lvGot=s.lv;
+      }
+      s.view=isFinite(o.view)?Math.max(-1,Math.min(AREAS.length-1,Math.floor(+o.view))):-1;
+      s.areaSeen=Math.max(0,Math.min(AREAS.length-1,Math.floor(+o.areaSeen||0)));
       var w=o.wish;
       if(w&&typeof w==='object'&&typeof w.reg==='string'&&['taps','visits','pets','cups'].indexOf(w.type)>=0&&isFinite(w.target)&&+w.target>0&&isFinite(w.base)){
         s.wish={reg:w.reg,type:w.type,target:+w.target,base:+w.base};
@@ -849,7 +967,7 @@ function rate(n){
   var r=Math.round(n*10)/10;
   return String(r);
 }
-var blendN=-1,lastGiftReady=null,giftT=0;
+var lastArea=-1,blendN=-1,lastGiftReady=null,giftT=0;
 function seasonNow(){var m=new Date().getMonth();return m===9?'october':((m===11||m<=1)?'winter':((m>=2&&m<=4)?'spring':((m>=5&&m<=7)?'summer':'')));}
 function regOpen(r){return S.life>=r.min&&(!r.season||r.season===seasonNow());}
 function achMult(){var n=0,k;for(k in S.ach){if(S.ach[k])n++;}return 1+0.01*n;}
@@ -900,7 +1018,10 @@ var ACH=[
   {id:'recipe5',  name:'Tea Sommelier',    desc:'Discover 5 recipes.',                   test:function(){return recipeCount()>=5;}},
   {id:'recipe10', name:'Master Blender',   desc:'Discover every recipe.',                test:function(){return recipeCount()>=RECIPES.length;}},
   {id:'pot2a',    name:'Little Helper',    desc:'Collect from the Little Pot.',          test:function(){return S.pot2n>=1;}},
-  {id:'pot2b',    name:'Pot Pal',          desc:'Collect from the Little Pot 25 times.', test:function(){return S.pot2n>=25;}}
+  {id:'pot2b',    name:'Pot Pal',          desc:'Collect from the Little Pot 25 times.', test:function(){return S.pot2n>=25;}},
+  {id:'lv5',      name:'Getting Cozy',     desc:'Reach nook level 5.',                   test:function(){return S.lv>=5;}},
+  {id:'lv15',     name:'Well Settled',     desc:'Reach nook level 15.',                  test:function(){return S.lv>=15;}},
+  {id:'lv30',     name:'Nook Legend',      desc:'Reach nook level 30.',                  test:function(){return S.lv>=30;}}
 ];
 function announce(msg){
   if($('toast').hidden){toast(msg);}
@@ -913,6 +1034,7 @@ function checkAch(){
     if(!S.ach[a.id]&&a.test()){S.ach[a.id]=true;got.push(a.name);}
   }
   if(got.length){
+    addXp(50*got.length);
     announce(got.length<=2?('Achievement: '+got.join(', ')+' (+'+got.length+'% brewing)'):(got.length+' achievements unlocked (+'+got.length+'% brewing)'));
     renderGoals();save();blip(740);
   }
@@ -927,13 +1049,83 @@ function earn(x){S.cups+=x;S.total+=x;S.life+=x;}
 function freshGain(){return Math.floor(Math.sqrt(S.total/500000));}
 function leafWord(n){return n===1?'Golden Leaf':'Golden Leaves';}
 function cost(i){return Math.ceil(PROD[i].base*Math.pow(1.15,S.counts[i]));}
+function latestArea(){for(var i=AREAS.length-1;i>0;i--){if(S.lv>=AREAS[i].lv)return i;}return 0;}
+function curArea(){var v=S.view;return (v>=0&&S.lv>=AREAS[v].lv)?v:latestArea();}
+function nextAreaText(){
+  for(var i=0;i<AREAS.length;i++){if(S.lv<AREAS[i].lv){var n=AREAS[i].lv-S.lv;return 'Next area: '+AREAS[i].name+' at level '+AREAS[i].lv+' ('+n+(n===1?' level':' levels')+' to go).';}}
+  return 'Every area is unlocked. Enjoy the view.';
+}
+function renderScenery(){
+  var la=latestArea(),ca=curArea(),i;
+  for(i=1;i<AREAS.length;i++){
+    $('i-'+i).classList.toggle('on',i<=la);
+    $('v-'+i).classList.toggle('on',i===ca);
+  }
+}
+function renderJourney(){
+  var l=$('journey'),ca=curArea();
+  l.innerHTML='';
+  AREAS.forEach(function(a,i){
+    var un=S.lv>=a.lv,on=un&&i===ca;
+    var el=document.createElement(un?'button':'div'),g=a.g.split(',');
+    if(un) el.type='button';
+    el.className='row area'+(on?' on':'')+(un?'':' lock');
+    el.innerHTML='<div class="ico" style="background:linear-gradient(160deg,'+g[0]+','+g[1]+')"></div><div class="txt"><div class="nm">'+a.name+'</div><div class="ds">'+a.desc+'</div><div class="mt">'+(on?'Looking out of this window now':(un?'Tap to look out of this window':('Unlocks at level '+a.lv+' · '+(a.lv-S.lv)+' to go')))+'</div></div>';
+    if(un) el.addEventListener('click',function(){
+      S.view=(i===latestArea())?-1:i;
+      renderScenery();renderJourney();blip(520);save();
+    });
+    l.appendChild(el);
+  });
+}
+function levelMult(){return 1+0.01*(S.lv-1);}
+function levelReward(L){return Math.max(500*L,Math.floor(cps()*300));}
+function addXp(n){
+  S.xp+=n;
+  if(S.lv<LV_MAX&&S.xp>=CUM[S.lv]) levelUp();
+}
+function levelUp(){
+  while(S.lv<LV_MAX&&S.xp>=CUM[S.lv])S.lv++;
+  var from=S.lvGot,L,cups=0,herbs=[],leaves=0;
+  for(L=S.lvGot+1;L<=S.lv;L++){
+    cups+=levelReward(L);
+    if(L%5===0){var h1=pickOf(HERBS),h2=pickOf(HERBS);S.herbs[h1.id]=(S.herbs[h1.id]||0)+1;S.herbs[h2.id]=(S.herbs[h2.id]||0)+1;herbs.push(h1.name,h2.name);}
+    if(L%10===0){S.leaves++;leaves++;}
+  }
+  S.lvGot=S.lv;
+  if(S.lv===from) return;
+  earn(cups);
+  announce('Level '+S.lv+': '+titleFor(S.lv)+'! +'+fmt(cups)+' cups'+(herbs.length?(', '+herbs.join(' and ')):'')+(leaves?(' and '+(leaves===1?'a Golden Leaf':leaves+' Golden Leaves')):'')+'. Brewing +'+(S.lv-1)+'%');
+  blip(780);save();
+}
+function nextRewardText(){
+  if(S.lv>=LV_MAX) return 'You reached the top level. Thank you for all the tea.';
+  var L=S.lv+1,t='Level '+L+': a cup bonus and +1% brewing';
+  if(L%5===0) t+=', two herbs';
+  if(L%10===0) t+=', and a Golden Leaf';
+  return 'Next reward: '+t+'.';
+}
+function renderLevel(){
+  var L=S.lv,max=L>=LV_MAX,base=L>1?CUM[L-1]:0,need=max?1:(CUM[L]-base),into=max?1:(S.xp-base),pct=Math.max(0,Math.min(100,100*into/need));
+  $('lvText').textContent='Lv '+L+' · '+titleFor(L);
+  $('lvFill').style.width=pct+'%';
+  $('lvBar').setAttribute('aria-valuenow',String(Math.round(pct)));
+  if($('p-goals').hidden) return;
+  $('lvBig').textContent='Lv '+L;
+  $('lvTitle').textContent=titleFor(L);
+  $('lvFill2').style.width=pct+'%';
+  $('lvBar2').setAttribute('aria-valuenow',String(Math.round(pct)));
+  $('lvNote').textContent=(max?'Max level':fmt(Math.ceil(CUM[L]-S.xp))+' XP to level '+(L+1))+' · +'+(L-1)+'% to everything you brew';
+  $('lvNext').textContent=nextRewardText();
+  $('lvArea').textContent=nextAreaText();
+}
 function recipeCount(){var n=0;RECIPES.forEach(function(r){if(S.recipes[r.id])n++;});return n;}
 function recipeMult(){return 1+0.02*recipeCount();}
 function recipeActive(){var b=buffId();if(!b)return null;var cb=curBlend().id;for(var i=0;i<RECIPES.length;i++){var r=RECIPES[i];if(S.recipes[r.id]&&r.blend===cb&&r.herb===b)return r;}return null;}
 function pairMult(){return recipeActive()?1.25:1;}
-function mult(){return (S.extras.anise?2:1)*(S.extras.quilt?1.5:1)*(S.extras.biscuit?2:1)*(S.extras.pillow?2:1)*(S.extras.moonhoney?2:1)*leafMult()*blendProd()*achMult()*friendMult()*buffProd()*recipeMult()*pairMult();}
+function mult(){return (S.extras.anise?2:1)*(S.extras.quilt?1.5:1)*(S.extras.biscuit?2:1)*(S.extras.pillow?2:1)*(S.extras.moonhoney?2:1)*leafMult()*blendProd()*achMult()*friendMult()*buffProd()*recipeMult()*pairMult()*levelMult();}
 function cps(){var b=0;for(var i=0;i<PROD.length;i++)b+=S.counts[i]*PROD[i].cps;return b*mult();}
-function tapValue(){return (S.extras.mitts?2:1)*(S.extras.spoon?2:1)*blendTap()*leafMult()*achMult()*friendMult()*buffTap()*recipeMult()*pairMult()*(1+0.5*lvl('taps'))+cps()*0.02;}
+function tapValue(){return (S.extras.mitts?2:1)*(S.extras.spoon?2:1)*blendTap()*leafMult()*achMult()*friendMult()*buffTap()*recipeMult()*pairMult()*levelMult()*(1+0.5*lvl('taps'))+cps()*0.02;}
 
 /* ---------- sound ---------- */
 var ac=null;
@@ -1013,6 +1205,7 @@ function renderScene(){
   var ch=$('catHit');
   ch.style.pointerEvents=S.counts[2]>0?'all':'none';
   ch.setAttribute('tabindex',S.counts[2]>0?'0':'-1');
+  renderScenery();
 }
 
 /* ---------- update ---------- */
@@ -1047,6 +1240,14 @@ function update(){
   $('buffChip').hidden=!bf;
   if(bf) $('buffChip').textContent=herbById(bf.id).buffName+' '+fmtLeft(bf.left)+(recipeActive()?' · recipe +25%':'');
   updatePot2();
+  if(S.lvGot<S.lv) levelUp();
+  var la=latestArea();
+  if(la!==lastArea){
+    lastArea=la;renderScenery();
+    if(!$('p-goals').hidden) renderJourney();
+    if(la>S.areaSeen){S.areaSeen=la;announce('New area unlocked: '+AREAS[la].name+'! See the Journey in the Goals tab.');save();}
+  }
+  renderLevel();
   gardenTick();
   $('tab-regulars').classList.toggle('ping',unreadLetters()>0);
   $('tab-shop').classList.toggle('ping',S.leaves>S.shopSeen);
@@ -1100,7 +1301,7 @@ function collectPot2(cx,cy){
   var r=scene.getBoundingClientRect();
   if(pot2Left()>0){blip(220);if(cx!=null)pop(cx-r.left,cy-r.top-12,'still steeping');return;}
   var g=pot2Reward(),extra='';
-  earn(g);S.pot2n++;
+  earn(g);S.pot2n++;addXp(20);
   if(Math.random()<0.2){var h=pickOf(HERBS);S.herbs[h.id]=(S.herbs[h.id]||0)+1;extra=' and 1 '+h.name;}
   S.pot2={at:Date.now()+POT2_SEC*1000};
   if(cx!=null)pop(cx-r.left,cy-r.top-12,'+'+fmt(g));
@@ -1129,7 +1330,7 @@ function pop(x,y,txt){
 }
 function tap(clientX,clientY){
   var v=tapValue();
-  earn(v);S.taps++;
+  earn(v);S.taps++;addXp(1);
   pot.classList.remove('squish');void pot.getBoundingClientRect();pot.classList.add('squish');
   var r=scene.getBoundingClientRect();
   pop(clientX-r.left+(Math.random()*24-12),clientY-r.top-18,'+'+rate(v));
@@ -1176,7 +1377,7 @@ mouse.addEventListener('click',function(){
   var tip=Math.max(25,Math.floor(cps()*40))*v.tipMult*(loved?3:1)*(first?5:1)*(1+0.25*Math.max(0,frLevel(v.id)-1))*(1+0.5*lvl('host'));
   S.reg[v.id]=(S.reg[v.id]||0)+1;
   if(loved) S.loved++;
-  earn(tip);S.mice++;
+  earn(tip);S.mice++;addXp(first?50:(loved?15:10));
   mouse.hidden=true;clearTimeout(mouseHideT);
   toast(first?('You met '+v.name+' the '+v.kind+'! Welcome gift: +'+fmt(tip)+' cups'):(loved?(v.name+' adores the '+curBlend().name+'! Tip: +'+fmt(tip)+' cups'):(v.name+' left a thank-you tip: +'+fmt(tip)+' cups')));
   addFriend(v.id,loved?3:1);
@@ -1191,12 +1392,13 @@ function tick(){
   lastTick=now;
   if(!(dt>0)) return;
   var away=dt>20;
-  if(!away&&!document.hidden) S.played+=dt;
+  if(!away&&!document.hidden){S.played+=dt;addXp(dt*0.05);}
   if(S.buff&&!away){
     S.buff.left-=dt;
     if(S.buff.left<=0){var bn=herbById(S.buff.id).buffName;S.buff=null;announce(bn+' has faded.');renderRecipes();}
   }
   var capS=awayCap();
+  if(away) addXp(Math.min(120,Math.min(dt,capS)/120));
   if(dt>capS) dt=capS;
   var gain=cps()*dt*(away&&curBlend().id==='rooibos'?1.5:1);
   earn(gain);
@@ -1267,7 +1469,7 @@ function showTab(name){
     $('p-'+t).hidden=!on;
   });
   if(name==='regulars') renderBook();
-  if(name==='goals') renderWish();
+  if(name==='goals'){renderWish();renderLevel();renderJourney();}
   if(name==='more') renderMore();
   if(name==='garden') renderGarden();
   if(name==='shop'){S.shopSeen=S.leaves;renderShop();update();save();}
@@ -1303,7 +1505,7 @@ $('giftBtn').addEventListener('click',function(){
   S.bestStreak=Math.max(S.bestStreak,S.streak);
   S.giftDay=t;
   var r=Math.floor(giftReward(S.streak)),leaf=(S.streak%7===0);
-  earn(r);
+  earn(r);addXp(40);
   if(leaf) S.leaves++;
   toast('Daily gift: +'+fmt(r)+' cups'+(leaf?' and a Golden Leaf':'')+'. Streak: '+S.streak+(S.streak===1?' day':' days'));
   blip(700);lastGiftReady=null;update();save();
@@ -1329,7 +1531,7 @@ function petCat(cx,cy){
   if(S.counts[2]<1) return;
   var now=Date.now(),g=0,r=scene.getBoundingClientRect(),cat=$('s-cat');
   cat.classList.remove('purr');void cat.getBoundingClientRect();cat.classList.add('purr');
-  if(now-lastPet>=2500){lastPet=now;g=Math.max(5,Math.floor(cps()*5));earn(g);S.pets++;}
+  if(now-lastPet>=2500){lastPet=now;g=Math.max(5,Math.floor(cps()*5));earn(g);S.pets++;addXp(3);}
   var cn=S.catName?(S.catName+' '):'';
   pop(cx-r.left,cy-r.top-12,g?(cn+'purrs +'+fmt(g)):(cn?(cn+'purrs'):'purr'));
   blip(300);update();
@@ -1390,7 +1592,7 @@ $('wishBtn').addEventListener('click',function(){
   if(!w) return;
   if(wishStat(w.type)-w.base<w.target){blip(220);return;}
   var r=wishReward(w),who=regById(w.reg)||REG[0];
-  earn(r);S.wishes++;S.wish=null;
+  earn(r);S.wishes++;S.wish=null;addXp(60);
   if(who&&who.id) addFriend(who.id,3);
   toast(who.name+' is delighted! Wish reward: +'+fmt(r)+' cups');
   blip(720);
@@ -1413,6 +1615,7 @@ function updateSky(){
   var sun=$('sun'),u=Math.max(0,Math.min(1,(h-6)/12));
   sun.setAttribute('transform','translate('+(42+u*58).toFixed(1)+' '+(112-Math.sin(u*Math.PI)*64).toFixed(1)+')');
   sun.style.opacity=String(Math.max(0,1-night*1.4));
+  $('vShade').style.opacity=String(Math.min(0.55,night*0.6));
 }
 
 /* ---------- teapot and wall colors ---------- */
@@ -1527,7 +1730,7 @@ document.addEventListener('pointerdown',function(){
 function fmtTime(sec){var m=Math.floor(sec/60),h=Math.floor(m/60);return h>0?(h+'h '+(m%60)+'m'):(m+'m');}
 function renderStats(){
   var rows=[
-    ['Lifetime cups',fmt(S.life)],['This run',fmt(S.total)],['Teapot taps',S.taps.toLocaleString('en-US')],
+    ['Nook level','Lv '+S.lv+' · '+titleFor(S.lv)],['Lifetime cups',fmt(S.life)],['This run',fmt(S.total)],['Teapot taps',S.taps.toLocaleString('en-US')],
     ['Visitors welcomed',String(visitsTotal())],['Regulars met',metCount()+' of '+REG.length],['Cat pets',String(S.pets)],
     ['Wishes granted',String(S.wishes)],['Herbs harvested',String(S.harvests)],['Infusions brewed',String(S.infusions)],['Letters unlocked',String(lettersTotal())],['Fresh Pots',String(S.pots)],
     ['Best gift streak',S.bestStreak+(S.bestStreak===1?' day':' days')],
@@ -1595,7 +1798,7 @@ $('nameNook').addEventListener('blur',function(){this.value=S.nookName;});
 $('nameCat').addEventListener('blur',function(){this.value=S.catName;});
 function refreshAll(){
   lastTick=Date.now();applyNames();syncNameInputs();
-  blendN=-1;lastGiftReady=null;
+  blendN=-1;lastArea=-1;lastGiftReady=null;
   curReg=null;$('regDetail').hidden=true;$('regList').hidden=false;gardenView=[];
   setSound();applyLook();updateSky();renderScene();update();renderBook();renderGoals();renderMore();renderWish();renderGarden();renderShop();
   if(S.amb==='off') stopAmb(); else startAmb();
@@ -1654,6 +1857,7 @@ function addFriend(id,pts){
   var after=frLevel(id);
   if(after>before){
     var r=regById(id);
+    addXp(75);
     announce('Friendship with '+r.name+' grew: '+LVL_NAME[after]+'. A new letter is waiting.');
   }
 }
@@ -1817,7 +2021,7 @@ function harvest(i){
   var h=st.h,n=1+(Math.random()<0.35?1:0),c=Math.max(300,Math.floor(cps()*h.grow*0.2));
   S.herbs[h.id]=(S.herbs[h.id]||0)+n;
   S.harvests++;S.garden[i]=null;
-  earn(c);
+  earn(c);addXp(25);
   toast('Harvested '+n+' '+h.name+' and +'+fmt(c)+' cups');
   blip(700);renderGarden();update();save();
 }
@@ -1830,11 +2034,11 @@ function useHerb(id){
   }
   S.herbs[id]--;
   if(S.buff&&S.buff.left>0) S.buff.left+=h.buffSec; else S.buff={id:id,left:h.buffSec};
-  S.infusions++;
+  S.infusions++;addXp(10);
   var rc=null,cb=curBlend().id;
   RECIPES.forEach(function(r){if(r.blend===cb&&r.herb===id&&!S.recipes[r.id]) rc=r;});
   if(rc){
-    S.recipes[rc.id]=true;
+    S.recipes[rc.id]=true;addXp(80);
     var rb=Math.max(1000,Math.floor(cps()*600));
     earn(rb);
     toast('New recipe: '+rc.name+'! +'+fmt(rb)+' cups, and +2% brewing for good');
@@ -1863,6 +2067,7 @@ $('freshYes').addEventListener('click',function(){
   var hs=HEAD[lvl('head')];
   if(hs){hs.forEach(function(n,i){S.counts[i]=n;});}
   if(S.wish&&S.wish.type==='pets'&&S.counts[2]<1) S.wish=null;
+  addXp(200);
   $('freshConfirm').hidden=true;
   renderScene();update();save();blip(660);
   toast('Fresh pot! You earned '+g+' '+leafWord(g)+'.');
